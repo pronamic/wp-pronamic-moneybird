@@ -43,6 +43,7 @@ class Plugin {
 		$controllers = [
 			new AuthorizationPostTypeController(),
 			new ContactPostTypeSupportController(),
+			new ProductPostTypeSupportController(),
 		];
 
 		if ( \is_admin() ) {
