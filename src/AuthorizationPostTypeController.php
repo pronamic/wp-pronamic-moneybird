@@ -104,6 +104,15 @@ class AuthorizationPostTypeController {
 			return;
 		}
 
+		\add_meta_box(
+			'pronamic_moneybird_authorization_settings',
+			\__( 'Authorization', 'pronamic-moneybird' ),
+			[ $this, 'meta_box_authorization_settings' ],
+			$post_type,
+			'normal',
+			'high'
+		);
+
 		/**
 		 * Authentication.
 		 */
@@ -119,15 +128,6 @@ class AuthorizationPostTypeController {
 				'high'
 			);
 		}
-
-		\add_meta_box(
-			'pronamic_moneybird_authorization_settings',
-			\__( 'Authorization', 'pronamic-moneybird' ),
-			[ $this, 'meta_box_authorization_settings' ],
-			$post_type,
-			'normal',
-			'high'
-		);
 	}
 
 	/**
