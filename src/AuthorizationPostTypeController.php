@@ -31,6 +31,7 @@ class AuthorizationPostTypeController {
 
 		\add_action( 'add_meta_boxes', [ $this, 'add_meta_boxes' ], 10, 2 );
 
+		\add_action( 'save_post_' . self::POST_TYPE, [ $this, 'save_post' ] );
 		\add_action( 'save_post_' . self::POST_TYPE, [ $this, 'maybe_set_default_authorization' ] );
 
 		\add_action( 'display_post_states', [ $this, 'display_post_states' ], 10, 2 );
@@ -85,7 +86,7 @@ class AuthorizationPostTypeController {
 				'hierarchical' => true,
 				'show_in_menu' => false,
 				'supports'     => [
-					'slug',
+					'title',
 				],
 			]
 		);
@@ -104,33 +105,55 @@ class AuthorizationPostTypeController {
 		}
 
 		/**
-		 * Authentication/
+		 * Authentication.
 		 */
-		$object = \json_decode( $post->post_content );
+		$api_token = \get_post_meta( $post->ID, '_pronamic_moneybird_api_token', true );
 
-		if ( ! empty( $object ) ) {
-			$authentication = AuthenticationInfo::from_object( $object );
-
-			if ( $authentication ) {
-				\add_meta_box(
-					'pronamic_moneybird_authentication',
-					\__( 'Authentication', 'pronamic-moneybird' ),
-					[ $this, 'meta_box_authentication' ],
-					$post_type,
-					'normal',
-					'high'
-				);
-			}
+		if ( '' !== $api_token ) {
+			\add_meta_box(
+				'pronamic_moneybird_authentication',
+				\__( 'Authentication', 'pronamic-moneybird' ),
+				[ $this, 'meta_box_authentication' ],
+				$post_type,
+				'normal',
+				'high'
+			);
 		}
 
 		\add_meta_box(
-			'pronamic_moneybird_authorize',
-			\__( 'Authorize', 'pronamic-moneybird' ),
-			[ $this, 'meta_box_authorize' ],
+			'pronamic_moneybird_authorization_settings',
+			\__( 'Authorization', 'pronamic-moneybird' ),
+			[ $this, 'meta_box_authorization_settings' ],
 			$post_type,
 			'normal',
 			'high'
 		);
+	}
+
+	/**
+	 * Save authorization settings.
+	 * 
+	 * @param int $post_id Post ID.
+	 * @return void
+	 */
+	public function save_post( $post_id ) {
+		if ( \defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+			return;
+		}
+
+		if ( ! \array_key_exists( 'pronamic_moneybird_nonce', $_POST ) ) {
+			return;
+		}
+
+		$nonce = \sanitize_key( $_POST['pronamic_moneybird_nonce'] );
+
+		if ( ! \wp_verify_nonce( $nonce, 'pronamic_moneybird_save_authorization_settings' ) ) {
+			return;
+		}
+
+		$api_token = \array_key_exists( '_pronamic_moneybird_api_token', $_POST ) ? \sanitize_text_field( \wp_unslash( $_POST['_pronamic_moneybird_api_token'] ) ) : '';
+
+		\update_post_meta( $post_id, '_pronamic_moneybird_api_token', $api_token );
 	}
 
 	/**
@@ -180,15 +203,17 @@ class AuthorizationPostTypeController {
 	}
 
 	/**
-	 * Meta box authorize.
+	 * Meta box authorization settings.
 	 * 
 	 * @link https://github.com/WordPress/WordPress/blob/5.8/wp-admin/includes/template.php#L1395
 	 * @param WP_Post $post Post.
 	 * @param array   $box  Box.
 	 * @return void
 	 */
-	public function meta_box_authorize( $post, $box ) {
-		include __DIR__ . '/../admin/meta-box-authorize.php';
+	public function meta_box_authorization_settings( $post, $box ) {
+		\wp_nonce_field( 'pronamic_moneybird_save_authorization_settings', 'pronamic_moneybird_nonce' );
+
+		include __DIR__ . '/../admin/meta-box-authorization-settings.php';
 	}
 
 	/**
