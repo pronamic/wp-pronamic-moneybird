@@ -5,8 +5,8 @@ msgstr ""
 "Project-Id-Version: Pronamic Moneybird 1.0.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/pronamic-"
 "moneybird\n"
-"POT-Creation-Date: 2024-01-25T10:34:00+00:00\n"
-"PO-Revision-Date: 2024-01-25 11:39+0100\n"
+"POT-Creation-Date: 2024-01-25T15:40:56+00:00\n"
+"PO-Revision-Date: 2024-01-25 16:44+0100\n"
 "Last-Translator: Remco Tolsma <info@remcotolsma.nl>\n"
 "Language-Team: \n"
 "Language: nl_NL\n"
@@ -40,15 +40,42 @@ msgstr "Pronamic"
 msgid "https://www.pronamic.eu/"
 msgstr "https://www.pronamic.nl/"
 
+#: admin/meta-box-authentication.php:26
+#: admin/meta-box-authorization-settings.php:22
+msgid "API token"
+msgstr "API-token"
+
+#. translators: %s: Moneybird URL.
+#: admin/meta-box-authorization-settings.php:35
+msgid "You can create an API token via %s."
+msgstr ""
+
+#: admin/meta-box-authorization-settings.php:56
+msgid "Administration ID"
+msgstr "Administratie-ID"
+
+#: admin/meta-box-authorization-settings.php:62
+msgid "This administration ID is used by default for API requests."
+msgstr ""
+
+#: admin/meta-box-contact.php:21
+msgid "Contact ID"
+msgstr "Contact-ID"
+
+#: admin/meta-box-product.php:21
+msgid "Product ID"
+msgstr "Product-ID"
+
 #: src/AdminController.php:94 src/AdminController.php:95
+#: templates/sales-invoice-new.php:17
 msgid "Moneybird"
 msgstr "Moneybird"
 
-#: src/AdminController.php:106
+#: src/AdminController.php:106 src/AuthorizationPostTypeController.php:49
 msgid "Moneybird Authorizations"
 msgstr "Moneybird-autorisaties"
 
-#: src/AdminController.php:107
+#: src/AdminController.php:107 src/AuthorizationPostTypeController.php:76
 msgid "Authorizations"
 msgstr "Autorisaties"
 
@@ -59,3 +86,184 @@ msgstr "Moneybird-instellingen"
 #: src/AdminController.php:117
 msgid "Settings"
 msgstr "Instellingen"
+
+#: src/AuthorizationPostTypeController.php:51
+msgctxt "post type general name"
+msgid "Authorizations"
+msgstr ""
+
+#: src/AuthorizationPostTypeController.php:52
+msgctxt "post type singular name"
+msgid "Authorization"
+msgstr "Autorisatie"
+
+#: src/AuthorizationPostTypeController.php:53
+msgctxt "twinfield authorizations"
+msgid "Add New"
+msgstr ""
+
+#: src/AuthorizationPostTypeController.php:54
+msgid "Add New Authorization"
+msgstr ""
+
+#: src/AuthorizationPostTypeController.php:55
+msgid "Edit Authorization"
+msgstr ""
+
+#: src/AuthorizationPostTypeController.php:56
+msgid "New Authorization"
+msgstr ""
+
+#: src/AuthorizationPostTypeController.php:57
+msgid "View Authorization"
+msgstr ""
+
+#: src/AuthorizationPostTypeController.php:58
+msgid "View Authorizations"
+msgstr ""
+
+#: src/AuthorizationPostTypeController.php:59
+msgid "Search Authorizations"
+msgstr ""
+
+#: src/AuthorizationPostTypeController.php:60
+msgid "No authorizations found."
+msgstr ""
+
+#: src/AuthorizationPostTypeController.php:61
+msgid "Not authorizations found in Trash."
+msgstr ""
+
+#: src/AuthorizationPostTypeController.php:62
+msgid "Parent Authorization:"
+msgstr ""
+
+#: src/AuthorizationPostTypeController.php:63
+msgid "All Authorizations"
+msgstr ""
+
+#: src/AuthorizationPostTypeController.php:64
+msgid "Authorization Archives"
+msgstr ""
+
+#: src/AuthorizationPostTypeController.php:65
+msgid "Authorization Attributes"
+msgstr ""
+
+#: src/AuthorizationPostTypeController.php:66
+msgid "Insert into authorization"
+msgstr ""
+
+#: src/AuthorizationPostTypeController.php:67
+msgid "Uploaded to this authorization"
+msgstr ""
+
+#: src/AuthorizationPostTypeController.php:68
+msgid "Featured image"
+msgstr ""
+
+#: src/AuthorizationPostTypeController.php:69
+msgid "Set featured image"
+msgstr ""
+
+#: src/AuthorizationPostTypeController.php:70
+msgid "Remove featured image"
+msgstr ""
+
+#: src/AuthorizationPostTypeController.php:71
+msgid "Use as featured image"
+msgstr ""
+
+#: src/AuthorizationPostTypeController.php:72
+msgid "Filter authorizations list"
+msgstr ""
+
+#: src/AuthorizationPostTypeController.php:73
+msgid "Filter by date"
+msgstr ""
+
+#: src/AuthorizationPostTypeController.php:74
+msgid "Authorizations list navigation"
+msgstr ""
+
+#: src/AuthorizationPostTypeController.php:75
+msgid "Authorizations list"
+msgstr ""
+
+#: src/AuthorizationPostTypeController.php:77
+msgctxt "add new from admin bar"
+msgid "Twinfield Authorization"
+msgstr ""
+
+#: src/AuthorizationPostTypeController.php:109
+#: templates/sales-invoice-new.php:29
+msgid "Authorization"
+msgstr "Autorisatie"
+
+#: src/AuthorizationPostTypeController.php:124
+msgid "Authentication"
+msgstr ""
+
+#: src/AuthorizationPostTypeController.php:201
+msgid "Default"
+msgstr "Standaard"
+
+#: src/ContactPostTypeSupportController.php:42
+msgid "Moneybird contact"
+msgstr "Moneybird-contact"
+
+#: src/ProductPostTypeSupportController.php:42
+msgid "Moneybird product"
+msgstr "Moneybird-product"
+
+#: src/SettingsController.php:45
+msgid "General"
+msgstr "Algemeen"
+
+#: src/SettingsController.php:52
+msgid "Default authorization"
+msgstr ""
+
+#: src/SettingsController.php:58
+msgid "— Select authorization —"
+msgstr ""
+
+#: src/SettingsController.php:84
+msgid "— Select a page —"
+msgstr ""
+
+#: templates/sales-invoice-new.php:19
+msgid "Add invoice"
+msgstr "Factuur toevoegen"
+
+#: templates/sales-invoice-new.php:24
+msgid "Base"
+msgstr "Basis"
+
+#: templates/sales-invoice-new.php:34
+msgid "Administration"
+msgstr "Administratie"
+
+#: templates/sales-invoice-new.php:39
+msgid "Contact"
+msgstr "Contact"
+
+#: templates/sales-invoice-new.php:47
+msgid "Lines"
+msgstr "Regels"
+
+#: templates/sales-invoice-new.php:55
+msgid "Number"
+msgstr "Aantal"
+
+#: templates/sales-invoice-new.php:56
+msgid "Description"
+msgstr "Beschrijving"
+
+#: templates/sales-invoice-new.php:57
+msgid "Amount"
+msgstr "Bedrag"
+
+#: templates/sales-invoice-new.php:124
+msgid "Create invoice"
+msgstr "Factuur maken"
