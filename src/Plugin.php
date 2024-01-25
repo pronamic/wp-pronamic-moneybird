@@ -44,7 +44,9 @@ class Plugin {
 			new AuthorizationPostTypeController(),
 			new ContactPostTypeSupportController(),
 			new ProductPostTypeSupportController(),
+			new RewriteController(),
 			new SettingsController(),
+			new TemplateController(),
 		];
 
 		if ( \is_admin() ) {
