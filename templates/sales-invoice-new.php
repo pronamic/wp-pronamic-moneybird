@@ -12,7 +12,24 @@ get_header();
 
 ?>
 <div>
-	<?php esc_html_e( 'Moneybird', 'pronamic-moneybird' ); ?>
+	<h2><?php esc_html_e( 'Moneybird', 'pronamic-moneybird' ); ?></h2>
+
+	<h3><?php esc_html_e( 'Add invoice', 'pronamic-moneybird' ); ?></h3>
+
+	<form method="post" action="">
+		<div class="mt-4">
+			<?php
+
+			wp_nonce_field( 'pronamic_moneybird_create_sales_invoice', 'pronamic_moneybird_nonce' );
+
+			printf(
+				'<button name="pronamic_moneybird_create_sales_invoice" value="true" type="submit" class="btn btn-primary">%s</button>',
+				__( 'Create invoice', 'pronamic-moneybird' )
+			); 
+
+			?>
+		</div>
+	</form>
 </div>
 <?php
 
