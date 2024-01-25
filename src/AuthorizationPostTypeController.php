@@ -197,7 +197,7 @@ class AuthorizationPostTypeController {
 			return $post_states;
 		}
 
-		if ( (int) get_option( 'pronamic_moneybird_authorization_post_id' ) === $post->ID ) {
+		if ( (int) \get_option( 'pronamic_moneybird_authorization_post_id' ) === $post->ID ) {
 			$post_states['pronamic_moneybird_authorization_post_id'] = \__( 'Default', 'pronamic-moneybird' );
 		}
 
