@@ -11,3 +11,4 @@ This WordPress plugin uses the Moneybird API, documentation for this can be foun
 - https://www.pronamic.nl/
 - https://www.moneybird.com/
 - https://developer.moneybird.com/
+- https://www.moneybird.nl/huisstijl/

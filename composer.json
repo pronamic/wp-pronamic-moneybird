@@ -1,0 +1,33 @@
+{
+	"name": "pronamic/wp-pronamic-moneybird",
+	"description": "This WordPress plugin provides the link between your WordPress website and your Moneybird administration.",
+	"license": "GPL-2.0-or-later",
+	"type": "wordpress-plugin",
+	"config": {
+		"allow-plugins": {
+			"dealerdirect/phpcodesniffer-composer-installer": true,
+			"automattic/jetpack-autoloader": true
+		},
+		"wp-slug": "pronamic-moneybird"
+	},
+	"autoload": {
+		"psr-4": {
+			"Pronamic\\Moneybird\\": "src/"
+		}
+	},
+	"require": {
+		"automattic/jetpack-autoloader": "^3.0"
+	},
+	"require-dev": {
+		"pronamic/wp-coding-standards": "^2.1",
+		"pronamic/pronamic-cli": "^1.1",
+		"roots/wordpress-no-content": "^6.4"
+	},
+	"scripts": {
+		"build": "vendor/bin/pronamic wp-build",
+		"translate": [
+			"@build",
+			"rsync --recursive --delete --verbose ./build/project/languages/ ./languages/"
+		]
+	}
+}

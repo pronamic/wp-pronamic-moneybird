@@ -1,0 +1,40 @@
+{
+	"name": "@pronamic/wp-pronamic-moneybird",
+	"version": "1.0.0",
+	"description": "This WordPress plugin provides the link between your WordPress website and your Moneybird administration.",
+	"author": {
+		"name": "Pronamic",
+		"email": "info@pronamic.nl",
+		"url": "http://www.pronamic.nl/"
+	},
+	"contributors": [
+		{
+			"name": "Remco Tolsma",
+			"email": "info@remcotolsma.nl",
+			"url": "http://www.remcotolsma.nl/"
+		}
+	],
+	"license": "GPL-2.0-or-later",
+	"keywords": [
+		"pronamic",
+		"moneybird"
+	],
+	"homepage": "https://github.com/pronamic/pronamic-moneybird",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/pronamic/pronamic-moneybird.git"
+	},
+	"bugs": {
+		"url": "https://github.com/pronamic/pronamic-moneybird/issues",
+		"email": "support@pronamic.eu"
+	},
+	"devDependencies": {
+		"@wordpress/env": "^9.2.0",
+		"@wordpress/scripts": "^27.1.0",
+		"svgo": "^3.2.0"
+	},
+	"scripts": {
+		"lint-pkg-json": "wp-scripts lint-pkg-json",
+		"svgo": "svgo images/src/moneybird-icon-wp-admin-fresh-base.svg -o images/dist/moneybird-icon-wp-admin-fresh-base.svg"
+	}
+}
