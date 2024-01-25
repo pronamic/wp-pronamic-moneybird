@@ -16,13 +16,14 @@ if ( ! \defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$api_token = \get_post_meta( $post->ID, '_pronamic_moneybird_api_token', true );
+$api_token         = \get_post_meta( $post->ID, '_pronamic_moneybird_api_token', true );
+$administration_id = \get_post_meta( $post->ID, '_pronamic_moneybird_administration_id', true );
 
 ?>
 <table class="form-table">
 	<tr valign="top">
 		<th scope="row">
-			<label for="pronamic_moneybird_api_token"><?php \esc_html_e( 'API token', 'orbis-tasks' ); ?></label>
+			<label for="pronamic_moneybird_api_token"><?php \esc_html_e( 'API token', 'pronamic-moneybird' ); ?></label>
 		</th>
 		<td>
 			<code><?php echo \esc_html( $api_token ); ?></code>
@@ -46,3 +47,43 @@ $data = $response->json();
 echo '<pre>';
 var_dump( $data );
 echo '</pre>';
+
+$data = [
+	'sales_invoice' => [
+		'reference'          => null,
+		'contact_id'         => '410289412558030139',
+		'details_attributes' => [
+			[
+				'description' => 'Rocking Chair',
+				'price'       => 129.95,
+			],
+		],
+	],
+];
+
+if ( false ) {
+	$response = Http::post(
+		\strtr(
+			'https://moneybird.com/api/:version/:administration_id/:resource_path.:format',
+			[
+				':version'           => 'v2',
+				':administration_id' => $administration_id,
+				':resource_path'     => 'sales_invoices',
+				':format'            => 'json',
+			]
+		),
+		[
+			'headers' => [
+				'Authorization' => 'Bearer ' . $api_token,
+				'Content-Type'  => 'application/json',
+			],
+			'body'    => \wp_json_encode( $data ),
+		]
+	);
+
+	$data = $response->json();
+
+	echo '<pre>';
+	var_dump( $data );
+	echo '</pre>';
+}

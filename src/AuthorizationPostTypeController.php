@@ -151,9 +151,11 @@ class AuthorizationPostTypeController {
 			return;
 		}
 
-		$api_token = \array_key_exists( '_pronamic_moneybird_api_token', $_POST ) ? \sanitize_text_field( \wp_unslash( $_POST['_pronamic_moneybird_api_token'] ) ) : '';
+		$api_token         = \array_key_exists( '_pronamic_moneybird_api_token', $_POST ) ? \sanitize_text_field( \wp_unslash( $_POST['_pronamic_moneybird_api_token'] ) ) : '';
+		$administration_id = \array_key_exists( '_pronamic_moneybird_administration_id', $_POST ) ? \sanitize_text_field( \wp_unslash( $_POST['_pronamic_moneybird_administration_id'] ) ) : '';
 
 		\update_post_meta( $post_id, '_pronamic_moneybird_api_token', $api_token );
+		\update_post_meta( $post_id, '_pronamic_moneybird_administration_id', $administration_id );
 	}
 
 	/**
