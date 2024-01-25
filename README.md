@@ -12,3 +12,4 @@ This WordPress plugin uses the Moneybird API, documentation for this can be foun
 - https://www.moneybird.com/
 - https://developer.moneybird.com/
 - https://www.moneybird.nl/huisstijl/
+- https://github.com/picqer/moneybird-php-client
