@@ -8,32 +8,36 @@
  * @package   Pronamic\Orbis\Tasks
  */
 
-$authorization_id  = get_option( 'pronamic_moneybird_authorization_post_id', '' );
+namespace Pronamic\Moneybird;
+
+$authorization_id  = \get_option( 'pronamic_moneybird_authorization_post_id', '' );
 $administration_id = '';
 
 if ( '' !== $authorization_id ) {
-	$administration_id = get_post_meta( $authorization_id, '_pronamic_moneybird_administration_id', true );
+	$administration_id = \get_post_meta( $authorization_id, '_pronamic_moneybird_administration_id', true );
 }
 
-$lines = range( 1, 5 );
+$lines = \range( 1, 5 );
 
-$moneybird_errors = apply_filters( 'pronamic_moneybird_errors', [] );
+$moneybird_errors = \apply_filters( 'pronamic_moneybird_errors', [] );
 
-get_header();
+$sales_invoice = new SalesInvoice();
+
+\get_header();
 
 ?>
 <div>
-	<h2><?php esc_html_e( 'Moneybird', 'pronamic-moneybird' ); ?></h2>
+	<h2><?php \esc_html_e( 'Moneybird', 'pronamic-moneybird' ); ?></h2>
 
-	<h3><?php esc_html_e( 'Add invoice', 'pronamic-moneybird' ); ?></h3>
+	<h3><?php \esc_html_e( 'Add invoice', 'pronamic-moneybird' ); ?></h3>
 
-	<?php if ( count( $moneybird_errors ) > 0 ) : ?>
+	<?php if ( \count( $moneybird_errors ) > 0 ) : ?>
 
 		<div class="alert alert-warning" role="alert">
 			<ul class="m-0">
 				<?php foreach ( $moneybird_errors as $moneybird_error ) : ?>
 					<li>
-						<?php echo esc_html( $moneybird_error->get_error_message() ); ?>
+						<?php echo \esc_html( $moneybird_error->get_error_message() ); ?>
 					</li>
 				<?php endforeach; ?>
 			</ul>
@@ -44,30 +48,30 @@ get_header();
 	<form method="post" action="">
 		<div class="card">
 			<div class="card-header">
-				<?php esc_html_e( 'Base', 'pronamic-moneybird' ); ?>
+				<?php \esc_html_e( 'Base', 'pronamic-moneybird' ); ?>
 			</div>
 
 			<div class="card-body">
 				<div class="mb-3">
-					<label for="pronamic_moneybird_authorization_id" class="form-label"><?php esc_html_e( 'Authorization', 'pronamic-moneybird' ); ?></label>
-					<input id="pronamic_moneybird_authorization_id" name="authorization_id" value="<?php echo esc_attr( $authorization_id ); ?>" type="text" class="form-control" required>
+					<label for="pronamic_moneybird_authorization_id" class="form-label"><?php \esc_html_e( 'Authorization', 'pronamic-moneybird' ); ?></label>
+					<input id="pronamic_moneybird_authorization_id" name="authorization_id" value="<?php echo \esc_attr( $authorization_id ); ?>" type="text" class="form-control" required>
 				</div>
 
 				<div class="mb-3">
-					<label for="pronamic_moneybird_administration_id" class="form-label"><?php esc_html_e( 'Administration', 'pronamic-moneybird' ); ?></label>
-					<input id="pronamic_moneybird_administration_id" name="administration_id" value="<?php echo esc_attr( $administration_id ); ?>" type="text" class="form-control" required>
+					<label for="pronamic_moneybird_administration_id" class="form-label"><?php \esc_html_e( 'Administration', 'pronamic-moneybird' ); ?></label>
+					<input id="pronamic_moneybird_administration_id" name="administration_id" value="<?php echo \esc_attr( $administration_id ); ?>" type="text" class="form-control" required>
 				</div>
 
 				<div class="mb-3">
-					<label for="pronamic_moneybird_contact_id" class="form-label"><?php esc_html_e( 'Contact', 'pronamic-moneybird' ); ?></label>
-					<input id="pronamic_moneybird_contact_id" name="sales_invoice[contact_id]" type="text" class="form-control" required>
+					<label for="pronamic_moneybird_contact_id" class="form-label"><?php \esc_html_e( 'Contact', 'pronamic-moneybird' ); ?></label>
+					<input id="pronamic_moneybird_contact_id" name="sales_invoice[contact_id]" value="<?php echo \esc_attr( $sales_invoice->contact_id ); ?>" type="text" class="form-control" required>
 				</div>
 			</div>
 		</div>
 
 		<div class="card mt-4">
 			<div class="card-header">
-				<?php esc_html_e( 'Lines', 'pronamic-moneybird' ); ?>
+				<?php \esc_html_e( 'Lines', 'pronamic-moneybird' ); ?>
 			</div>
 
 			<div class="card-body">
@@ -110,7 +114,7 @@ get_header();
 									<?php
 
 									\printf(
-										'<input name="%s" value="%s" type="number" class="form-control" />',
+										'<input name="%s" value="%s" type="text" class="form-control" />',
 										\esc_attr( $name . '[product_id]' ),
 										\esc_attr( '' )
 									);
@@ -152,11 +156,11 @@ get_header();
 		<div class="mt-4">
 			<?php
 
-			wp_nonce_field( 'pronamic_moneybird_create_sales_invoice', 'pronamic_moneybird_nonce' );
+			\wp_nonce_field( 'pronamic_moneybird_create_sales_invoice', 'pronamic_moneybird_nonce' );
 
-			printf(
+			\printf(
 				'<button name="pronamic_moneybird_create_sales_invoice" value="true" type="submit" class="btn btn-primary">%s</button>',
-				esc_html__( 'Create invoice', 'pronamic-moneybird' )
+				\esc_html__( 'Create invoice', 'pronamic-moneybird' )
 			); 
 
 			?>
@@ -165,4 +169,4 @@ get_header();
 </div>
 <?php
 
-get_footer();
+\get_footer();
