@@ -10,6 +10,7 @@
 
 namespace Pronamic\Moneybird;
 
+use Pronamic\WordPress\Http\Facades\Http;
 use WP_Error;
 use WP_REST_Request;
 use WP_REST_Response;
@@ -94,6 +95,7 @@ class SalesInvoicesController {
 	 * @return WP_REST_Response
 	 */
 	public function rest_api_new_sales_invoice( WP_REST_Request $request ) {
+		$authorization_id  = $request->get_param( 'authorization_id' );
 		$administration_id = $request->get_param( 'administration_id' );
 		$contact_id        = $request->get_param( 'contact_id' );
 
@@ -109,6 +111,8 @@ class SalesInvoicesController {
 				],
 			],
 		];
+
+		$api_token = \get_post_meta( $authorization_id, '_pronamic_moneybird_api_token', true );
 
 		$api_url = \strtr(
 			'https://moneybird.com/api/:version/:administration_id/:resource_path.:format',
@@ -171,6 +175,10 @@ class SalesInvoicesController {
 			$request->set_body_params( \wp_unslash( $_POST['sales_invoice'] ) );
 		}
 
+		if ( \array_key_exists( 'authorization_id', $_POST ) ) {
+			$request->set_param( 'authorization_id', \sanitize_text_field( \wp_unslash( $_POST['authorization_id'] ) ) );
+		}
+
 		$response = \rest_do_request( $request );
 
 		if ( $response->is_error() ) {
@@ -178,6 +186,10 @@ class SalesInvoicesController {
 
 			return;
 		}
+
+		echo '<pre>';
+		echo \wp_json_encode( $response, JSON_PRETTY_PRINT );
+		echo '</pre>';
 
 		exit;
 	}

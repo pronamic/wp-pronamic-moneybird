@@ -50,7 +50,7 @@ get_header();
 			<div class="card-body">
 				<div class="mb-3">
 					<label for="pronamic_moneybird_authorization_id" class="form-label"><?php esc_html_e( 'Authorization', 'pronamic-moneybird' ); ?></label>
-					<input id="pronamic_moneybird_authorization_id" name="sales_invoice[authorization_id]" value="<?php echo esc_attr( $authorization_id ); ?>" type="text" class="form-control" required>
+					<input id="pronamic_moneybird_authorization_id" name="authorization_id" value="<?php echo esc_attr( $authorization_id ); ?>" type="text" class="form-control" required>
 				</div>
 
 				<div class="mb-3">
@@ -60,7 +60,7 @@ get_header();
 
 				<div class="mb-3">
 					<label for="pronamic_moneybird_contact_id" class="form-label"><?php esc_html_e( 'Contact', 'pronamic-moneybird' ); ?></label>
-					<input id="pronamic_moneybird_contact_id" type="text" class="form-control" required>
+					<input id="pronamic_moneybird_contact_id" name="sales_invoice[contact_id]" type="text" class="form-control" required>
 				</div>
 			</div>
 		</div>
@@ -76,6 +76,7 @@ get_header();
 					<thead>
 						<tr>
 							<th scope="col"><?php \esc_html_e( 'Number', 'pronamic-moneybird' ); ?></th>
+							<th scope="col"><?php \esc_html_e( 'Product', 'pronamic-moneybird' ); ?></th>
 							<th scope="col"><?php \esc_html_e( 'Description', 'pronamic-moneybird' ); ?></th>
 							<th scope="col"><?php \esc_html_e( 'Amount', 'pronamic-moneybird' ); ?></th>
 						</tr>
@@ -100,6 +101,17 @@ get_header();
 									\printf(
 										'<input name="%s" value="%s" type="number" class="form-control" />',
 										\esc_attr( $name . '[quantity]' ),
+										\esc_attr( '' )
+									);
+
+									?>
+								</td>
+								<td>
+									<?php
+
+									\printf(
+										'<input name="%s" value="%s" type="number" class="form-control" />',
+										\esc_attr( $name . '[product_id]' ),
 										\esc_attr( '' )
 									);
 
