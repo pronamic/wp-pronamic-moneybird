@@ -55,7 +55,7 @@ get_header();
 
 				<div class="mb-3">
 					<label for="pronamic_moneybird_administration_id" class="form-label"><?php esc_html_e( 'Administration', 'pronamic-moneybird' ); ?></label>
-					<input id="pronamic_moneybird_administration_id" name="sales_invoice[administration_id]" value="<?php echo esc_attr( $administration_id ); ?>" type="text" class="form-control" required>
+					<input id="pronamic_moneybird_administration_id" name="administration_id" value="<?php echo esc_attr( $administration_id ); ?>" type="text" class="form-control" required>
 				</div>
 
 				<div class="mb-3">
@@ -90,7 +90,7 @@ get_header();
 								<?php
 
 								$name = \sprintf(
-									'sales_invoice[lines][%d]',
+									'sales_invoice[details_attributes][%d]',
 									$i
 								);
 
@@ -100,7 +100,7 @@ get_header();
 
 									\printf(
 										'<input name="%s" value="%s" type="number" class="form-control" />',
-										\esc_attr( $name . '[quantity]' ),
+										\esc_attr( $name . '[amount]' ),
 										\esc_attr( '' )
 									);
 
@@ -133,7 +133,7 @@ get_header();
 
 									\printf(
 										'<input name="%s" value="%s" type="number" step="0.01" class="form-control" />',
-										\esc_attr( $name . '[amount]' ),
+										\esc_attr( $name . '[price]' ),
 										\esc_attr( '' )
 									);
 

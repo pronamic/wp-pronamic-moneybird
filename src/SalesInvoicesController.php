@@ -57,22 +57,54 @@ class SalesInvoicesController {
 				'permission_callback' => [ $this, 'permission_callback' ],
 				'args'                => [
 					'authorization_id'  => [
-						'description'       => 'Authorization post ID.',
+						'description'       => \__( 'Authorization post ID.', 'pronamic-moneybird' ),
 						'type'              => 'integer',
 						'sanitize_callback' => 'absint',
 						'required'          => true,
 					],
 					'administration_id' => [
-						'description'       => 'Moneybird administration ID.',
+						'description'       => \__( 'Moneybird administration ID.', 'pronamic-moneybird' ),
 						'type'              => 'integer',
 						'sanitize_callback' => 'absint',
 						'required'          => true,
 					],
-					'contact_id'        => [
-						'description'       => 'Moneybird contact ID.',
-						'type'              => 'integer',
-						'sanitize_callback' => 'absint',
-						'required'          => true,
+					'sales_invoice'     => [
+						'description' => \__( 'Moneybird sales invoice.', 'pronamic-moneybird' ),
+						'type'        => 'object',
+						'required'    => true,
+						'properties'  => [
+							'contact_id'         => [
+								'description'       => \__( 'Moneybird contact ID.', 'pronamic-moneybird' ),
+								'type'              => 'integer',
+								'sanitize_callback' => 'absint',
+								'required'          => true,
+							],
+							'details_attributes' => [
+								'description' => \__( 'Contains the sales invoice lines.', 'pronamic-moneybird' ),
+								'type'        => 'array',
+								'items'       => [
+									'type'       => 'object',
+									'properties' => [
+										'description' => [
+											'description' => \__( 'Description.', 'pronamic-moneybird' ),
+											'type'        => 'string',
+										],
+										'price'       => [
+											'description' => \__( 'Price.', 'pronamic-moneybird' ),
+											'type'        => 'string',
+										],
+										'amount'      => [
+											'description' => \__( 'Amount.', 'pronamic-moneybird' ),
+											'type'        => 'string',
+										],
+										'product_id'  => [
+											'description' => \__( 'Product ID.', 'pronamic-moneybird' ),
+											'type'        => 'string',
+										],
+									],
+								],
+							],
+						],
 					],
 				],
 			]
@@ -97,19 +129,11 @@ class SalesInvoicesController {
 	public function rest_api_new_sales_invoice( WP_REST_Request $request ) {
 		$authorization_id  = $request->get_param( 'authorization_id' );
 		$administration_id = $request->get_param( 'administration_id' );
-		$contact_id        = $request->get_param( 'contact_id' );
+
+		$sales_invoice = $request->get_param( 'sales_invoice' );
 
 		$request_data = [
-			'sales_invoice' => [
-				'reference'          => null,
-				'contact_id'         => $contact_id,
-				'details_attributes' => [
-					[
-						'description' => 'Rocking Chair',
-						'price'       => 129.95,
-					],
-				],
-			],
+			'sales_invoice' => $sales_invoice,
 		];
 
 		$api_token = \get_post_meta( $authorization_id, '_pronamic_moneybird_api_token', true );
@@ -165,19 +189,8 @@ class SalesInvoicesController {
 		// OK.
 		$request = new WP_REST_Request( 'POST', '/pronamic-moneybird/v1/sales-invoices' );
 
-		/**
-		 * REST API.
-		 *
-		 * @link https://github.com/WordPress/WordPress/blob/6.4/wp-includes/rest-api/class-wp-rest-server.php#L366-L372
-		 */
-		if ( \array_key_exists( 'sales_invoice', $_POST ) ) {
-			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Sanitization is handled by WordPress REST API.
-			$request->set_body_params( \wp_unslash( $_POST['sales_invoice'] ) );
-		}
-
-		if ( \array_key_exists( 'authorization_id', $_POST ) ) {
-			$request->set_param( 'authorization_id', \sanitize_text_field( \wp_unslash( $_POST['authorization_id'] ) ) );
-		}
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Sanitization is handled by WordPress REST API.
+		$request->set_body_params( \wp_unslash( $_POST ) );
 
 		$response = \rest_do_request( $request );
 
