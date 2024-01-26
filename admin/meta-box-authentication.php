@@ -45,45 +45,5 @@ $response = Http::get(
 $data = $response->json();
 
 echo '<pre>';
-var_dump( $data );
+echo \wp_json_encode( $data, \JSON_PRETTY_PRINT );
 echo '</pre>';
-
-$data = [
-	'sales_invoice' => [
-		'reference'          => null,
-		'contact_id'         => '410289412558030139',
-		'details_attributes' => [
-			[
-				'description' => 'Rocking Chair',
-				'price'       => 129.95,
-			],
-		],
-	],
-];
-
-if ( false ) {
-	$response = Http::post(
-		\strtr(
-			'https://moneybird.com/api/:version/:administration_id/:resource_path.:format',
-			[
-				':version'           => 'v2',
-				':administration_id' => $administration_id,
-				':resource_path'     => 'sales_invoices',
-				':format'            => 'json',
-			]
-		),
-		[
-			'headers' => [
-				'Authorization' => 'Bearer ' . $api_token,
-				'Content-Type'  => 'application/json',
-			],
-			'body'    => \wp_json_encode( $data ),
-		]
-	);
-
-	$data = $response->json();
-
-	echo '<pre>';
-	var_dump( $data );
-	echo '</pre>';
-}

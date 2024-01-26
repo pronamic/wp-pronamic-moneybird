@@ -45,6 +45,7 @@ class Plugin {
 			new ContactPostTypeSupportController(),
 			new ProductPostTypeSupportController(),
 			new RewriteController(),
+			new SalesInvoicesController(),
 			new SettingsController(),
 			new TemplateController(),
 		];

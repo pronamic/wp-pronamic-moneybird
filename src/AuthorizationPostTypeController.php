@@ -209,10 +209,11 @@ class AuthorizationPostTypeController {
 	 * 
 	 * @link https://github.com/WordPress/WordPress/blob/5.8/wp-admin/includes/template.php#L1395
 	 * @param WP_Post $post Post.
-	 * @param array   $box  Box.
 	 * @return void
 	 */
-	public function meta_box_authorization_settings( $post, $box ) {
+	public function meta_box_authorization_settings( // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found -- Used in include.
+		$post
+	) {
 		\wp_nonce_field( 'pronamic_moneybird_save_authorization_settings', 'pronamic_moneybird_nonce' );
 
 		include __DIR__ . '/../admin/meta-box-authorization-settings.php';
@@ -223,10 +224,11 @@ class AuthorizationPostTypeController {
 	 * 
 	 * @link https://github.com/WordPress/WordPress/blob/5.8/wp-admin/includes/template.php#L1395
 	 * @param WP_Post $post Post.
-	 * @param array   $box  Box.
 	 * @return void
 	 */
-	public function meta_box_authentication( $post, $box ) {
+	public function meta_box_authentication(  // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found -- Used in include.
+		$post
+	) {
 		include __DIR__ . '/../admin/meta-box-authentication.php';
 	}
 }

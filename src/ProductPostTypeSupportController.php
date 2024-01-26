@@ -20,7 +20,7 @@ class ProductPostTypeSupportController {
 	 * @return void
 	 */
 	public function setup() {
-		\add_action( 'add_meta_boxes', [ $this, 'add_meta_boxes' ], 10, 2 );
+		\add_action( 'add_meta_boxes', [ $this, 'add_meta_boxes' ] );
 
 		\add_action( 'save_post', [ $this, 'save_post' ] );
 	}
@@ -28,11 +28,10 @@ class ProductPostTypeSupportController {
 	/**
 	 * Add meta boxes.
 	 * 
-	 * @param string  $post_type Post type.
-	 * @param WP_Post $post      Post object.
+	 * @param string $post_type Post type.
 	 * @return void
 	 */
-	public function add_meta_boxes( $post_type, $post ) {
+	public function add_meta_boxes( $post_type ) {
 		if ( ! \post_type_supports( $post_type, 'pronamic_moneybird_product' ) ) {
 			return;
 		}
@@ -52,10 +51,11 @@ class ProductPostTypeSupportController {
 	 * 
 	 * @link https://github.com/WordPress/WordPress/blob/5.8/wp-admin/includes/template.php#L1395
 	 * @param WP_Post $post Post.
-	 * @param array   $box  Box.
 	 * @return void
 	 */
-	public function meta_box_product( $post, $box ) {
+	public function meta_box_product( // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found -- Used in include.
+		$post
+	) {
 		\wp_nonce_field( 'pronamic_moneybird_save_product', 'pronamic_moneybird_nonce' );
 
 		include __DIR__ . '/../admin/meta-box-product.php';

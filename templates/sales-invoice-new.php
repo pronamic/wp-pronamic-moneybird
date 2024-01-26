@@ -17,6 +17,8 @@ if ( '' !== $authorization_id ) {
 
 $lines = range( 1, 5 );
 
+$moneybird_errors = apply_filters( 'pronamic_moneybird_errors', [] );
+
 get_header();
 
 ?>
@@ -24,6 +26,20 @@ get_header();
 	<h2><?php esc_html_e( 'Moneybird', 'pronamic-moneybird' ); ?></h2>
 
 	<h3><?php esc_html_e( 'Add invoice', 'pronamic-moneybird' ); ?></h3>
+
+	<?php if ( count( $moneybird_errors ) > 0 ) : ?>
+
+		<div class="alert alert-warning" role="alert">
+			<ul class="m-0">
+				<?php foreach ( $moneybird_errors as $moneybird_error ) : ?>
+					<li>
+						<?php echo esc_html( $moneybird_error->get_error_message() ); ?>
+					</li>
+				<?php endforeach; ?>
+			</ul>
+		</div>
+
+	<?php endif; ?>
 
 	<form method="post" action="">
 		<div class="card">
@@ -128,7 +144,7 @@ get_header();
 
 			printf(
 				'<button name="pronamic_moneybird_create_sales_invoice" value="true" type="submit" class="btn btn-primary">%s</button>',
-				__( 'Create invoice', 'pronamic-moneybird' )
+				esc_html__( 'Create invoice', 'pronamic-moneybird' )
 			); 
 
 			?>

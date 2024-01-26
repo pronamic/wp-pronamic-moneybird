@@ -28,11 +28,10 @@ class ContactPostTypeSupportController {
 	/**
 	 * Add meta boxes.
 	 * 
-	 * @param string  $post_type Post type.
-	 * @param WP_Post $post      Post object.
+	 * @param string $post_type Post type.
 	 * @return void
 	 */
-	public function add_meta_boxes( $post_type, $post ) {
+	public function add_meta_boxes( $post_type ) {
 		if ( ! \post_type_supports( $post_type, 'pronamic_moneybird_contact' ) ) {
 			return;
 		}
@@ -52,10 +51,11 @@ class ContactPostTypeSupportController {
 	 * 
 	 * @link https://github.com/WordPress/WordPress/blob/5.8/wp-admin/includes/template.php#L1395
 	 * @param WP_Post $post Post.
-	 * @param array   $box  Box.
 	 * @return void
 	 */
-	public function meta_box_contact( $post, $box ) {
+	public function meta_box_contact( // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found -- Used in include.
+		$post
+	) {
 		\wp_nonce_field( 'pronamic_moneybird_save_contact', 'pronamic_moneybird_nonce' );
 
 		include __DIR__ . '/../admin/meta-box-contact.php';
