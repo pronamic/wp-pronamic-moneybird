@@ -161,6 +161,10 @@ class SalesInvoicesController {
 
 		$response_data = $response->json();
 
+		if ( '201' === (string) $response->status() ) {
+			
+		}
+
 		$result = [
 			'api_url'  => $api_url,
 			'request'  => $request_data,
