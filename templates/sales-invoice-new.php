@@ -23,6 +23,92 @@ $moneybird_errors = \apply_filters( 'pronamic_moneybird_errors', [] );
 
 $sales_invoice = new SalesInvoice();
 
+\add_action(
+	'pronamic_moneybird_new_sales_invoice',
+	function ( $sales_invoice ) {
+		global $wpdb;
+
+		if ( ! \array_key_exists( 'orbis_project_id', $_GET ) ) {
+			return;
+		}
+
+		$project_id = \sanitize_text_field( \wp_unslash( $_GET['orbis_project_id'] ) );
+
+		$where = '1 = 1';
+
+		$where .= $wpdb->prepare( ' AND project.id = %d', $project_id );
+
+		$query = "
+			SELECT
+				project.id AS project_id,
+				project.name AS project_name,
+				project.billable_amount AS project_billable_amount,
+				project.number_seconds AS project_billable_time,
+				project.invoice_number AS project_invoice_number,
+				project.post_id AS project_post_id,
+				project.start_date AS project_start_date,
+				manager.ID AS project_manager_id,
+				manager.display_name AS project_manager_name,
+				principal.id AS principal_id,
+				principal.name AS principal_name,
+				principal.post_id AS principal_post_id,
+				project_invoice_totals.project_billed_time,
+				project_invoice_totals.project_billed_amount,
+				project_invoice_totals.project_invoice_numbers,
+				project_timesheet_totals.project_timesheet_time
+			FROM
+				$wpdb->orbis_projects AS project
+					INNER JOIN
+				wp_posts AS project_post
+						ON project.post_id = project_post.ID
+					INNER JOIN
+				wp_users AS manager
+						ON project_post.post_author = manager.ID
+					INNER JOIN
+				$wpdb->orbis_companies AS principal
+						ON project.principal_id = principal.id
+					LEFT JOIN
+				(
+					SELECT
+						project_invoice.project_id,
+						SUM( project_invoice.seconds ) AS project_billed_time,
+						SUM( project_invoice.amount ) AS project_billed_amount,
+						GROUP_CONCAT( DISTINCT project_invoice.invoice_number ) AS project_invoice_numbers
+					FROM
+						$wpdb->orbis_projects_invoices AS project_invoice
+					GROUP BY
+						project_invoice.project_id
+				) AS project_invoice_totals ON project_invoice_totals.project_id = project.id
+					LEFT JOIN
+				(
+					SELECT
+						project_timesheet.project_id,
+						SUM( project_timesheet.number_seconds ) AS project_timesheet_time
+					FROM
+						$wpdb->orbis_timesheets AS project_timesheet
+					GROUP BY
+						project_timesheet.project_id
+				) AS project_timesheet_totals ON project_timesheet_totals.project_id = project.id
+			WHERE
+				$where
+			GROUP BY
+				project.id
+			ORDER BY
+				principal.name
+			;
+		";
+
+		$project = $wpdb->get_row( $query );
+
+		echo '<pre>';
+		\var_dump( $project );
+		echo '</pre>';
+		exit;
+	}
+);
+
+\do_action( 'pronamic_moneybird_new_sales_invoice', $sales_invoice );
+
 \get_header();
 
 ?>
