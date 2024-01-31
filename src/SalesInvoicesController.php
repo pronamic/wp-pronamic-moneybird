@@ -151,7 +151,7 @@ class SalesInvoicesController {
 				':format'            => 'json',
 			]
 		);
-var_dump( $request_data );exit;
+
 		$response = Http::post(
 			$api_url,
 			[
@@ -164,7 +164,10 @@ var_dump( $request_data );exit;
 		);
 
 		$response_data = $response->json();
-
+		echo '<pre>';
+		var_dump( $response_data );
+		echo '</pre>';
+		exit;
 		if ( '201' === (string) $response->status() ) {
 			$result = \preg_match_all(
 				'/#subscription_(?P<subscription_id>[0-9]+)/',
@@ -174,9 +177,7 @@ var_dump( $request_data );exit;
 
 			if ( false === $result ) {
 				throw new \Exception( 'Something went wrong finding subscription IDs in the Moneybird sales invoice detail description.' );
-			}
-
-
+			}       
 		}
 
 		$result = [
@@ -204,11 +205,32 @@ var_dump( $request_data );exit;
 			return;
 		}
 
-		// OK.
 		$request = new WP_REST_Request( 'POST', '/pronamic-moneybird/v1/sales-invoices' );
 
-		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Sanitization is handled by WordPress REST API.
-		$request->set_body_params( \wp_unslash( $_POST ) );
+		if ( isset( $_POST['authorization_id'] ) ) {
+			$request->set_param( 'authorization_id', \sanitize_text_field( \wp_unslash( $_POST['authorization_id'] ) ) );
+		}
+
+		if ( isset( $_POST['administration_id'] ) ) {
+			$request->set_param( 'administration_id', \sanitize_text_field( \wp_unslash( $_POST['administration_id'] ) ) );
+		}
+
+		if ( isset( $_POST['sales_invoice'] ) ) {
+			$data = \map_deep( $_POST['sales_invoice'], 'sanitize_text_field' );
+
+			if ( \array_key_exists( 'details_attributes', $data ) && \is_array( $data['details_attributes'] ) ) {
+				$data['details_attributes'] = \array_filter(
+					\array_map(
+						function ( $data ) {
+							return \is_array( $data ) ? \array_filter( $data ) : $data;
+						},
+						$data['details_attributes']
+					)
+				);
+			}
+
+			$request->set_param( 'sales_invoice', $data );
+		}
 
 		$response = \rest_do_request( $request );
 
