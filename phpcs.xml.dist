@@ -11,6 +11,7 @@
 	<rule ref="PronamicWP">
 		<exclude name="WordPress.DB.DirectDatabaseQuery.DirectQuery" />
 		<exclude name="WordPress.DB.DirectDatabaseQuery.NoCaching" />
+
 		<exclude name="WordPressVIPMinimum.Performance.FetchingRemoteData.FileGetContentsUnknown" />
 	</rule>
 
