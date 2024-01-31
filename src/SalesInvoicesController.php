@@ -165,7 +165,7 @@ class SalesInvoicesController {
 
 		$response_data = $response->json();
 		echo '<pre>';
-		var_dump( $response_data );
+		var_dump( $response->body() );
 		echo '</pre>';
 		exit;
 		if ( '201' === (string) $response->status() ) {
@@ -177,7 +177,7 @@ class SalesInvoicesController {
 
 			if ( false === $result ) {
 				throw new \Exception( 'Something went wrong finding subscription IDs in the Moneybird sales invoice detail description.' );
-			}       
+			}
 		}
 
 		$result = [

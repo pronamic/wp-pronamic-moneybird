@@ -1,0 +1,163 @@
+{
+    "id":"411572643029845630",
+    "administration_id":"406652219513898285",
+    "contact_id":"410289412558030139",
+    "contact":{
+        "id":"410289412558030139",
+        "administration_id":"406652219513898285",
+        "company_name":"Pronamic",
+        "firstname":"",
+        "lastname":"",
+        "address1":"Burgemeester Wuiteweg 39 b",
+        "address2":"",
+        "zipcode":"9203KA",
+        "city":"Drachten",
+        "country":"NL",
+        "phone":"",
+        "delivery_method":"Email",
+        "customer_id":"1",
+        "tax_number":"",
+        "chamber_of_commerce":"01108446",
+        "bank_account":"",
+        "attention":"Remco Tolsma",
+        "email":"administratie@pronamic.nl",
+        "email_ubl":true,
+        "send_invoices_to_attention":"Remco Tolsma",
+        "send_invoices_to_email":"administratie@pronamic.nl",
+        "send_estimates_to_attention":"Remco Tolsma",
+        "send_estimates_to_email":"administratie@pronamic.nl",
+        "sepa_active":false,
+        "sepa_iban":"",
+        "sepa_iban_account_name":"",
+        "sepa_bic":"",
+        "sepa_mandate_id":"",
+        "sepa_mandate_date":null,
+        "sepa_sequence_type":"RCUR",
+        "credit_card_number":"",
+        "credit_card_reference":"",
+        "credit_card_type":null,
+        "tax_number_validated_at":null,
+        "tax_number_valid":null,
+        "invoice_workflow_id":null,
+        "estimate_workflow_id":null,
+        "si_identifier":"",
+        "si_identifier_type":null,
+        "moneybird_payments_mandate":false,
+        "created_at":"2024-01-17T14:41:36.769Z",
+        "updated_at":"2024-01-25T11:39:30.901Z",
+        "version":1706182770,
+        "sales_invoices_url":"https://moneybird.com/406652219513898285/sales_invoices/a9c47a7fb8f4967d8041d2ed3241e2da19a1eac1e10f93a3cd5dca9000744daf/all",
+        "notes":[
+            
+        ],
+        "custom_fields":[
+            
+        ],
+        "contact_people":[
+            
+        ],
+        "archived":false
+    },
+    "contact_person_id":null,
+    "contact_person":null,
+    "invoice_id":null,
+    "recurring_sales_invoice_id":null,
+    "workflow_id":"406652220593931644",
+    "document_style_id":"406652220686206342",
+    "identity_id":"406652220363244914",
+    "draft_id":6,
+    "state":"draft",
+    "invoice_date":null,
+    "due_date":"2024-02-14",
+    "payment_conditions":"We verzoeken u vriendelijk het bovenstaande bedrag van {document.total_price} voor {document.due_date} te voldoen op onze bankrekening onder vermelding van de omschrijving {document.payment_reference}. Voor vragen kunt u contact opnemen per e-mail.",
+    "payment_reference":null,
+    "short_payment_reference":null,
+    "reference":null,
+    "language":"nl",
+    "currency":"EUR",
+    "discount":"0.0",
+    "original_sales_invoice_id":null,
+    "paused":false,
+    "paid_at":null,
+    "sent_at":null,
+    "created_at":"2024-01-31T18:38:00.712Z",
+    "updated_at":"2024-01-31T18:38:00.756Z",
+    "public_view_code":null,
+    "public_view_code_expires_at":null,
+    "version":1706726280,
+    "details":[
+        {
+            "id":"411572643067594367",
+            "administration_id":"406652219513898285",
+            "tax_rate_id":"406652220280407401",
+            "ledger_account_id":"406652219588347195",
+            "project_id":null,
+            "product_id":"410289491686721516",
+            "amount":"1",
+            "amount_decimal":"1.0",
+            "description":"Test · example.com · #subscription_1",
+            "price":"50.0",
+            "period":"20240130..20250129",
+            "row_order":0,
+            "total_price_excl_tax_with_discount":"50.0",
+            "total_price_excl_tax_with_discount_base":"50.0",
+            "tax_report_reference":[
+                "NL/1a"
+            ],
+            "mandatory_tax_text":null,
+            "created_at":"2024-01-31T18:38:00.748Z",
+            "updated_at":"2024-01-31T18:38:00.748Z"
+        }
+    ],
+    "payments":[
+        
+    ],
+    "total_paid":"0.0",
+    "total_unpaid":"60.5",
+    "total_unpaid_base":"60.5",
+    "prices_are_incl_tax":false,
+    "total_price_excl_tax":"50.0",
+    "total_price_excl_tax_base":"50.0",
+    "total_price_incl_tax":"60.5",
+    "total_price_incl_tax_base":"60.5",
+    "total_discount":"0.0",
+    "marked_dubious_on":null,
+    "marked_uncollectible_on":null,
+    "reminder_count":0,
+    "next_reminder":null,
+    "original_estimate_id":null,
+    "url":"https://moneybird.com/406652219513898285/online_authorizations/authorize/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaEpJa1ZoT1dNME4yRTNabUk0WmpRNU5qZGtPREEwTVdReVpXUXpNalF4WlRKa1lURTVZVEZsWVdNeFpURXdaamt6WVROalpEVmtZMkU1TURBd056UTBaR0ZtQmpvR1JWUT0iLCJleHAiOiIyMDI0LTAyLTA3VDE4OjM4OjAwLjgzMFoiLCJwdXIiOiJvbmxpbmVfY29udGFjdF9hdXRob3JpemF0aW9uIn19--3fee0cd359d3939e3e439db8e0493f75fbf504e90d776e3a13c1e225b9eb23bbaa6220577073e875af80f7c6306a9808bd220a08dcda017a3e4e89e7d09b79b7/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaERPaTFCWTNScGRtVlRkWEJ3YjNKME9qcElZWE5vVjJsMGFFbHVaR2xtWm1WeVpXNTBRV05qWlhOemV3bEpJaEJqYjI1MFlXTjBYM1ZwWkFZNkJrVkdTU0pGWVRsak5EZGhOMlppT0dZME9UWTNaRGd3TkRGa01tVmtNekkwTVdVeVpHRXhPV0V4WldGak1XVXhNR1k1TTJFelkyUTFaR05oT1RBd01EYzBOR1JoWmdZN0JsUkpJZzlqYjI1MGNtOXNiR1Z5QmpzR1Jra2lHbTl1YkdsdVpWOXpZV3hsYzE5cGJuWnZhV05sY3dZN0JsUkpJZ3RoWTNScGIyNEdPd1pHU1NJVVkyOXVkR0ZqZEY5cGJuWnZhV05sQmpzR1ZFa2lGbk5oYkdWelgybHVkbTlwWTJWZmRXbGtCanNHUmtraVJUaGtNbVkyT0RBMlpEYzFZakZoWlRBME1HTTRaakJoWXpoaFlXUmxabVZpWTJNNE1EWmtOVGM0WkdZNU5UUTFNV05oTWpCbVpESmxabUZpWm1WaE0ySUdPd1pHIiwiZXhwIjpudWxsLCJwdXIiOiJvbmxpbmVfY29udGFjdF9hdXRob3JpemF0aW9uIn19--cf4f19c42573913aacb29e2408cc49328958ca83595f5e1203f03345d833b6ad2a521772a9d52ffe7c8d6325e637fac96b1a5df25fe0d1169db96f8a6867fc84",
+    "payment_url":"https://moneybird.com/406652219513898285/online_sales_invoices/8d2f6806d75b1ae040c8f0ac8aadefebcc806d578df95451ca20fd2efabfea3b/a9c47a7fb8f4967d8041d2ed3241e2da19a1eac1e10f93a3cd5dca9000744daf/pay_invoice",
+    "custom_fields":[
+        
+    ],
+    "notes":[
+        
+    ],
+    "attachments":[
+        
+    ],
+    "events":[
+        {
+            "administration_id":"406652219513898285",
+            "user_id":"411000117512897739",
+            "action":"sales_invoice_created",
+            "link_entity_id":null,
+            "link_entity_type":null,
+            "data":{
+                
+            },
+            "created_at":"2024-01-31T18:38:00.759Z",
+            "updated_at":"2024-01-31T18:38:00.759Z"
+        }
+    ],
+    "tax_totals":[
+        {
+            "tax_rate_id":"406652220280407401",
+            "taxable_amount":"50.0",
+            "taxable_amount_base":"50.0",
+            "tax_amount":"10.5",
+            "tax_amount_base":"10.5"
+        }
+    ]
+}
