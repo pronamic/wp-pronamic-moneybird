@@ -152,32 +152,27 @@ class SalesInvoicesController {
 			]
 		);
 
-		$response = Http::post(
-			$api_url,
-			[
-				'headers' => [
-					'Authorization' => 'Bearer ' . $api_token,
-					'Content-Type'  => 'application/json',
-				],
-				'body'    => \wp_json_encode( $request_data ),
-			]
-		);
+		$response_status = '201';
+		$response_data   = \json_decode( file_get_contents( __DIR__ . '/../tests/json/create-sales-invoice-response.json' ) );
 
-		$response_data = $response->json();
-		echo '<pre>';
-		var_dump( $response->body() );
-		echo '</pre>';
-		exit;
-		if ( '201' === (string) $response->status() ) {
-			$result = \preg_match_all(
-				'/#subscription_(?P<subscription_id>[0-9]+)/',
-				$line,
-				$matches
+		if ( defined( 'PRONAMIC_MONEYBIRD_PRODUCTION' ) ) {
+			$response = Http::post(
+				$api_url,
+				[
+					'headers' => [
+						'Authorization' => 'Bearer ' . $api_token,
+						'Content-Type'  => 'application/json',
+					],
+					'body'    => \wp_json_encode( $request_data ),
+				]
 			);
 
-			if ( false === $result ) {
-				throw new \Exception( 'Something went wrong finding subscription IDs in the Moneybird sales invoice detail description.' );
-			}
+			$response_status = (string) $response->status();
+			$response_data   = $response->json();
+		}
+
+		if ( '201' === $response_status ) {
+			\do_action( 'pronamic_moneybird_sales_invoice_created', $response_data );
 		}
 
 		$result = [

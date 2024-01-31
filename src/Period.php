@@ -57,17 +57,18 @@ class Period {
 	 * 
 	 * @param string $value Value.
 	 * @return self
+	 * @throws \InvalidArgumentException Throws an exception if the string cannot be converted to a period object.
 	 */
 	public static function from_string( $value ) {
 		$start_date = DateTimeImmutable::createFromFormat( 'Ymd', \substr( $value, 0, 8 ), new DateTimeZone( 'UTC' ) );
 		$end_date   = DateTimeImmutable::createFromFormat( 'Ymd', \substr( $value, 10, 8 ), new DateTimeZone( 'UTC' ) );
 
 		if ( false === $start_date ) {
-			throw new \InvalidArgumentException( 'Cannot read start date from period string: ' . $value );
+			throw new \InvalidArgumentException( \esc_html( 'Cannot read start date from period string: ' . $value ) );
 		}
 
 		if ( false === $end_date ) {
-			throw new \InvalidArgumentException( 'Cannot read end date from period string: ' . $value );
+			throw new \InvalidArgumentException( \esc_html( 'Cannot read end date from period string: ' . $value ) );
 		}
 
 		return new self(

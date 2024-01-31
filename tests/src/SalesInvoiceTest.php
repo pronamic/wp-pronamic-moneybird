@@ -22,6 +22,7 @@ final class SalesInvoiceTest extends TestCase {
 	 * Test description parse.
 	 *
 	 * @return void
+	 * @throws \Exception Throws an exception on an error.
 	 */
 	public function test_description_parse() {
 		$data = \json_decode( \file_get_contents( __DIR__ . '/../json/create-sales-invoice-response.json' ) );
