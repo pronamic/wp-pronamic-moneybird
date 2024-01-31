@@ -101,6 +101,10 @@ class SalesInvoicesController {
 											'description' => \__( 'Product ID.', 'pronamic-moneybird' ),
 											'type'        => 'string',
 										],
+										'period'      => [
+											'description' => \__( 'Period.', 'pronamic-moneybird' ),
+											'type'        => 'string',
+										],
 									],
 								],
 							],
@@ -147,7 +151,7 @@ class SalesInvoicesController {
 				':format'            => 'json',
 			]
 		);
-
+var_dump( $request_data );exit;
 		$response = Http::post(
 			$api_url,
 			[
@@ -162,7 +166,17 @@ class SalesInvoicesController {
 		$response_data = $response->json();
 
 		if ( '201' === (string) $response->status() ) {
-			
+			$result = \preg_match_all(
+				'/#subscription_(?P<subscription_id>[0-9]+)/',
+				$line,
+				$matches
+			);
+
+			if ( false === $result ) {
+				throw new \Exception( 'Something went wrong finding subscription IDs in the Moneybird sales invoice detail description.' );
+			}
+
+
 		}
 
 		$result = [

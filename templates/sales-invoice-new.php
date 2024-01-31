@@ -10,14 +10,14 @@
 
 namespace Pronamic\Moneybird;
 
+use DateTimeImmutable;
+
 $authorization_id  = \get_option( 'pronamic_moneybird_authorization_post_id', '' );
 $administration_id = '';
 
 if ( '' !== $authorization_id ) {
 	$administration_id = \get_post_meta( $authorization_id, '_pronamic_moneybird_administration_id', true );
 }
-
-$lines = \range( 1, 5 );
 
 $moneybird_errors = \apply_filters( 'pronamic_moneybird_errors', [] );
 
@@ -107,7 +107,88 @@ $sales_invoice = new SalesInvoice();
 	}
 );
 
+\add_action(
+	'pronamic_moneybird_new_sales_invoice',
+	function ( $sales_invoice ) {
+		global $wpdb;
+
+		if ( ! \array_key_exists( 'orbis_company_id', $_GET ) ) {
+			return;
+		}
+
+		$company_id = \sanitize_text_field( \wp_unslash( $_GET['orbis_company_id'] ) );
+
+		$company = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $wpdb->orbis_companies WHERE id = %d;", $company_id ) );
+
+		if ( null === $company ) {
+			return;
+		}
+
+		$sales_invoice->contact_id = get_post_meta( $company->post_id, '_pronamic_moneybird_contact_id', true );
+
+		$subscription_ids = wp_parse_id_list( \sanitize_text_field( \wp_unslash( $_GET['orbis_subscription_ids'] ) ) );
+
+		$subscriptions = $wpdb->get_results(
+			$wpdb->prepare(
+				\sprintf(
+					"
+					SELECT
+						subscription.id,
+						subscription.name,
+						DATE(
+							COALESCE(
+								subscription.billed_to,
+								subscription.activation_date,
+								NOW()
+							)
+						) AS start_date,
+						product.name AS product_name,
+						product.post_id AS product_post_id,
+						product.price
+					FROM
+						$wpdb->orbis_subscriptions AS subscription
+							INNER JOIN
+						$wpdb->orbis_subscription_products AS product
+								ON subscription.type_id = product.id
+					WHERE
+						subscription.id IN ( %s )
+					",
+					\implode( ', ', \array_fill( 0, count( $subscription_ids ), '%d' ) ),
+				),
+				$subscription_ids
+			)
+		);
+
+		foreach ( $subscriptions as $subscription ) {
+			$detail = new SalesInvoiceDetail();
+
+			$date_start = DateTimeImmutable::createFromFormat( 'Y-m-d', $subscription->start_date )->setTime( 0, 0 );
+			$date_end   = $date_start->modify( '+1 year' )->modify( '-1 second' );
+
+			$detail->description = \sprintf(
+				'%s · %s · %s',
+				$subscription->product_name,
+				$subscription->name,
+				'#subscription_' . $subscription->id
+			);
+
+			$detail->amount     = '1';
+			$detail->price      = $subscription->price;
+			$detail->product_id = \get_post_meta( $subscription->product_post_id, '_pronamic_moneybird_product_id', true );
+			$detail->period     = $date_start->format( 'Ymd' ) . '..' . $date_end->format( 'Ymd' );
+
+			$sales_invoice->details_attributes[] = $detail;
+		}
+	}
+);
+
 \do_action( 'pronamic_moneybird_new_sales_invoice', $sales_invoice );
+
+$sales_invoice->details_attributes[] = new SalesInvoiceDetail();
+$sales_invoice->details_attributes[] = new SalesInvoiceDetail();
+$sales_invoice->details_attributes[] = new SalesInvoiceDetail();
+$sales_invoice->details_attributes[] = new SalesInvoiceDetail();
+$sales_invoice->details_attributes[] = new SalesInvoiceDetail();
 
 \get_header();
 
@@ -124,6 +205,12 @@ $sales_invoice = new SalesInvoice();
 				<?php foreach ( $moneybird_errors as $moneybird_error ) : ?>
 					<li>
 						<?php echo \esc_html( $moneybird_error->get_error_message() ); ?>
+
+						<?php if ( current_user_can( 'manage_options' ) ) : ?>
+
+							<pre><?php echo \esc_html( wp_json_encode( $moneybird_error->get_error_data(), \JSON_PRETTY_PRINT ) ); ?></pre>
+
+						<?php endif; ?>
 					</li>
 				<?php endforeach; ?>
 			</ul>
@@ -166,15 +253,16 @@ $sales_invoice = new SalesInvoice();
 					<thead>
 						<tr>
 							<th scope="col"><?php \esc_html_e( 'Number', 'pronamic-moneybird' ); ?></th>
-							<th scope="col"><?php \esc_html_e( 'Product', 'pronamic-moneybird' ); ?></th>
 							<th scope="col"><?php \esc_html_e( 'Description', 'pronamic-moneybird' ); ?></th>
 							<th scope="col"><?php \esc_html_e( 'Amount', 'pronamic-moneybird' ); ?></th>
+							<th scope="col"><?php \esc_html_e( 'Product ID', 'pronamic-moneybird' ); ?></th>
+							<th scope="col"><?php \esc_html_e( 'Period', 'pronamic-moneybird' ); ?></th>
 						</tr>
 					</thead>
 
 					<tbody>
 
-						<?php foreach ( $lines as $i => $line ) : ?>
+						<?php foreach ( $sales_invoice->details_attributes as $i => $detail ) : ?>
 
 							<tr>
 								<?php
@@ -191,18 +279,7 @@ $sales_invoice = new SalesInvoice();
 									\printf(
 										'<input name="%s" value="%s" type="number" class="form-control" />',
 										\esc_attr( $name . '[amount]' ),
-										\esc_attr( '' )
-									);
-
-									?>
-								</td>
-								<td>
-									<?php
-
-									\printf(
-										'<input name="%s" value="%s" type="text" class="form-control" />',
-										\esc_attr( $name . '[product_id]' ),
-										\esc_attr( '' )
+										\esc_attr( $detail->amount ?? '' )
 									);
 
 									?>
@@ -213,7 +290,7 @@ $sales_invoice = new SalesInvoice();
 									\printf(
 										'<input name="%s" value="%s" type="text" class="form-control" maxlength="36" />',
 										\esc_attr( $name . '[description]' ),
-										\esc_attr( '' )
+										\esc_attr( $detail->description ?? '' )
 									);
 
 									?>
@@ -224,7 +301,29 @@ $sales_invoice = new SalesInvoice();
 									\printf(
 										'<input name="%s" value="%s" type="number" step="0.01" class="form-control" />',
 										\esc_attr( $name . '[price]' ),
-										\esc_attr( '' )
+										\esc_attr( $detail->price ?? '' )
+									);
+
+									?>
+								</td>
+								<td>
+									<?php
+
+									\printf(
+										'<input name="%s" value="%s" type="text" class="form-control" />',
+										\esc_attr( $name . '[product_id]' ),
+										\esc_attr( $detail->product_id ?? '' )
+									);
+
+									?>
+								</td>
+								<td>
+									<?php
+
+									\printf(
+										'<input name="%s" value="%s" type="text" class="form-control" />',
+										\esc_attr( $name . '[period]' ),
+										\esc_attr( $detail->period ?? '' )
 									);
 
 									?>
