@@ -28,10 +28,12 @@ $sales_invoice = new SalesInvoice();
 	function ( $sales_invoice ) {
 		global $wpdb;
 
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		if ( ! \array_key_exists( 'orbis_project_id', $_GET ) ) {
 			return;
 		}
 
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		$project_id = \sanitize_text_field( \wp_unslash( $_GET['orbis_project_id'] ) );
 
 		$where = '1 = 1';
@@ -98,7 +100,14 @@ $sales_invoice = new SalesInvoice();
 			;
 		";
 
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		$project = $wpdb->get_row( $query );
+
+		if ( null === $project ) {
+			return;
+		}
+
+		$sales_invoice->contact_id = \get_post_meta( $project->principal_post_id, '_pronamic_moneybird_contact_id', true );
 
 		echo '<pre>';
 		\var_dump( $project );
@@ -112,10 +121,12 @@ $sales_invoice = new SalesInvoice();
 	function ( $sales_invoice ) {
 		global $wpdb;
 
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		if ( ! \array_key_exists( 'orbis_company_id', $_GET ) ) {
 			return;
 		}
 
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		$company_id = \sanitize_text_field( \wp_unslash( $_GET['orbis_company_id'] ) );
 
 		$company = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $wpdb->orbis_companies WHERE id = %d;", $company_id ) );
@@ -125,7 +136,20 @@ $sales_invoice = new SalesInvoice();
 		}
 
 		$sales_invoice->contact_id = get_post_meta( $company->post_id, '_pronamic_moneybird_contact_id', true );
+	}
+);
 
+\add_action(
+	'pronamic_moneybird_new_sales_invoice',
+	function ( $sales_invoice ) {
+		global $wpdb;
+
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		if ( ! \array_key_exists( 'orbis_subscription_ids', $_GET ) ) {
+			return;
+		}
+
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		$subscription_ids = wp_parse_id_list( \sanitize_text_field( \wp_unslash( $_GET['orbis_subscription_ids'] ) ) );
 
 		$subscriptions = $wpdb->get_results(
