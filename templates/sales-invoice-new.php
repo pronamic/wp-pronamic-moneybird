@@ -37,6 +37,14 @@ $sales_invoice->details_attributes[] = new SalesInvoiceDetail();
 <div>
 	<h2><?php \esc_html_e( 'Moneybird', 'pronamic-moneybird' ); ?></h2>
 
+	<?php if ( \array_key_exists( 'pronamic_moneybird_sales_invoice_created', $_GET ) ) : ?>
+
+		<div class="alert alert-success" role="alert">
+			<?php \esc_html_e( 'Moneybird inoice created.', 'pronamic-moneybird' ); ?>
+		</div>
+
+	<?php endif; ?>
+
 	<h3><?php \esc_html_e( 'Add invoice', 'pronamic-moneybird' ); ?></h3>
 
 	<?php if ( \count( $moneybird_errors ) > 0 ) : ?>
