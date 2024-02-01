@@ -152,24 +152,19 @@ class SalesInvoicesController {
 			]
 		);
 
-		$response_status = '201';
-		$response_data   = \json_decode( file_get_contents( __DIR__ . '/../tests/json/create-sales-invoice-response.json' ) );
+		$response = Http::post(
+			$api_url,
+			[
+				'headers' => [
+					'Authorization' => 'Bearer ' . $api_token,
+					'Content-Type'  => 'application/json',
+				],
+				'body'    => \wp_json_encode( $request_data ),
+			]
+		);
 
-		if ( defined( 'PRONAMIC_MONEYBIRD_PRODUCTION' ) ) {
-			$response = Http::post(
-				$api_url,
-				[
-					'headers' => [
-						'Authorization' => 'Bearer ' . $api_token,
-						'Content-Type'  => 'application/json',
-					],
-					'body'    => \wp_json_encode( $request_data ),
-				]
-			);
-
-			$response_status = (string) $response->status();
-			$response_data   = $response->json();
-		}
+		$response_status = (string) $response->status();
+		$response_data   = $response->json();
 
 		if ( '201' === $response_status ) {
 			\do_action( 'pronamic_moneybird_sales_invoice_created', $response_data );
