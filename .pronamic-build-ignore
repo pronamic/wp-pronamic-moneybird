@@ -3,3 +3,9 @@
 
 # Build
 /build/
+
+# PHPUnit
+/.phpunit.cache/
+
+# Tests
+/tests/
