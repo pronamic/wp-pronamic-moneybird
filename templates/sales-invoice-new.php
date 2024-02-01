@@ -31,13 +31,16 @@ $sales_invoice->details_attributes[] = new SalesInvoiceDetail();
 $sales_invoice->details_attributes[] = new SalesInvoiceDetail();
 $sales_invoice->details_attributes[] = new SalesInvoiceDetail();
 
+// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+$created = \array_key_exists( 'pronamic_moneybird_sales_invoice_created', $_GET );
+
 \get_header();
 
 ?>
 <div>
 	<h2><?php \esc_html_e( 'Moneybird', 'pronamic-moneybird' ); ?></h2>
 
-	<?php if ( \array_key_exists( 'pronamic_moneybird_sales_invoice_created', $_GET ) ) : ?>
+	<?php if ( $created ) : ?>
 
 		<div class="alert alert-success" role="alert">
 			<?php \esc_html_e( 'Moneybird inoice created.', 'pronamic-moneybird' ); ?>
