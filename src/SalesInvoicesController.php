@@ -235,9 +235,14 @@ class SalesInvoicesController {
 			return;
 		}
 
-		echo '<pre>';
-		echo \wp_json_encode( $response, JSON_PRETTY_PRINT );
-		echo '</pre>';
+		$url = \add_query_arg(
+			[
+				'pronamic_moneybird_sales_invoice_created' => true,
+			],
+			\wp_get_referer()
+		);
+
+		\wp_safe_redirect( $url );
 
 		exit;
 	}
