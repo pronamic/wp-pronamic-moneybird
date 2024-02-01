@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2024-01-25T15:40:56+00:00\n"
+"POT-Creation-Date: 2024-02-01T13:01:54+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.9.0\n"
 "X-Domain: pronamic-moneybird\n"
@@ -57,12 +57,13 @@ msgid "Contact ID"
 msgstr ""
 
 #: admin/meta-box-product.php:21
+#: templates/sales-invoice-new.php:115
 msgid "Product ID"
 msgstr ""
 
 #: src/AdminController.php:94
 #: src/AdminController.php:95
-#: templates/sales-invoice-new.php:17
+#: templates/sales-invoice-new.php:41
 msgid "Moneybird"
 msgstr ""
 
@@ -193,7 +194,7 @@ msgid "Twinfield Authorization"
 msgstr ""
 
 #: src/AuthorizationPostTypeController.php:109
-#: templates/sales-invoice-new.php:29
+#: templates/sales-invoice-new.php:81
 msgid "Authorization"
 msgstr ""
 
@@ -205,12 +206,56 @@ msgstr ""
 msgid "Default"
 msgstr ""
 
-#: src/ContactPostTypeSupportController.php:42
+#: src/ContactPostTypeSupportController.php:41
 msgid "Moneybird contact"
 msgstr ""
 
-#: src/ProductPostTypeSupportController.php:42
+#: src/ProductPostTypeSupportController.php:41
 msgid "Moneybird product"
+msgstr ""
+
+#: src/SalesInvoicesController.php:60
+msgid "Authorization post ID."
+msgstr ""
+
+#: src/SalesInvoicesController.php:66
+msgid "Moneybird administration ID."
+msgstr ""
+
+#: src/SalesInvoicesController.php:72
+msgid "Moneybird sales invoice."
+msgstr ""
+
+#: src/SalesInvoicesController.php:77
+msgid "Contact ID."
+msgstr ""
+
+#: src/SalesInvoicesController.php:83
+msgid "Reference."
+msgstr ""
+
+#: src/SalesInvoicesController.php:87
+msgid "Contains the sales invoice lines."
+msgstr ""
+
+#: src/SalesInvoicesController.php:93
+msgid "Description."
+msgstr ""
+
+#: src/SalesInvoicesController.php:97
+msgid "Price."
+msgstr ""
+
+#: src/SalesInvoicesController.php:101
+msgid "Amount."
+msgstr ""
+
+#: src/SalesInvoicesController.php:105
+msgid "Product ID."
+msgstr ""
+
+#: src/SalesInvoicesController.php:109
+msgid "Period."
 msgstr ""
 
 #: src/SettingsController.php:45
@@ -229,38 +274,50 @@ msgstr ""
 msgid "— Select a page —"
 msgstr ""
 
-#: templates/sales-invoice-new.php:19
+#: templates/sales-invoice-new.php:46
+msgid "Moneybird inoice created."
+msgstr ""
+
+#: templates/sales-invoice-new.php:51
 msgid "Add invoice"
 msgstr ""
 
-#: templates/sales-invoice-new.php:24
+#: templates/sales-invoice-new.php:76
 msgid "Base"
 msgstr ""
 
-#: templates/sales-invoice-new.php:34
+#: templates/sales-invoice-new.php:86
 msgid "Administration"
 msgstr ""
 
-#: templates/sales-invoice-new.php:39
+#: templates/sales-invoice-new.php:91
 msgid "Contact"
 msgstr ""
 
-#: templates/sales-invoice-new.php:47
+#: templates/sales-invoice-new.php:96
+msgid "Reference"
+msgstr ""
+
+#: templates/sales-invoice-new.php:104
 msgid "Lines"
 msgstr ""
 
-#: templates/sales-invoice-new.php:55
+#: templates/sales-invoice-new.php:112
 msgid "Number"
 msgstr ""
 
-#: templates/sales-invoice-new.php:56
+#: templates/sales-invoice-new.php:113
 msgid "Description"
 msgstr ""
 
-#: templates/sales-invoice-new.php:57
+#: templates/sales-invoice-new.php:114
 msgid "Amount"
 msgstr ""
 
-#: templates/sales-invoice-new.php:124
+#: templates/sales-invoice-new.php:116
+msgid "Period"
+msgstr ""
+
+#: templates/sales-invoice-new.php:205
 msgid "Create invoice"
 msgstr ""

@@ -17,9 +17,16 @@ class SalesInvoice {
 	/**
 	 * Contact ID.
 	 * 
-	 * @var string
+	 * @var string|null
 	 */
-	public $contact_id = '';
+	public $contact_id;
+
+	/**
+	 * Reference.
+	 * 
+	 * @var string|null
+	 */
+	public $reference;
 
 	/**
 	 * Details attributes.

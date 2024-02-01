@@ -5,8 +5,8 @@ msgstr ""
 "Project-Id-Version: Pronamic Moneybird 1.0.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/pronamic-"
 "moneybird\n"
-"POT-Creation-Date: 2024-01-25T15:40:56+00:00\n"
-"PO-Revision-Date: 2024-01-25 16:44+0100\n"
+"POT-Creation-Date: 2024-02-01T13:01:54+00:00\n"
+"PO-Revision-Date: 2024-02-01 14:02+0100\n"
 "Last-Translator: Remco Tolsma <info@remcotolsma.nl>\n"
 "Language-Team: \n"
 "Language: nl_NL\n"
@@ -62,12 +62,12 @@ msgstr ""
 msgid "Contact ID"
 msgstr "Contact-ID"
 
-#: admin/meta-box-product.php:21
+#: admin/meta-box-product.php:21 templates/sales-invoice-new.php:115
 msgid "Product ID"
 msgstr "Product-ID"
 
 #: src/AdminController.php:94 src/AdminController.php:95
-#: templates/sales-invoice-new.php:17
+#: templates/sales-invoice-new.php:41
 msgid "Moneybird"
 msgstr "Moneybird"
 
@@ -196,7 +196,7 @@ msgid "Twinfield Authorization"
 msgstr ""
 
 #: src/AuthorizationPostTypeController.php:109
-#: templates/sales-invoice-new.php:29
+#: templates/sales-invoice-new.php:81
 msgid "Authorization"
 msgstr "Autorisatie"
 
@@ -208,13 +208,57 @@ msgstr ""
 msgid "Default"
 msgstr "Standaard"
 
-#: src/ContactPostTypeSupportController.php:42
+#: src/ContactPostTypeSupportController.php:41
 msgid "Moneybird contact"
 msgstr "Moneybird-contact"
 
-#: src/ProductPostTypeSupportController.php:42
+#: src/ProductPostTypeSupportController.php:41
 msgid "Moneybird product"
 msgstr "Moneybird-product"
+
+#: src/SalesInvoicesController.php:60
+msgid "Authorization post ID."
+msgstr ""
+
+#: src/SalesInvoicesController.php:66
+msgid "Moneybird administration ID."
+msgstr ""
+
+#: src/SalesInvoicesController.php:72
+msgid "Moneybird sales invoice."
+msgstr ""
+
+#: src/SalesInvoicesController.php:77
+msgid "Contact ID."
+msgstr ""
+
+#: src/SalesInvoicesController.php:83
+msgid "Reference."
+msgstr "Referentie."
+
+#: src/SalesInvoicesController.php:87
+msgid "Contains the sales invoice lines."
+msgstr ""
+
+#: src/SalesInvoicesController.php:93
+msgid "Description."
+msgstr ""
+
+#: src/SalesInvoicesController.php:97
+msgid "Price."
+msgstr ""
+
+#: src/SalesInvoicesController.php:101
+msgid "Amount."
+msgstr ""
+
+#: src/SalesInvoicesController.php:105
+msgid "Product ID."
+msgstr ""
+
+#: src/SalesInvoicesController.php:109
+msgid "Period."
+msgstr "Periode."
 
 #: src/SettingsController.php:45
 msgid "General"
@@ -232,38 +276,50 @@ msgstr ""
 msgid "— Select a page —"
 msgstr ""
 
-#: templates/sales-invoice-new.php:19
+#: templates/sales-invoice-new.php:46
+msgid "Moneybird inoice created."
+msgstr ""
+
+#: templates/sales-invoice-new.php:51
 msgid "Add invoice"
 msgstr "Factuur toevoegen"
 
-#: templates/sales-invoice-new.php:24
+#: templates/sales-invoice-new.php:76
 msgid "Base"
 msgstr "Basis"
 
-#: templates/sales-invoice-new.php:34
+#: templates/sales-invoice-new.php:86
 msgid "Administration"
 msgstr "Administratie"
 
-#: templates/sales-invoice-new.php:39
+#: templates/sales-invoice-new.php:91
 msgid "Contact"
 msgstr "Contact"
 
-#: templates/sales-invoice-new.php:47
+#: templates/sales-invoice-new.php:96
+msgid "Reference"
+msgstr "Referentie"
+
+#: templates/sales-invoice-new.php:104
 msgid "Lines"
 msgstr "Regels"
 
-#: templates/sales-invoice-new.php:55
+#: templates/sales-invoice-new.php:112
 msgid "Number"
 msgstr "Aantal"
 
-#: templates/sales-invoice-new.php:56
+#: templates/sales-invoice-new.php:113
 msgid "Description"
 msgstr "Beschrijving"
 
-#: templates/sales-invoice-new.php:57
+#: templates/sales-invoice-new.php:114
 msgid "Amount"
 msgstr "Bedrag"
 
-#: templates/sales-invoice-new.php:124
+#: templates/sales-invoice-new.php:116
+msgid "Period"
+msgstr "Periode"
+
+#: templates/sales-invoice-new.php:205
 msgid "Create invoice"
 msgstr "Factuur maken"

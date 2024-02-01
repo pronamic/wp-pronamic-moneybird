@@ -74,10 +74,14 @@ class SalesInvoicesController {
 						'required'    => true,
 						'properties'  => [
 							'contact_id'         => [
-								'description'       => \__( 'Moneybird contact ID.', 'pronamic-moneybird' ),
+								'description'       => \__( 'Contact ID.', 'pronamic-moneybird' ),
 								'type'              => 'integer',
 								'sanitize_callback' => 'absint',
 								'required'          => true,
+							],
+							'reference'          => [
+								'description' => \__( 'Reference.', 'pronamic-moneybird' ),
+								'type'        => 'string',
 							],
 							'details_attributes' => [
 								'description' => \__( 'Contains the sales invoice lines.', 'pronamic-moneybird' ),
