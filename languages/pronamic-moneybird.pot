@@ -9,28 +9,33 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2024-02-01T13:01:54+00:00\n"
+"POT-Creation-Date: 2024-02-15T09:09:08+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.9.0\n"
+"X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: pronamic-moneybird\n"
 
 #. Plugin Name of the plugin
+#: pronamic-moneybird.php
 msgid "Pronamic Moneybird"
 msgstr ""
 
 #. Plugin URI of the plugin
+#: pronamic-moneybird.php
 msgid "https://wp.pronamic.directory/plugins/pronamic-moneybird/"
 msgstr ""
 
 #. Description of the plugin
+#: pronamic-moneybird.php
 msgid "This WordPress plugin provides the link between your WordPress website and your Moneybird administration."
 msgstr ""
 
 #. Author of the plugin
+#: pronamic-moneybird.php
 msgid "Pronamic"
 msgstr ""
 
 #. Author URI of the plugin
+#: pronamic-moneybird.php
 msgid "https://www.pronamic.eu/"
 msgstr ""
 
@@ -96,7 +101,7 @@ msgid "Authorization"
 msgstr ""
 
 #: src/AuthorizationPostTypeController.php:53
-msgctxt "twinfield authorizations"
+msgctxt "moneybird authorizations"
 msgid "Add New"
 msgstr ""
 
@@ -190,7 +195,7 @@ msgstr ""
 
 #: src/AuthorizationPostTypeController.php:77
 msgctxt "add new from admin bar"
-msgid "Twinfield Authorization"
+msgid "Moneybird Authorization"
 msgstr ""
 
 #: src/AuthorizationPostTypeController.php:109

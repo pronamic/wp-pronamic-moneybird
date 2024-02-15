@@ -50,7 +50,7 @@ class AuthorizationPostTypeController {
 				'labels'       => [
 					'name'                  => \_x( 'Authorizations', 'post type general name', 'pronamic-moneybird' ),
 					'singular_name'         => \_x( 'Authorization', 'post type singular name', 'pronamic-moneybird' ),
-					'add_new'               => \_x( 'Add New', 'twinfield authorizations', 'pronamic-moneybird' ),
+					'add_new'               => \_x( 'Add New', 'moneybird authorizations', 'pronamic-moneybird' ),
 					'add_new_item'          => \__( 'Add New Authorization', 'pronamic-moneybird' ),
 					'edit_item'             => \__( 'Edit Authorization', 'pronamic-moneybird' ),
 					'new_item'              => \__( 'New Authorization', 'pronamic-moneybird' ),
@@ -74,7 +74,7 @@ class AuthorizationPostTypeController {
 					'items_list_navigation' => \__( 'Authorizations list navigation', 'pronamic-moneybird' ),
 					'items_list'            => \__( 'Authorizations list', 'pronamic-moneybird' ),
 					'menu_name'             => \__( 'Authorizations', 'pronamic-moneybird' ),
-					'name_admin_bar'        => \_x( 'Twinfield Authorization', 'add new from admin bar', 'pronamic-moneybird' ),
+					'name_admin_bar'        => \_x( 'Moneybird Authorization', 'add new from admin bar', 'pronamic-moneybird' ),
 				],
 				'public'       => true,
 				/**
