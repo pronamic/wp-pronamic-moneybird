@@ -37,11 +37,25 @@ class TemplateController {
 		}
 
 		switch ( $route ) {
+			case 'new_financial_statement':
+				return $this->template_include_new_financial_statement( $template );
 			case 'new_sales_invoice':
 				return $this->template_include_new_sales_invoice( $template );
 			default:
 				return $template;
 		}
+	}
+
+	/**
+	 * Template include new financial statement.
+	 * 
+	 * @param string $template Template.
+	 * @return string
+	 */
+	private function template_include_new_financial_statement( $template ) {
+		$template = __DIR__ . '/../templates/financial-statement-new.php';
+
+		return $template;
 	}
 
 	/**
