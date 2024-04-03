@@ -56,13 +56,13 @@ class FinancialStatementsController {
 				'callback'            => [ $this, 'rest_api_new_financial_statement' ],
 				'permission_callback' => [ $this, 'permission_callback' ],
 				'args'                => [
-					'authorization_id'  => [
+					'authorization_id'    => [
 						'description'       => \__( 'Authorization post ID.', 'pronamic-moneybird' ),
 						'type'              => 'integer',
 						'sanitize_callback' => 'absint',
 						'required'          => true,
 					],
-					'administration_id' => [
+					'administration_id'   => [
 						'description'       => \__( 'Moneybird administration ID.', 'pronamic-moneybird' ),
 						'type'              => 'integer',
 						'sanitize_callback' => 'absint',
@@ -79,13 +79,34 @@ class FinancialStatementsController {
 								'sanitize_callback' => 'absint',
 								'required'          => true,
 							],
-							'reference'          => [
+							'reference'            => [
 								'description' => \__( 'Reference.', 'pronamic-moneybird' ),
 								'type'        => 'string',
 							],
-							'official_date'          => [
+							'official_date'        => [
 								'description' => \__( 'Official date.', 'pronamic-moneybird' ),
 								'type'        => 'string',
+							],
+							'financial_mutations_attributes' => [
+								'description' => \__( 'Contains the financial mutations.', 'pronamic-moneybird' ),
+								'type'        => 'array',
+								'items'       => [
+									'type'       => 'object',
+									'properties' => [
+										'date'    => [
+											'description' => \__( 'Date.', 'pronamic-moneybird' ),
+											'type'        => 'string',
+										],
+										'message' => [
+											'description' => \__( 'Message.', 'pronamic-moneybird' ),
+											'type'        => 'string',
+										],
+										'amount'  => [
+											'description' => \__( 'Amount.', 'pronamic-moneybird' ),
+											'type'        => 'string',
+										],
+									],
+								],
 							],
 						],
 					],
@@ -145,25 +166,32 @@ class FinancialStatementsController {
 		$response_status = (string) $response->status();
 		$response_data   = $response->json();
 
-		if ( '201' === $response_status ) {
-			\do_action( 'pronamic_moneybird_financial_statement_created', $response_data );
+		if ( '201' !== $response_status ) {
+			return new WP_Error(
+				'pronamic_moneybird_error',
+				'Unexpected response status: ' . $response_status,
+				[
+					'status' => $response_status,
+					'data'   => $response_data,
+				]
+			);
 		}
 
-		$result = [
-			'api_url'  => $api_url,
-			'request'  => $request_data,
-			'response' => $response_data,
-		];
+		\do_action( 'pronamic_moneybird_financial_statement_created', $response_data );
 
-		return \rest_ensure_response( $result );
+		$response = new WP_REST_Response( $response_data, $response_status );
+
+		$response->add_link( 'api-url', $api_url );
+
+		return $response;
 	}
 
 	/**
-	 * Maybe create new sales invoice.
+	 * Maybe create new financial statement.
 	 * 
 	 * @return void
 	 */
-	public function maybe_create_new_sales_invoice() {
+	public function maybe_create_new_financial_statement() {
 		if ( ! \array_key_exists( 'pronamic_moneybird_nonce', $_POST ) ) {
 			return;
 		}

@@ -52,5 +52,13 @@ class RewriteController {
 			],
 			'top'
 		);
+
+		\add_rewrite_rule(
+			'moneybird/financial-statements/new/?$', 
+			[
+				'pronamic_moneybird_route' => 'new_financial_statement',
+			],
+			'top'
+		);
 	}
 }

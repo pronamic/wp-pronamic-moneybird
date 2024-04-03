@@ -21,18 +21,18 @@ if ( '' !== $authorization_id ) {
 
 $moneybird_errors = \apply_filters( 'pronamic_moneybird_errors', [] );
 
-$sales_invoice = new SalesInvoice();
+$financial_statement = new FinancialStatement( 0, '' );
 
-\do_action( 'pronamic_moneybird_new_sales_invoice', $sales_invoice );
+\do_action( 'pronamic_moneybird_new_financial_statement', $financial_statement );
 
-$sales_invoice->details_attributes[] = new SalesInvoiceDetail();
-$sales_invoice->details_attributes[] = new SalesInvoiceDetail();
-$sales_invoice->details_attributes[] = new SalesInvoiceDetail();
-$sales_invoice->details_attributes[] = new SalesInvoiceDetail();
-$sales_invoice->details_attributes[] = new SalesInvoiceDetail();
+$financial_statement->financial_mutations_attributes[] = new FinancialMutation();
+$financial_statement->financial_mutations_attributes[] = new FinancialMutation();
+$financial_statement->financial_mutations_attributes[] = new FinancialMutation();
+$financial_statement->financial_mutations_attributes[] = new FinancialMutation();
+$financial_statement->financial_mutations_attributes[] = new FinancialMutation();
 
 // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-$created = \array_key_exists( 'pronamic_moneybird_sales_invoice_created', $_GET );
+$created = \array_key_exists( 'pronamic_moneybird_financial_statement_created', $_GET );
 
 \get_header();
 
@@ -43,12 +43,12 @@ $created = \array_key_exists( 'pronamic_moneybird_sales_invoice_created', $_GET 
 	<?php if ( $created ) : ?>
 
 		<div class="alert alert-success" role="alert">
-			<?php \esc_html_e( 'Moneybird inoice created.', 'pronamic-moneybird' ); ?>
+			<?php \esc_html_e( 'Moneybird financial statement created.', 'pronamic-moneybird' ); ?>
 		</div>
 
 	<?php endif; ?>
 
-	<h3><?php \esc_html_e( 'Add invoice', 'pronamic-moneybird' ); ?></h3>
+	<h3><?php \esc_html_e( 'Add financial statement', 'pronamic-moneybird' ); ?></h3>
 
 	<?php if ( \count( $moneybird_errors ) > 0 ) : ?>
 
@@ -88,20 +88,20 @@ $created = \array_key_exists( 'pronamic_moneybird_sales_invoice_created', $_GET 
 				</div>
 
 				<div class="mb-3">
-					<label for="pronamic_moneybird_contact_id" class="form-label"><?php \esc_html_e( 'Contact', 'pronamic-moneybird' ); ?></label>
-					<input id="pronamic_moneybird_contact_id" name="sales_invoice[contact_id]" value="<?php echo \esc_attr( $sales_invoice->contact_id ?? '' ); ?>" type="text" class="form-control" required>
+					<label for="pronamic_moneybird_financial_account_id" class="form-label"><?php \esc_html_e( 'Financial account', 'pronamic-moneybird' ); ?></label>
+					<input id="pronamic_moneybird_financial_account_id" name="financial_statement[financial_account_id]" value="<?php echo \esc_attr( $financial_statement->financial_account_id ?? '' ); ?>" type="text" class="form-control" required>
 				</div>
 
 				<div class="mb-3">
 					<label for="pronamic_moneybird_reference" class="form-label"><?php \esc_html_e( 'Reference', 'pronamic-moneybird' ); ?></label>
-					<input id="pronamic_moneybird_reference" name="sales_invoice[reference]" value="<?php echo \esc_attr( $sales_invoice->reference ?? '' ); ?>" type="text" class="form-control" required>
+					<input id="pronamic_moneybird_reference" name="financial_statement[reference]" value="<?php echo \esc_attr( $financial_statement->reference ?? '' ); ?>" type="text" class="form-control" required>
 				</div>
 			</div>
 		</div>
 
 		<div class="card mt-4">
 			<div class="card-header">
-				<?php \esc_html_e( 'Lines', 'pronamic-moneybird' ); ?>
+				<?php \esc_html_e( 'Mutations', 'pronamic-moneybird' ); ?>
 			</div>
 
 			<div class="card-body">
@@ -109,23 +109,21 @@ $created = \array_key_exists( 'pronamic_moneybird_sales_invoice_created', $_GET 
 				<table class="table table-striped">
 					<thead>
 						<tr>
-							<th scope="col"><?php \esc_html_e( 'Number', 'pronamic-moneybird' ); ?></th>
-							<th scope="col"><?php \esc_html_e( 'Description', 'pronamic-moneybird' ); ?></th>
+							<th scope="col"><?php \esc_html_e( 'Date', 'pronamic-moneybird' ); ?></th>
+							<th scope="col"><?php \esc_html_e( 'Message', 'pronamic-moneybird' ); ?></th>
 							<th scope="col"><?php \esc_html_e( 'Amount', 'pronamic-moneybird' ); ?></th>
-							<th scope="col"><?php \esc_html_e( 'Product ID', 'pronamic-moneybird' ); ?></th>
-							<th scope="col"><?php \esc_html_e( 'Period', 'pronamic-moneybird' ); ?></th>
 						</tr>
 					</thead>
 
 					<tbody>
 
-						<?php foreach ( $sales_invoice->details_attributes as $i => $detail ) : ?>
+						<?php foreach ( $financial_statement->financial_mutations_attributes as $i => $detail ) : ?>
 
 							<tr>
 								<?php
 
 								$name = \sprintf(
-									'sales_invoice[details_attributes][%d]',
+									'financial_statement[financial_mutations_attributes][%d]',
 									$i
 								);
 
@@ -134,9 +132,9 @@ $created = \array_key_exists( 'pronamic_moneybird_sales_invoice_created', $_GET 
 									<?php
 
 									\printf(
-										'<input name="%s" value="%s" type="text" class="form-control" />',
-										\esc_attr( $name . '[amount]' ),
-										\esc_attr( $detail->amount ?? '' )
+										'<input name="%s" value="%s" type="date" class="form-control" />',
+										\esc_attr( $name . '[date]' ),
+										\esc_attr( $detail->date ?? '' )
 									);
 
 									?>
@@ -145,9 +143,9 @@ $created = \array_key_exists( 'pronamic_moneybird_sales_invoice_created', $_GET 
 									<?php
 
 									\printf(
-										'<input name="%s" value="%s" type="text" class="form-control" maxlength="36" />',
-										\esc_attr( $name . '[description]' ),
-										\esc_attr( $detail->description ?? '' )
+										'<input name="%s" value="%s" type="text" class="form-control" />',
+										\esc_attr( $name . '[message]' ),
+										\esc_attr( $detail->message ?? '' )
 									);
 
 									?>
@@ -157,30 +155,8 @@ $created = \array_key_exists( 'pronamic_moneybird_sales_invoice_created', $_GET 
 
 									\printf(
 										'<input name="%s" value="%s" type="number" step="0.01" class="form-control" />',
-										\esc_attr( $name . '[price]' ),
-										\esc_attr( $detail->price ?? '' )
-									);
-
-									?>
-								</td>
-								<td>
-									<?php
-
-									\printf(
-										'<input name="%s" value="%s" type="text" class="form-control" />',
-										\esc_attr( $name . '[product_id]' ),
-										\esc_attr( $detail->product_id ?? '' )
-									);
-
-									?>
-								</td>
-								<td>
-									<?php
-
-									\printf(
-										'<input name="%s" value="%s" type="text" class="form-control" />',
-										\esc_attr( $name . '[period]' ),
-										\esc_attr( $detail->period ?? '' )
+										\esc_attr( $name . '[amount]' ),
+										\esc_attr( $detail->amount ?? '' )
 									);
 
 									?>
@@ -198,11 +174,11 @@ $created = \array_key_exists( 'pronamic_moneybird_sales_invoice_created', $_GET 
 		<div class="mt-4">
 			<?php
 
-			\wp_nonce_field( 'pronamic_moneybird_create_sales_invoice', 'pronamic_moneybird_nonce' );
+			\wp_nonce_field( 'pronamic_moneybird_create_financial_statement', 'pronamic_moneybird_nonce' );
 
 			\printf(
-				'<button name="pronamic_moneybird_create_sales_invoice" value="true" type="submit" class="btn btn-primary">%s</button>',
-				\esc_html__( 'Create invoice', 'pronamic-moneybird' )
+				'<button name="pronamic_moneybird_create_financial_statement" value="true" type="submit" class="btn btn-primary">%s</button>',
+				\esc_html__( 'Create financial statement', 'pronamic-moneybird' )
 			); 
 
 			?>
