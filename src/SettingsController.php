@@ -13,7 +13,7 @@ namespace Pronamic\Moneybird;
 /**
  * Settings controller class
  */
-class SettingsController {
+final class SettingsController {
 	/**
 	 * Setup.
 	 */

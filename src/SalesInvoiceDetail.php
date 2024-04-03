@@ -15,7 +15,7 @@ namespace Pronamic\Moneybird;
  * 
  * @link https://developer.moneybird.com/api/sales_invoices/#post_sales_invoices
  */
-class SalesInvoiceDetail {
+final class SalesInvoiceDetail {
 	/**
 	 * Description.
 	 * 

@@ -13,7 +13,7 @@ namespace Pronamic\Moneybird;
 /**
  * Financial mutation class
  */
-class FinancialMutation {
+final class FinancialMutation {
 	/**
 	 * Date.
 	 * 

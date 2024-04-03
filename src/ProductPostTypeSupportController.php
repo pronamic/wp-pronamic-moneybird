@@ -13,7 +13,7 @@ namespace Pronamic\Moneybird;
 /**
  * Product post type support controller class
  */
-class ProductPostTypeSupportController {
+final class ProductPostTypeSupportController {
 	/**
 	 * Setup.
 	 *

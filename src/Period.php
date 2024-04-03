@@ -17,7 +17,7 @@ use DateTimeZone;
 /**
  * Period
  */
-class Period {
+final class Period {
 	/**
 	 * Start date.
 	 * 

@@ -19,7 +19,7 @@ use WP_REST_Server;
 /**
  * Sales invoices controller class
  */
-class SalesInvoicesController {
+final class SalesInvoicesController {
 	/**
 	 * Error.
 	 * 

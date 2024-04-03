@@ -13,7 +13,7 @@ namespace Pronamic\Moneybird;
 /**
  * Financial statement class
  */
-class FinancialStatement {
+final class FinancialStatement {
 	/**
 	 * Financial account ID.
 	 * 

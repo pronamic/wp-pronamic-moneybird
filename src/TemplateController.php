@@ -13,7 +13,7 @@ namespace Pronamic\Moneybird;
 /**
  * Template controller class
  */
-class TemplateController {
+final class TemplateController {
 	/**
 	 * Setup.
 	 * 

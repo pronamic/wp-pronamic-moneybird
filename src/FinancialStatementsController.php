@@ -19,7 +19,7 @@ use WP_REST_Server;
 /**
  * Financial statements controller class
  */
-class FinancialStatementsController {
+final class FinancialStatementsController {
 	/**
 	 * Error.
 	 * 

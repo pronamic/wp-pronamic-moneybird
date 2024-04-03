@@ -13,7 +13,7 @@ namespace Pronamic\Moneybird;
 /**
  * Authorization post type controller class
  */
-class AuthorizationPostTypeController {
+final class AuthorizationPostTypeController {
 	/**
 	 * Post type key.
 	 * 

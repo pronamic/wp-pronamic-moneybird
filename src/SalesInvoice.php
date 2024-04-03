@@ -13,7 +13,7 @@ namespace Pronamic\Moneybird;
 /**
  * Sales invoice class
  */
-class SalesInvoice {
+final class SalesInvoice {
 	/**
 	 * Contact ID.
 	 * 

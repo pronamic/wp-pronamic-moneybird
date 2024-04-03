@@ -13,7 +13,7 @@ namespace Pronamic\Moneybird;
 /**
  * Plugin class
  */
-class Plugin {
+final class Plugin {
 	/**
 	 * Instance.
 	 * 

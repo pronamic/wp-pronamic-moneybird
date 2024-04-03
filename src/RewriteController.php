@@ -13,7 +13,7 @@ namespace Pronamic\Moneybird;
 /**
  * Rewrite controller class
  */
-class RewriteController {
+final class RewriteController {
 	/**
 	 * Setup.
 	 * 
