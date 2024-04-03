@@ -13,7 +13,7 @@ namespace Pronamic\Moneybird;
 /**
  * Admin controller class
  */
-class AdminController {
+final class AdminController {
 	/**
 	 * Setup.
 	 */
