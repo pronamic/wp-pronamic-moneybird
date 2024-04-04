@@ -10,10 +10,12 @@
 
 namespace Pronamic\Moneybird;
 
+use JsonSerializable;
+
 /**
  * Financial statement class
  */
-final class FinancialStatement {
+final class FinancialStatement implements JsonSerializable {
 	/**
 	 * ID.
 	 * 
@@ -91,6 +93,32 @@ final class FinancialStatement {
 				'financial_mutations_attributes' => \array_map(
 					function ( $financial_mutation ) {
 						return $financial_mutation->get_create_parameters();
+					},
+					$this->financial_mutations
+				),
+			],
+			function ( $value ) {
+				return ( null !== $value );
+			}
+		);
+	}
+
+	/**
+	 * JSON serialize.
+	 * 
+	 * @return object
+	 */
+	public function jsonSerialize() {
+		return (object) \array_filter(
+			[
+				'financial_account_id' => $this->financial_account_id,
+				'reference'            => $this->reference,
+				'official_date'        => ( null === $this->official_date ) ? null : $this->official_date->format( 'Y-m-d' ),
+				'official_balance'     => $this->official_balance,
+				'importer_key'         => $this->importer_key,
+				'financial_mutations'  => \array_map(
+					function ( $financial_mutation ) {
+						return $financial_mutation->jsonSerialize();
 					},
 					$this->financial_mutations
 				),

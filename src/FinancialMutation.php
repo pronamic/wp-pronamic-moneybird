@@ -10,10 +10,12 @@
 
 namespace Pronamic\Moneybird;
 
+use JsonSerializable;
+
 /**
  * Financial mutation class
  */
-final class FinancialMutation {
+final class FinancialMutation implements JsonSerializable {
 	/**
 	 * ID.
 	 * 
@@ -99,6 +101,31 @@ final class FinancialMutation {
 	 */
 	public function get_create_parameters() {
 		return \array_filter(
+			[
+				'date'                            => ( null === $this->date ) ? null : $this->date->format( 'Y-m-d' ),
+				'message'                         => $this->message,
+				'amount'                          => $this->amount,
+				'code'                            => $this->code,
+				'contra_account_name'             => $this->contra_account_name,
+				'contra_account_number'           => $this->contra_account_number,
+				'batch_reference'                 => $this->batch_reference,
+				'offset'                          => $this->offset,
+				'account_servicer_transaction_id' => $this->account_servicer_transaction_id,
+				'account_servicer_metadata'       => $this->account_servicer_metadata,
+			],
+			function ( $value ) {
+				return ( null !== $value );
+			}
+		);
+	}
+
+	/**
+	 * JSON serialize.
+	 * 
+	 * @return object
+	 */
+	public function jsonSerialize() {
+		return (object) \array_filter(
 			[
 				'date'                            => ( null === $this->date ) ? null : $this->date->format( 'Y-m-d' ),
 				'message'                         => $this->message,
