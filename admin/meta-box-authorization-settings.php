@@ -53,7 +53,7 @@ $administration_id = get_post_meta( $post->ID, '_pronamic_moneybird_administrati
 	</tr>
 	<tr valign="top">
 		<th scope="row">
-			<label for="pronamic_moneybird_administration_id"><?php esc_html_e( 'Administration ID', 'pronamic-moneybird' ); ?></label>
+			<label for="pronamic_moneybird_administration_id"><?php esc_html_e( 'Default administration', 'pronamic-moneybird' ); ?></label>
 		</th>
 		<td>
 			<input id="pronamic_moneybird_administration_id" name="_pronamic_moneybird_administration_id" value="<?php echo esc_attr( $administration_id ); ?>" type="text" class="regular-text code" />
