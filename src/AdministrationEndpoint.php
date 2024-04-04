@@ -27,7 +27,7 @@ final class AdministrationEndpoint extends Endpoint {
 	 * @param Client $client            Client.
 	 * @param string $administration_id Administration ID.
 	 */
-	public function __construct( $client ) {
+	public function __construct( $client, $administration_id ) {
 		parent::__construct( $client );
 
 		$this->administration_id = $administration_id;
@@ -39,7 +39,7 @@ final class AdministrationEndpoint extends Endpoint {
 	 * @return FinancialStatementsEndpoint
 	 */
 	public function get_financial_statements_endpoint() {
-		return new FinancialStatementsEndpoint( $this->administration_id );
+		return new FinancialStatementsEndpoint( $this->client, $this->administration_id );
 	}
 
 	/**
@@ -48,6 +48,6 @@ final class AdministrationEndpoint extends Endpoint {
 	 * @return SalesInvoicesEndpoint
 	 */
 	public function get_sales_invoices_endpoint() {
-		return new SalesInvoicesEndpoint( $this->administration_id );
+		return new SalesInvoicesEndpoint( $this->client, $this->administration_id );
 	}
 }

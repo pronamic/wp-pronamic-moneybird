@@ -10,6 +10,8 @@
 
 namespace Pronamic\Moneybird;
 
+use Exception;
+
 /**
  * Sales invoices endpoint class
  */
@@ -33,9 +35,9 @@ final class SalesInvoicesEndpoint extends ResourceEndpoint {
 		$response_data   = $response->json();
 
 		if ( '201' !== $response_status ) {
-			throw new \Exception( '' );
-		}
+			$http_exception = new Exception( 'Unexpected HTTP response: ' . $response_status, (int) $response_status );
 
-		
+			throw Error::from_response_object( $response_data, (int) $response_status, $http_exception );
+		}
 	}
 }

@@ -10,8 +10,6 @@
 
 namespace Pronamic\Moneybird;
 
-use DateTimeImmutable;
-
 $authorization_id  = \get_option( 'pronamic_moneybird_authorization_post_id', '' );
 $administration_id = '';
 
@@ -25,11 +23,11 @@ $financial_statement = new FinancialStatement( 0, '' );
 
 \do_action( 'pronamic_moneybird_new_financial_statement', $financial_statement );
 
-$financial_statement->financial_mutations_attributes[] = new FinancialMutation();
-$financial_statement->financial_mutations_attributes[] = new FinancialMutation();
-$financial_statement->financial_mutations_attributes[] = new FinancialMutation();
-$financial_statement->financial_mutations_attributes[] = new FinancialMutation();
-$financial_statement->financial_mutations_attributes[] = new FinancialMutation();
+$financial_statement->financial_mutations[] = new FinancialMutation();
+$financial_statement->financial_mutations[] = new FinancialMutation();
+$financial_statement->financial_mutations[] = new FinancialMutation();
+$financial_statement->financial_mutations[] = new FinancialMutation();
+$financial_statement->financial_mutations[] = new FinancialMutation();
 
 // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 $created = \array_key_exists( 'pronamic_moneybird_financial_statement_created', $_GET );
@@ -96,6 +94,16 @@ $created = \array_key_exists( 'pronamic_moneybird_financial_statement_created', 
 					<label for="pronamic_moneybird_reference" class="form-label"><?php \esc_html_e( 'Reference', 'pronamic-moneybird' ); ?></label>
 					<input id="pronamic_moneybird_reference" name="financial_statement[reference]" value="<?php echo \esc_attr( $financial_statement->reference ?? '' ); ?>" type="text" class="form-control" required>
 				</div>
+
+				<div class="mb-3">
+					<label for="pronamic_moneybird_official_date" class="form-label"><?php \esc_html_e( 'Official date', 'pronamic-moneybird' ); ?></label>
+					<input id="pronamic_moneybird_official_date" name="financial_statement[official_date]" value="<?php echo \esc_attr( null === $financial_statement->official_date ? '' : financial_statement->official_date->format( 'Y-m-d' ) ); ?>" type="date" class="form-control">
+				</div>
+
+				<div class="mb-3">
+					<label for="pronamic_moneybird_importer_key" class="form-label"><?php \esc_html_e( 'Importer key', 'pronamic-moneybird' ); ?></label>
+					<input id="pronamic_moneybird_importer_key" name="financial_statement[importer_key]" value="<?php echo \esc_attr( $financial_statement->importer_key ?? '' ); ?>" type="text" class="form-control">
+				</div>
 			</div>
 		</div>
 
@@ -117,13 +125,13 @@ $created = \array_key_exists( 'pronamic_moneybird_financial_statement_created', 
 
 					<tbody>
 
-						<?php foreach ( $financial_statement->financial_mutations_attributes as $i => $detail ) : ?>
+						<?php foreach ( $financial_statement->financial_mutations as $i => $detail ) : ?>
 
 							<tr>
 								<?php
 
 								$name = \sprintf(
-									'financial_statement[financial_mutations_attributes][%d]',
+									'financial_statement[financial_mutations][%d]',
 									$i
 								);
 

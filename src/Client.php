@@ -55,6 +55,7 @@ final class Client {
 				'headers' => [
 					'Authorization' => 'Bearer ' . $this->api_token,
 					'Content-Type'  => 'application/json',
+					'Time-Zone'     => 'UTC',
 				],
 				'body'    => \wp_json_encode( $data ),
 			]

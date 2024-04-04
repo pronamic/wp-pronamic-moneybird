@@ -10,11 +10,9 @@
 
 namespace Pronamic\Moneybird;
 
-use Pronamic\WordPress\Http\Facades\Http;
 use WP_Error;
 use WP_REST_Request;
 use WP_REST_Response;
-use WP_REST_Server;
 
 /**
  * Financial statements controller class
@@ -87,7 +85,15 @@ final class FinancialStatementsController {
 								'description' => \__( 'Official date.', 'pronamic-moneybird' ),
 								'type'        => 'string',
 							],
-							'financial_mutations_attributes' => [
+							'official_balance'     => [
+								'description' => \__( 'Official balance.', 'pronamic-moneybird' ),
+								'type'        => 'string',
+							],
+							'importer_key'         => [
+								'description' => \__( 'Importer key.', 'pronamic-moneybird' ),
+								'type'        => 'string',
+							],
+							'financial_mutations'  => [
 								'description' => \__( 'Contains the financial mutations.', 'pronamic-moneybird' ),
 								'type'        => 'array',
 								'items'       => [
@@ -103,6 +109,10 @@ final class FinancialStatementsController {
 										],
 										'amount'  => [
 											'description' => \__( 'Amount.', 'pronamic-moneybird' ),
+											'type'        => 'string',
+										],
+										'code'    => [
+											'description' => \__( 'Code.', 'pronamic-moneybird' ),
 											'type'        => 'string',
 										],
 									],
@@ -134,54 +144,21 @@ final class FinancialStatementsController {
 		$authorization_id  = $request->get_param( 'authorization_id' );
 		$administration_id = $request->get_param( 'administration_id' );
 
-		$financial_statement = $request->get_param( 'financial_statement' );
-
-		$request_data = [
-			'financial_statement' => $financial_statement,
-		];
+		$financial_statement = FinancialStatement::from_object( json_decode( wp_json_encode( $request->get_param( 'financial_statement' ) ) ) );
 
 		$api_token = \get_post_meta( $authorization_id, '_pronamic_moneybird_api_token', true );
 
-		$api_url = \strtr(
-			'https://moneybird.com/api/:version/:administration_id/:resource_path.:format',
-			[
-				':version'           => 'v2',
-				':administration_id' => $administration_id,
-				':resource_path'     => 'financial_statements',
-				':format'            => 'json',
-			]
-		);
+		$client = new Client( $api_token );
 
-		$response = Http::post(
-			$api_url,
-			[
-				'headers' => [
-					'Authorization' => 'Bearer ' . $api_token,
-					'Content-Type'  => 'application/json',
-				],
-				'body'    => \wp_json_encode( $request_data ),
-			]
-		);
+		$administration_endpoint = $client->get_administration_endpoint( $administration_id );
 
-		$response_status = (string) $response->status();
-		$response_data   = $response->json();
+		$financial_statements_endpoint = $administration_endpoint->get_financial_statements_endpoint();
 
-		if ( '201' !== $response_status ) {
-			return new WP_Error(
-				'pronamic_moneybird_error',
-				'Unexpected response status: ' . $response_status,
-				[
-					'status' => $response_status,
-					'data'   => $response_data,
-				]
-			);
-		}
+		$financial_statement = $financial_statements_endpoint->create( $financial_statement );
 
-		\do_action( 'pronamic_moneybird_financial_statement_created', $response_data );
+		\do_action( 'pronamic_moneybird_financial_statement_created', $financial_statement );
 
-		$response = new WP_REST_Response( $response_data, $response_status );
-
-		$response->add_link( 'api-url', $api_url );
+		$response = new WP_REST_Response( $financial_statement, '201' );
 
 		return $response;
 	}
@@ -215,16 +192,23 @@ final class FinancialStatementsController {
 		if ( isset( $_POST['financial_statement'] ) ) {
 			$data = \map_deep( $_POST['financial_statement'], 'sanitize_text_field' );
 
-			if ( \array_key_exists( 'financial_mutations_attributes', $data ) && \is_array( $data['financial_mutations_attributes'] ) ) {
-				$data['financial_mutations_attributes'] = \array_filter(
+			if ( \array_key_exists( 'financial_mutations', $data ) && \is_array( $data['financial_mutations'] ) ) {
+				$data['financial_mutations'] = \array_filter(
 					\array_map(
 						function ( $data ) {
 							return \is_array( $data ) ? \array_filter( $data ) : $data;
 						},
-						$data['financial_mutations_attributes']
+						$data['financial_mutations']
 					)
 				);
 			}
+
+			$data = \array_filter(
+				$data,
+				function ( $item ) { 
+					return ( '' !== $item );
+				} 
+			);
 
 			$request->set_param( 'financial_statement', $data );
 		}
