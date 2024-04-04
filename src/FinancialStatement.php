@@ -75,6 +75,33 @@ final class FinancialStatement {
 	}
 
 	/**
+	 * Get create parameters.
+	 * 
+	 * @link https://developer.moneybird.com/api/financial_statements/#post_financial_statements
+	 * @return array
+	 */
+	public function get_create_parameters() {
+		return \array_filter(
+			[
+				'financial_account_id'           => $this->financial_account_id,
+				'reference'                      => $this->reference,
+				'official_date'                  => ( null === $this->official_date ) ? null : $this->official_date->format( 'Y-m-d' ),
+				'official_balance'               => $this->official_balance,
+				'importer_key'                   => $this->importer_key,
+				'financial_mutations_attributes' => \array_map(
+					function ( $financial_mutation ) {
+						return $financial_mutation->get_create_parameters();
+					},
+					$this->financial_mutations
+				),
+			],
+			function ( $value ) {
+				return ( null !== $value );
+			}
+		);
+	}
+
+	/**
 	 * From object.
 	 * 
 	 * @retrun self

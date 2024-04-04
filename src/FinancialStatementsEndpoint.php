@@ -42,34 +42,7 @@ final class FinancialStatementsEndpoint extends ResourceEndpoint {
 		$url = $this->get_api_url( 'financial_statements' );
 
 		$data = [
-			'financial_statement' => self::array_filter_null(
-				[
-					'financial_account_id'           => $financial_statement->financial_account_id,
-					'reference'                      => $financial_statement->reference,
-					'official_date'                  => ( null === $financial_statement->official_date ) ? null : $financial_statement->official_date->format( 'Y-m-d' ),
-					'official_balance'               => $financial_statement->official_balance,
-					'importer_key'                   => $financial_statement->importer_key,
-					'financial_mutations_attributes' => \array_map(
-						function ( $financial_mutation ) {
-							return self::array_filter_null(
-								[
-									'date'                => ( null === $financial_mutation->date ) ? null : $financial_mutation->date->format( 'Y-m-d' ),
-									'message'             => $financial_mutation->message,
-									'amount'              => $financial_mutation->amount,
-									'code'                => $financial_mutation->code,
-									'contra_account_name' => $financial_mutation->contra_account_name,
-									'contra_account_number' => $financial_mutation->contra_account_number,
-									'batch_reference'     => $financial_mutation->batch_reference,
-									'offset'              => $financial_mutation->offset,
-									'account_servicer_transaction_id' => $financial_mutation->account_servicer_transaction_id,
-									'account_servicer_metadata' => $financial_mutation->account_servicer_metadata,
-								]
-							);
-						},
-						$financial_statement->financial_mutations
-					),
-				]
-			),
+			'financial_statement' => $financial_statement->get_create_parameters(),
 		];
 
 		$response = $this->client->post( $url, $data );

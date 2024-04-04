@@ -92,6 +92,32 @@ final class FinancialMutation {
 	public $account_servicer_metadata;
 
 	/**
+	 * Get create parameters.
+	 * 
+	 * @link https://developer.moneybird.com/api/financial_statements/#post_financial_statements
+	 * @return array
+	 */
+	public function get_create_parameters() {
+		return \array_filter(
+			[
+				'date'                            => ( null === $this->date ) ? null : $this->date->format( 'Y-m-d' ),
+				'message'                         => $this->message,
+				'amount'                          => $this->amount,
+				'code'                            => $this->code,
+				'contra_account_name'             => $this->contra_account_name,
+				'contra_account_number'           => $this->contra_account_number,
+				'batch_reference'                 => $this->batch_reference,
+				'offset'                          => $this->offset,
+				'account_servicer_transaction_id' => $this->account_servicer_transaction_id,
+				'account_servicer_metadata'       => $this->account_servicer_metadata,
+			],
+			function ( $value ) {
+				return ( null !== $value );
+			}
+		);
+	}
+
+	/**
 	 * From object.
 	 * 
 	 * @param object $data Data.
