@@ -46,6 +46,9 @@ final class FinancialStatementsController {
 	public function rest_api_init() {
 		$namespace = 'pronamic-moneybird/v1';
 
+		$authorization_id  = (int) \get_option( 'pronamic_moneybird_authorization_post_id' );
+		$administration_id = ( 0 === $authorization_id ) ? 0 : (int) \get_post_meta( $authorization_id, '_pronamic_moneybird_administration_id', true );
+
 		\register_rest_route(
 			$namespace,
 			'/financial-statements',
@@ -57,14 +60,16 @@ final class FinancialStatementsController {
 					'authorization_id'    => [
 						'description'       => \__( 'Authorization post ID.', 'pronamic-moneybird' ),
 						'type'              => 'integer',
-						'sanitize_callback' => 'absint',
+						'default'           => ( 0 === $authorization_id ) ? null : $authorization_id,
 						'required'          => true,
+						'sanitize_callback' => 'absint',
 					],
 					'administration_id'   => [
 						'description'       => \__( 'Moneybird administration ID.', 'pronamic-moneybird' ),
 						'type'              => 'integer',
-						'sanitize_callback' => 'absint',
+						'default'           => ( 0 === $administration_id ) ? null : $administration_id,
 						'required'          => true,
+						'sanitize_callback' => 'absint',
 					],
 					'financial_statement' => [
 						'description' => \__( 'Moneybird financial statement.', 'pronamic-moneybird' ),
