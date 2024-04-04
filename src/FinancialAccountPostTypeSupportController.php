@@ -47,13 +47,13 @@ final class FinancialAccountPostTypeSupportController {
 	}
 
 	/**
-	 * Meta box authentication.
+	 * Meta box financial account.
 	 * 
 	 * @link https://github.com/WordPress/WordPress/blob/5.8/wp-admin/includes/template.php#L1395
 	 * @param WP_Post $post Post.
 	 * @return void
 	 */
-	public function meta_box_contact( // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found -- Used in include.
+	public function meta_box_financial_account( // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found -- Used in include.
 		$post
 	) {
 		\wp_nonce_field( 'pronamic_moneybird_save_financial_account', 'pronamic_moneybird_nonce' );
