@@ -161,7 +161,7 @@ final class FinancialMutation implements JsonSerializable {
 		$financial_mutation->amount                          = $object_access->get_optional( 'amount' );
 		$financial_mutation->code                            = $object_access->get_optional( 'code' );
 		$financial_mutation->contra_account_name             = $object_access->get_optional( 'contra_account_name' );
-		$financial_mutation->contra_account_name             = $object_access->get_optional( 'contra_account_number' );
+		$financial_mutation->contra_account_number           = $object_access->get_optional( 'contra_account_number' );
 		$financial_mutation->batch_reference                 = $object_access->get_optional( 'batch_reference' );
 		$financial_mutation->offset                          = $object_access->get_optional( 'offset' );
 		$financial_mutation->account_servicer_transaction_id = $object_access->get_optional( 'account_servicer_transaction_id' );
