@@ -83,6 +83,24 @@ final class WooCommerceController {
 
 		foreach ( $orders as $order ) {
 			WP_CLI::log( 'Order: ' . $order->get_id() );
+
+			/**
+			 * Step 1: Query Moneybird contacts to check whether contacts are found with company name.
+			 * 
+			 * @link https://github.com/pronamic/pronamic.shop/issues/48#issuecomment-2045339077
+			 * @link https://developer.moneybird.com/api/contacts/#get_contacts
+			 */
+
+			/**
+			 * Step 2: Stop if contacts are found.
+			 */
+
+
+			/**
+			 * Step 3: Create new contact.
+			 * 
+			 * @link https://developer.moneybird.com/api/contacts/#post_contacts
+			 */
 		}
 	}
 
