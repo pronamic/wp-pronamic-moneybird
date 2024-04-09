@@ -50,6 +50,7 @@ final class Plugin {
 			new SalesInvoicesController(),
 			new SettingsController(),
 			new TemplateController(),
+			new WooCommerceController(),
 		];
 
 		if ( \is_admin() ) {
