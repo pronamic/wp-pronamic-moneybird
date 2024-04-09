@@ -10,6 +10,7 @@
 
 namespace Pronamic\Moneybird;
 
+use WP_CLI;
 use WC_Order;
 
 /**
@@ -60,10 +61,10 @@ final class WooCommerceController {
 		 */
 		$orders = \wc_get_orders(
 			[
-				'status' => [
+				'status'     => [
 					'completed',
 				],
-				'limit' => -1,
+				'limit'      => -1,
 				'meta_query' => [
 					[
 						'key'     => '_pronamic_moneybird_contact_id',
@@ -85,7 +86,6 @@ final class WooCommerceController {
 	 * @param WC_Order $order WooCommerce order.
 	 */
 	private function create_contact_based_on_woocommerce_order( WC_Order $order ) {
-
 	}
 
 	/**
