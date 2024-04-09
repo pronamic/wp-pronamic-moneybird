@@ -52,6 +52,13 @@ final class WooCommerceController {
 	 * @return void
 	 */
 	public function cli_create_contacts_for_wc_orders( $args, $assoc_args ) {
+		$assoc_args = \wp_parse_args(
+			$assoc_args,
+			[
+				'limit' => 10,
+			]
+		);
+
 		/**
 		 * WooCommerce orders.
 		 * 
@@ -64,7 +71,7 @@ final class WooCommerceController {
 				'status'     => [
 					'completed',
 				],
-				'limit'      => -1,
+				'limit'      => $assoc_args['limit'],
 				'meta_query' => [
 					[
 						'key'     => '_pronamic_moneybird_contact_id',
