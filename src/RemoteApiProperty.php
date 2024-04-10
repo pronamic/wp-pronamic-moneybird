@@ -28,11 +28,34 @@ final class RemoteApiProperty {
 	public string $name;
 
 	/**
+	 * Create name.
+	 * 
+	 * @var string
+	 */
+	public ?string $create_name;
+
+	/**
 	 * Construct property.
 	 * 
-	 * @param string $name Name.
+	 * @param string $name        Name.
+	 * @param string $create_name Create name.
 	 */
-	public function __construct( $name ) {
-		$this->name = $name;
+	public function __construct( $name, $create_name = null ) {
+		$this->name        = $name;
+		$this->create_name = $create_name;
+	}
+
+	/**
+	 * Get name.
+	 * 
+	 * @param string $context Context.
+	 * @return string
+	 */
+	public function get_name( $context = '' ) {
+		if ( 'create' === $context && null !== $this->create_name ) {
+			return $this->create_name;
+		}
+
+		return $this->name;
 	}
 }

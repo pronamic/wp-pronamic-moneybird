@@ -17,6 +17,13 @@ use ReflectionObject;
  */
 final class RemoteSerializer {
 	/**
+	 * Context.
+	 * 
+	 * @var string
+	 */
+	public $context = '';
+
+	/**
 	 * Serialize.
 	 * 
 	 * @return object
@@ -40,10 +47,25 @@ final class RemoteSerializer {
 			foreach ( $attributes as $attribute ) {
 				$remote_api_property = $attribute->newInstance();
 
-				$data[ $remote_api_property->name ] = $value instanceof RemoteSerializable ? $this->serialize( $value ) : $value;
+				$data[ $remote_api_property->get_name( $this->context ) ] = $this->get_value( $value );
 			}
 		}
 
 		return (object) $data;
+	}
+
+	private function get_value( $value ) {
+		if ( $value instanceof RemoteSerializable ) {
+			return $this->serialize( $value );
+		}
+
+		if ( \is_array( $value ) ) {
+			return \array_map(
+				[ $this, 'get_value' ],
+				$value
+			);
+		}
+
+		return $value;
 	}
 }

@@ -43,6 +43,15 @@ final class AdministrationEndpoint extends Endpoint {
 	}
 
 	/**
+	 * Get external sales invoices endpoint.
+	 * 
+	 * @return ExternalSalesInvoicesEndpoint
+	 */
+	public function get_external_sales_invoices_endpoint() {
+		return new ExternalSalesInvoicesEndpoint( $this->client, $this->administration_id );
+	}
+
+	/**
 	 * Get financial statements endpoint.
 	 * 
 	 * @return FinancialStatementsEndpoint

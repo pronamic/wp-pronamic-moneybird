@@ -15,12 +15,13 @@ namespace Pronamic\Moneybird;
  * 
  * @link https://developer.moneybird.com/api/sales_invoices/#post_sales_invoices
  */
-final class SalesInvoiceDetail {
+final class SalesInvoiceDetail implements RemoteSerializable {
 	/**
 	 * Description.
 	 * 
 	 * @var string|null
 	 */
+	#[RemoteApiProperty( 'description' )]
 	public $description;
 
 	/**
@@ -28,6 +29,7 @@ final class SalesInvoiceDetail {
 	 * 
 	 * @var string|null
 	 */
+	#[RemoteApiProperty( 'period' )]
 	public $period;
 
 	/**
@@ -35,6 +37,7 @@ final class SalesInvoiceDetail {
 	 * 
 	 * @var string|null
 	 */
+	#[RemoteApiProperty( 'price' )]
 	public $price;
 
 	/**
@@ -42,6 +45,7 @@ final class SalesInvoiceDetail {
 	 * 
 	 * @var string|null
 	 */
+	#[RemoteApiProperty( 'amount' )]
 	public $amount;
 
 	/**
@@ -49,5 +53,6 @@ final class SalesInvoiceDetail {
 	 * 
 	 * @var int|null
 	 */
+	#[RemoteApiProperty( 'product_id' )]
 	public $product_id;
 }

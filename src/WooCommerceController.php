@@ -42,6 +42,7 @@ final class WooCommerceController {
 	 */
 	public function cli_init() {
 		WP_CLI::add_command( 'pronamic-moneybird create-contacts-for-wc-orders', [ $this, 'cli_create_contacts_for_wc_orders' ] );
+		WP_CLI::add_command( 'pronamic-moneybird create-external-sales-invoices-for-wc-orders', [ $this, 'cli_create_external_sales_invoices_for_wc_orders' ] );
 	}
 
 	/**
@@ -203,6 +204,99 @@ final class WooCommerceController {
 		}
 
 		return $contact;
+	}
+
+	/**
+	 * WP-CLI create external sales invoices for WooCommerce orders.
+	 * 
+	 * @param array $args       Arguments.
+	 * @param array $assoc_args Associative arguments.
+	 * @return void
+	 */
+	public function cli_create_external_sales_invoices_for_wc_orders( $args, $assoc_args ) {
+		$assoc_args = \wp_parse_args(
+			$assoc_args,
+			[
+				'limit' => 10,
+			]
+		);
+
+		/**
+		 * Moneybird client.
+		 */
+		$authorization_id  = (int) \get_option( 'pronamic_moneybird_authorization_post_id' );
+		$administration_id = ( 0 === $authorization_id ) ? 0 : (int) \get_post_meta( $authorization_id, '_pronamic_moneybird_administration_id', true );
+
+		$api_token = \get_post_meta( $authorization_id, '_pronamic_moneybird_api_token', true );
+
+		$client = new Client( $api_token );
+
+		$administration_endpoint = $client->get_administration_endpoint( $administration_id );
+
+		$external_sales_invoices_endpoint = $administration_endpoint->get_external_sales_invoices_endpoint();
+
+		/**
+		 * WooCommerce orders.
+		 * 
+		 * @link https://github.com/woocommerce/woocommerce/wiki/HPOS:-new-order-querying-APIs
+		 * @link https://developer.wordpress.org/reference/classes/wp_query/#custom-field-post-meta-parameters
+		 * @link https://wordpress.stackexchange.com/questions/337852/query-woocommerce-orders-where-meta-data-does-not-exist
+		 */
+		$orders = \wc_get_orders(
+			[
+				'status'     => [
+					'completed',
+				],
+				'limit'      => $assoc_args['limit'],
+				'meta_query' => [
+					[
+						'key'     => '_pronamic_moneybird_external_sales_invoice_id',
+						'compare' => 'NOT EXISTS',   
+					],
+				],
+				'orderby'    => 'date',
+				'order'      => 'ASC',
+			]
+		);
+
+		WP_CLI::log( 'Orders: ' . \count( $orders ) );
+
+		foreach ( $orders as $order ) {
+			WP_CLI::log( 'Order: ' . $order->get_id() );
+
+			$wcpdf_invoice = \wcpdf_get_invoice( $order, true );
+
+			$external_sales_invoice = new ExternalSalesInvoice();
+
+			$external_sales_invoice->contact_id          = $order->get_meta( '_pronamic_moneybird_contact_id' );
+			$external_sales_invoice->reference           = $wcpdf_invoice->get_number()->get_formatted();
+			$external_sales_invoice->date                = $wcpdf_invoice->get_date()->format( 'Y-m-d' );
+			$external_sales_invoice->currency            = $order->get_currency();
+			$external_sales_invoice->prices_are_incl_tax = false;
+			$external_sales_invoice->source              = \get_bloginfo( 'name' );
+			$external_sales_invoice->source_url          = $order->get_edit_order_url();
+
+			$external_sales_invoice->details = [];
+
+			foreach ( $order->get_items() as $item ) {
+				$detail = new SalesInvoiceDetail();
+
+				$detail->description = $item->get_name();
+				$detail->price       = $item->get_total();
+
+				$external_sales_invoice->details[] = $detail;
+			}
+
+			$attachment = new Attachment(
+				$wcpdf_invoice->get_filename(),
+				$wcpdf_invoice->get_pdf(),
+				'application/pdf'
+			);
+
+			$external_sales_invoice = $external_sales_invoices_endpoint->create_external_sales_invoice( $external_sales_invoice );
+
+			$external_sales_invoices_endpoint->add_attachment_to_external_sales_invoice( $external_sales_invoice, $attachment );
+		}
 	}
 
 	/**

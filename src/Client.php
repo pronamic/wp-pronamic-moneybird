@@ -47,12 +47,15 @@ final class Client {
 	 * 
 	 * @return array
 	 */
-	private function get_headers() {
-		return [
-			'Authorization' => 'Bearer ' . $this->api_token,
-			'Content-Type'  => 'application/json',
-			'Time-Zone'     => 'UTC',
-		];
+	private function get_headers( $headers = [] ) {
+		return \wp_parse_args(
+			$headers,
+			[
+				'Authorization' => 'Bearer ' . $this->api_token,
+				'Content-Type'  => 'application/json',
+				'Time-Zone'     => 'UTC',
+			]
+		);
 	}
 
 	/**
@@ -81,11 +84,11 @@ final class Client {
 	 * @param mixed $data Data.
 	 * @return mixed
 	 */
-	public function post( $api_url, $data ) {
+	public function post( $api_url, $data, $headers = [] ) {
 		$response = Http::post(
 			$api_url,
 			[
-				'headers' => $this->get_headers(),
+				'headers' => $this->get_headers( $headers ),
 				'body'    => \wp_json_encode( $data ),
 			]
 		);
