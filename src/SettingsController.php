@@ -10,6 +10,8 @@
 
 namespace Pronamic\Moneybird;
 
+use Pronamic\WordPress\Html\Element;
+
 /**
  * Settings controller class
  */
@@ -32,6 +34,15 @@ final class SettingsController {
 			'pronamic_moneybird_authorization_post_id',
 			[
 				'type' => 'integer',
+			]
+		);
+
+		\register_setting(
+			'pronamic_moneybird',
+			'pronamic_moneybird_customer_id_template',
+			[
+				'type'    => 'string',
+				'default' => '{user_id}',
 			]
 		);
 	}
@@ -57,6 +68,17 @@ final class SettingsController {
 				'post_type'        => 'pronamic_moneybird_a',
 				'show_option_none' => \__( '— Select authorization —', 'pronamic-moneybird' ),
 				'label_for'        => 'pronamic_moneybird_authorization_post_id',
+			]
+		);
+
+		\add_settings_field(
+			'pronamic_moneybird_customer_id_template',
+			\__( 'Customer ID template', 'pronamic-moneybird' ),
+			[ $this, 'input_text' ],
+			'pronamic_moneybird',
+			'pronamic_moneybird_general',
+			[
+				'label_for' => 'pronamic_moneybird_customer_id_template',
 			]
 		);
 	}
@@ -85,5 +107,28 @@ final class SettingsController {
 				'class'            => 'regular-text',
 			]
 		);
+	}
+
+	/**
+	 * Input text.
+	 *
+	 * @param array $args Arguments.
+	 * @return void
+	 */
+	public function input_text( $args ) {
+		$id = $args['label_for'];
+
+		$element = new Element(
+			'input',
+			[
+				'type'  => 'text',
+				'name'  => $id,
+				'id'    => $id,
+				'value' => \get_option( $id ),
+				'class' => 'regular-text',
+			]
+		);
+
+		$element->output();
 	}
 }

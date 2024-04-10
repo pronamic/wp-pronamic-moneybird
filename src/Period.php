@@ -15,7 +15,7 @@ use DateTimeInterface;
 use DateTimeZone;
 
 /**
- * Period
+ * Period class
  */
 final class Period {
 	/**

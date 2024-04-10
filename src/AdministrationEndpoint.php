@@ -34,6 +34,15 @@ final class AdministrationEndpoint extends Endpoint {
 	}
 
 	/**
+	 * Get contacts endpoint.
+	 * 
+	 * @return ContactsEndpoint
+	 */
+	public function get_contacts_endpoint() {
+		return new ContactsEndpoint( $this->client, $this->administration_id );
+	}
+
+	/**
 	 * Get financial statements endpoint.
 	 * 
 	 * @return FinancialStatementsEndpoint

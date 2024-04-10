@@ -43,6 +43,39 @@ final class Client {
 	}
 
 	/**
+	 * Get headers.
+	 * 
+	 * @return array
+	 */
+	private function get_headers() {
+		return [
+			'Authorization' => 'Bearer ' . $this->api_token,
+			'Content-Type'  => 'application/json',
+			'Time-Zone'     => 'UTC',
+		];
+	}
+
+	/**
+	 * Get data.
+	 * 
+	 * @param string $api_url    API URL.
+	 * @param array  $parameters Parameters.
+	 * @return mixed
+	 */
+	public function get( $api_url, $parameters ) {
+		$api_url .= '?' . \http_build_query( $parameters, '', '&' );
+
+		$response = Http::get(
+			$api_url,
+			[
+				'headers' => $this->get_headers(),
+			]
+		);
+
+		return $response;
+	}
+
+	/**
 	 * Post data.
 	 * 
 	 * @param mixed $data Data.
@@ -52,11 +85,7 @@ final class Client {
 		$response = Http::post(
 			$api_url,
 			[
-				'headers' => [
-					'Authorization' => 'Bearer ' . $this->api_token,
-					'Content-Type'  => 'application/json',
-					'Time-Zone'     => 'UTC',
-				],
+				'headers' => $this->get_headers(),
 				'body'    => \wp_json_encode( $data ),
 			]
 		);

@@ -60,6 +60,20 @@ final class WooCommerceController {
 		);
 
 		/**
+		 * Moneybird client.
+		 */
+		$authorization_id  = (int) \get_option( 'pronamic_moneybird_authorization_post_id' );
+		$administration_id = ( 0 === $authorization_id ) ? 0 : (int) \get_post_meta( $authorization_id, '_pronamic_moneybird_administration_id', true );
+
+		$api_token = \get_post_meta( $authorization_id, '_pronamic_moneybird_api_token', true );
+
+		$client = new Client( $api_token );
+
+		$administration_endpoint = $client->get_administration_endpoint( $administration_id );
+
+		$contacts_endpoint = $administration_endpoint->get_contacts_endpoint();
+
+		/**
 		 * WooCommerce orders.
 		 * 
 		 * @link https://github.com/woocommerce/woocommerce/wiki/HPOS:-new-order-querying-APIs
@@ -81,8 +95,22 @@ final class WooCommerceController {
 			]
 		);
 
+		WP_CLI::log( 'Orders: ' . \count( $orders ) );
+
 		foreach ( $orders as $order ) {
 			WP_CLI::log( 'Order: ' . $order->get_id() );
+
+			$user = $order->get_user();
+
+			$contact_id = null;
+
+			if ( false !== $user ) {
+				$value = \get_user_meta( $user->ID, '_pronamic_moneybird_contact_id', true );
+
+				if ( '' !== $value ) {
+					throw new \Exception( 'Found Moneybird contact ID in user meta: ' . $order->get_id() );
+				}
+			}
 
 			/**
 			 * Step 1: Query Moneybird contacts to check whether contacts are found with company name.
@@ -90,6 +118,74 @@ final class WooCommerceController {
 			 * @link https://github.com/pronamic/pronamic.shop/issues/48#issuecomment-2045339077
 			 * @link https://developer.moneybird.com/api/contacts/#get_contacts
 			 */
+			$company_name = $order->get_billing_company();
+
+			if ( '' === $company_name ) {
+				throw new \Exception( 'Company name is empty for order: ' . $order->get_id() );
+			}
+
+			$moneybird_contacts = $contacts_endpoint->get_contacts(
+				[
+					'query' => $company_name,
+				]
+			);
+
+			if ( \count( $moneybird_contacts ) > 0 ) {
+				throw new \Exception( 'Found Moneybird contacts for order: ' . $order->get_id() );
+			}
+
+			$contact = new Contact();
+
+			$contact->company_name                = $company_name;
+			$contact->address_1                   = $order->get_billing_address_1();
+			$contact->address_2                   = $order->get_billing_address_2();
+			$contact->zip_code                    = $order->get_billing_postcode();
+			$contact->city                        = $order->get_billing_city();
+			$contact->country_code                = $order->get_billing_country();
+			$contact->phone                       = $order->get_billing_phone();
+			$contact->customer_id                 = \strtr(
+				\get_option( 'pronamic_moneybird_customer_id_template', '{customer_id}' ),
+				[
+					'{customer_id}' => $order->get_customer_id(),
+					'{user_id}'     => $order->get_user_id(),
+				]
+			);
+			$contact->tax_number                  = null;
+			$contact->first_name                  = $order->get_billing_first_name();
+			$contact->last_name                   = $order->get_billing_last_name(); 
+			$contact->chamber_of_commerce         = null;
+			$contact->bank_account                = null;
+			$contact->send_invoices_to_attention  = null;
+			$contact->send_invoices_to_email      = $order->get_billing_email();
+			$contact->send_estimates_to_attention = null;
+			$contact->send_estimates_to_email     = null;
+			$contact->sepa_active                 = null;
+			$contact->sepa_iban                   = null;
+			$contact->sepa_iban_account_name      = null;
+			$contact->sepa_bic                    = null;
+			$contact->sepa_mandate_id             = null;
+			$contact->sepa_mandate_date           = null;
+			$contact->sepa_sequence_type          = null;
+			$contact->si_identifier_type          = null;
+			$contact->si_identifier               = null;
+			$contact->invoice_workflow_id         = null;
+			$contact->estimate_workflow_id        = null;
+			$contact->email_ubl                   = null;
+			$contact->direct_debit                = null;
+			$contact->custom_fields               = [];
+			$contact->contact_person              = new ContactPerson( $contact->first_name, $contact->last_name );
+			$contact->type                        = null;
+			$contact->from_checkout               = null;
+
+			$contact = $contacts_endpoint->create_contact( $contact );
+
+			$order->update_meta_data( '_pronamic_moneybird_contact_id', $contact->id );
+
+			$order->save();
+
+			if ( false !== $user ) {
+				\update_user_meta( $user->ID, '_pronamic_moneybird_contact_id', $contact->id );
+			}
 
 			/**
 			 * Step 2: Stop if contacts are found.
@@ -140,7 +236,7 @@ final class WooCommerceController {
 				include __DIR__ . '/../admin/meta-box-woocommerce-order.php';
 			},
 			$post_type_or_screen_id,
-			'side',
+			'advanced',
 			'default'
 		);
 	}
