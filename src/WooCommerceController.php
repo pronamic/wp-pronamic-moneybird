@@ -13,6 +13,7 @@ namespace Pronamic\Moneybird;
 use WP_CLI;
 use WC_Order;
 use WC_Product;
+use WC_Product_Subscription;
 use WC_Order_Item_Product;
 use WP_Post;
 
@@ -271,7 +272,7 @@ final class WooCommerceController {
 					],
 				],
 				'orderby'    => 'date',
-				'order'      => 'ASC',
+				'order'      => 'DESC',
 			]
 		);
 
@@ -294,6 +295,12 @@ final class WooCommerceController {
 
 			$external_sales_invoice->details = [];
 
+			$subscriptions = [];
+
+			if ( \function_exists( '\wcs_get_subscriptions_for_order' ) ) {
+				$subscriptions = \wcs_get_subscriptions_for_order( $order );
+			}
+
 			foreach ( $order->get_items() as $item ) {
 				$detail = new ExternalSalesInvoiceDetail();
 
@@ -301,23 +308,50 @@ final class WooCommerceController {
 				$detail->price       = $item->get_total();
 
 				if ( $item instanceof WC_Order_Item_Product ) {
-					$wc_product = $item->get_product();
+					$product = $item->get_product();
 
-					if ( false !== $wc_product ) {
-						$detail->ledger_account_id = $wc_product->get_meta( '_pronamic_moneybird_ledger_account_id' );
+					if ( false !== $product ) {
+						$ledger_account_id = $product->get_meta( '_pronamic_moneybird_ledger_account_id' );
+
+						if ( '' !== $ledger_account_id ) {
+							$detail->ledger_account_id = $ledger_account_id;
+						}
+					}
+
+					if ( $product instanceof WC_Product_Subscription ) {
+						foreach ( $subscriptions as $subscription ) {
+							if ( $subscription->has_product( $product->get_id() ) ) {
+								$start_date = $order->get_date_completed();
+
+								$timestamp = \wcs_add_time(
+									$subscription->get_billing_interval(),
+									$subscription->get_billing_period(),
+									$start_date->getTimestamp()
+								);
+
+								$end_date = new Date( '@' . $timestamp );
+								$end_date = $end_date->modify( '-1 day' );
+
+								$detail->period = new Period( $start_date, $end_date );
+							}
+						}
 					}
 				}
 
 				$external_sales_invoice->details[] = $detail;
 			}
+var_dump( $external_sales_invoice->remote_serialize( 'create' ) );
+			$external_sales_invoice = $external_sales_invoices_endpoint->create_external_sales_invoice( $external_sales_invoice );
+
+			$order->update_meta_data( '_pronamic_moneybird_external_sales_invoice_id', $external_sales_invoice->id );
+
+			$order->save();
 
 			$attachment = new Attachment(
 				$wcpdf_invoice->get_filename(),
 				$wcpdf_invoice->get_pdf(),
 				'application/pdf'
 			);
-
-			$external_sales_invoice = $external_sales_invoices_endpoint->create_external_sales_invoice( $external_sales_invoice );
 
 			$external_sales_invoices_endpoint->add_attachment_to_external_sales_invoice( $external_sales_invoice, $attachment );
 		}
@@ -381,13 +415,26 @@ final class WooCommerceController {
 			return;
 		}
 
-		$contact_id = \array_key_exists( '_pronamic_moneybird_contact_id', $_POST ) ? \sanitize_text_field( \wp_unslash( $_POST['_pronamic_moneybird_contact_id'] ) ) : '';
+		$keys = [
+			'_pronamic_moneybird_contact_id',
+			'_pronamic_moneybird_external_sales_invoice_id',
+		];
 
-		$order->update_meta_data( '_pronamic_moneybird_contact_id', $contact_id );
+		foreach ( $keys as $key ) {
+			if ( ! \array_key_exists( $key, $_POST ) ) {
+				continue;
+			}
 
-		$external_sales_invoice_id = \array_key_exists( '_pronamic_moneybird_external_sales_invoice_id', $_POST ) ? \sanitize_text_field( \wp_unslash( $_POST['_pronamic_moneybird_external_sales_invoice_id'] ) ) : '';
+			$value = \sanitize_text_field( \wp_unslash( $_POST[ $key ] ) );
 
-		$order->update_meta_data( '_pronamic_moneybird_external_sales_invoice_id', $external_sales_invoice_id );
+			if ( '' === $value ) {
+				$order->delete_meta_data( $key );
+			}
+
+			if ( '' !== $value ) {
+				$order->update_meta_data( $key, $value );
+			}
+		}
 
 		$order->save();
 	}

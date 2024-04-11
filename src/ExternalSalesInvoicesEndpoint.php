@@ -28,7 +28,7 @@ final class ExternalSalesInvoicesEndpoint extends ResourceEndpoint {
 		$url = $this->get_api_url( 'external_sales_invoices' );
 
 		$data = [
-			'external_sales_invoice' => $external_sales_invoice->get_create_parameters(),
+			'external_sales_invoice' => $external_sales_invoice->remote_serialize( 'create' ),
 		];
 
 		$response = $this->client->post( $url, $data );

@@ -87,4 +87,17 @@ final class ExternalSalesInvoiceDetail implements RemoteSerializable {
 	 */
 	#[RemoteApiProperty( 'row_order' )]
 	public $row_order;
+
+	/**
+	 * Remote serialize.
+	 * 
+	 * @link https://developer.moneybird.com/api/external_sales_invoices/#post_external_sales_invoices
+	 * @param string $context Context. 
+	 * @return mixed
+	 */
+	public function remote_serialize( $context = '' ) {
+		$serializer = new RemoteSerializer( $context );
+
+		return $serializer->serialize( $this );
+	}
 }

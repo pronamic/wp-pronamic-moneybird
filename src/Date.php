@@ -13,11 +13,12 @@ namespace Pronamic\Moneybird;
 use DateTimeImmutable;
 use DateTimeZone;
 use Exception;
+use JsonSerializable;
 
 /**
  * Date class
  */
-final class Date extends DateTimeImmutable {
+final class Date extends DateTimeImmutable implements JsonSerializable, RemoteSerializable {
 	/**
 	 * Date from string.
 	 * 
@@ -33,5 +34,33 @@ final class Date extends DateTimeImmutable {
 		$result = $result->setTime( 0, 0 );
 
 		return $result;
+	}
+
+	/**
+	 * JSON serialize.
+	 * 
+	 * @return mixed
+	 */
+	public function jsonSerialize(): mixed {
+		return $this->__toString();
+	}
+
+	/**
+	 * Remote serialize.
+	 * 
+	 * @param string $context Context.
+	 * @return mixed
+	 */
+	public function remote_serialize( $context = '' ) {
+		return $this->__toString();
+	}
+
+	/**
+	 * To string.
+	 * 
+	 * @return string
+	 */
+	public function __toString() {
+		return $this->format( 'Y-m-d' );
 	}
 }

@@ -21,7 +21,16 @@ final class RemoteSerializer {
 	 * 
 	 * @var string
 	 */
-	public $context = '';
+	public $context;
+
+	/**
+	 * Construct remote serializer.
+	 * 
+	 * @param string $context Context.
+	 */
+	public function __construct( $context = '' ) {
+		$this->context = $context;
+	}
 
 	/**
 	 * Serialize.
@@ -56,7 +65,7 @@ final class RemoteSerializer {
 
 	private function get_value( $value ) {
 		if ( $value instanceof RemoteSerializable ) {
-			return $this->serialize( $value );
+			return $value->remote_serialize();
 		}
 
 		if ( \is_array( $value ) ) {

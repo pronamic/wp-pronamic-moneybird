@@ -14,5 +14,11 @@ namespace Pronamic\Moneybird;
  * Remote serializable class
  */
 interface RemoteSerializable {
-
+	/**
+	 * Remote serialize.
+	 * 
+	 * @param string $context Context.
+	 * @return mixed
+	 */
+	public function remote_serialize( $context = '' );
 }

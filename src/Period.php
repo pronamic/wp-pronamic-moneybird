@@ -13,11 +13,12 @@ namespace Pronamic\Moneybird;
 use DateTimeImmutable;
 use DateTimeInterface;
 use DateTimeZone;
+use JsonSerializable;
 
 /**
  * Period class
  */
-final class Period {
+final class Period implements JsonSerializable, RemoteSerializable {
 	/**
 	 * Start date.
 	 * 
@@ -41,6 +42,25 @@ final class Period {
 	public function __construct( $start_date, $end_date ) {
 		$this->start_date = $start_date;
 		$this->end_date   = $end_date;
+	}
+
+	/**
+	 * JSON serialize.
+	 * 
+	 * @return mixed
+	 */
+	public function jsonSerialize(): mixed {
+		return $this->__toString();
+	}
+
+	/**
+	 * Remote serialize.
+	 * 
+	 * @param string $context Context.
+	 * @return mixed
+	 */
+	public function remote_serialize( $context = '' ) {
+		return $this->__toString();
 	}
 
 	/**
