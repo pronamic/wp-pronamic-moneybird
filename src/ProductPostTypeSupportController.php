@@ -85,5 +85,9 @@ final class ProductPostTypeSupportController {
 		$product_id = \array_key_exists( '_pronamic_moneybird_product_id', $_POST ) ? \sanitize_text_field( \wp_unslash( $_POST['_pronamic_moneybird_product_id'] ) ) : '';
 
 		\update_post_meta( $post_id, '_pronamic_moneybird_product_id', $product_id );
+
+		$ledger_account_id = \array_key_exists( '_pronamic_moneybird_ledger_account_id', $_POST ) ? \sanitize_text_field( \wp_unslash( $_POST['_pronamic_moneybird_ledger_account_id'] ) ) : '';
+
+		\update_post_meta( $post_id, '_pronamic_moneybird_ledger_account_id', $ledger_account_id );
 	}
 }

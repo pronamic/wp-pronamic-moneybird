@@ -97,8 +97,8 @@ final class ExternalSalesInvoicesEndpoint extends ResourceEndpoint {
 			$url,
 			[
 				'headers' => [
-					'Content-Type'   => 'multipart/mixed; boundary=' . $boundary,
-					'Authorization'  => 'Bearer ' . $this->client->api_token,
+					'Content-Type'  => 'multipart/mixed; boundary=' . $boundary,
+					'Authorization' => 'Bearer ' . $this->client->api_token,
 				],
 				'body'    => $body,
 				'timeout' => 30,

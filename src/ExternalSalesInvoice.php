@@ -97,7 +97,7 @@ final class ExternalSalesInvoice implements RemoteSerializable {
 	/**
 	 * Details.
 	 * 
-	 * @var array|null
+	 * @var ExternalSalesInvoiceDetail[]|null
 	 */
 	#[RemoteApiProperty( 'details', 'details_attributes' )]
 	public $details;

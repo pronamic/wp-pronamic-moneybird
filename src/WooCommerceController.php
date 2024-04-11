@@ -12,6 +12,8 @@ namespace Pronamic\Moneybird;
 
 use WP_CLI;
 use WC_Order;
+use WC_Product;
+use WC_Order_Item_Product;
 use WP_Post;
 
 /**
@@ -28,14 +30,24 @@ final class WooCommerceController {
 			return;
 		}
 
+		\add_action( 'init', [ $this, 'init' ] );
+
 		\add_action( 'cli_init', [ $this, 'cli_init' ] );
 
 		if ( \is_admin() ) {
 			\add_action( 'add_meta_boxes', [ $this, 'maybe_add_pronamic_moneybird_meta_box_to_wc_order' ], 10, 2 );
 		}
 
-		\add_action( 'woocommerce_process_product_meta', [ $this, 'process_product_meta' ], 10, 2 );
 		\add_action( 'woocommerce_process_shop_order_meta', [ $this, 'process_shop_order_meta' ] );
+	}
+
+	/**
+	 * Initialize.
+	 * 
+	 * @return void
+	 */
+	public function init() {
+		\add_post_type_support( 'product', 'pronamic_moneybird_product' );
 	}
 
 	/**
@@ -283,10 +295,18 @@ final class WooCommerceController {
 			$external_sales_invoice->details = [];
 
 			foreach ( $order->get_items() as $item ) {
-				$detail = new SalesInvoiceDetail();
+				$detail = new ExternalSalesInvoiceDetail();
 
 				$detail->description = $item->get_name();
 				$detail->price       = $item->get_total();
+
+				if ( $item instanceof WC_Order_Item_Product ) {
+					$wc_product = $item->get_product();
+
+					if ( false !== $wc_product ) {
+						$detail->ledger_account_id = $wc_product->get_meta( '_pronamic_moneybird_ledger_account_id' );
+					}
+				}
 
 				$external_sales_invoice->details[] = $detail;
 			}
@@ -327,25 +347,14 @@ final class WooCommerceController {
 			'woocommerce-order-pronamic-moneybird',
 			\__( 'Pronamic Moneybird', 'pronamic-moneybird' ),
 			function () use ( $order ) {
+				\wp_nonce_field( 'pronamic_moneybird_save_wc_order', 'pronamic_moneybird_nonce' );
+
 				include __DIR__ . '/../admin/meta-box-woocommerce-order.php';
 			},
 			$post_type_or_screen_id,
 			'advanced',
 			'default'
 		);
-	}
-
-	/**
-	 * Process product meta.
-	 * 
-	 * @link https://github.com/woocommerce/woocommerce/blob/deef144a433ae8765b01883ff13fad221d98c918/plugins/woocommerce/includes/admin/class-wc-admin-meta-boxes.php#L265-L273
-	 * @link https://github.com/search?q=repo%3Awoocommerce%2Fwoocommerce%20woocommerce_process_product_meta&type=code
-	 * @link https://github.com/woocommerce/woocommerce/blob/deef144a433ae8765b01883ff13fad221d98c918/plugins/woocommerce/includes/admin/meta-boxes/class-wc-meta-box-product-data.php#L322-L435
-	 * @param int     $post_id WP post id.
-	 * @param WP_Post $post Post object.
-	 */
-	public function process_product_meta( $post_id, $post ) {
-
 	}
 
 	/**
@@ -356,6 +365,30 @@ final class WooCommerceController {
 	 * @param int $order_id Order ID.
 	 */
 	public function process_shop_order_meta( $order_id ) {
+		if ( ! \array_key_exists( 'pronamic_moneybird_nonce', $_POST ) ) {
+			return;
+		}
 
+		$nonce = \sanitize_key( $_POST['pronamic_moneybird_nonce'] );
+
+		if ( ! \wp_verify_nonce( $nonce, 'pronamic_moneybird_save_wc_order' ) ) {
+			return;
+		}
+
+		$order = \wc_get_order( $order_id );
+
+		if ( ! $order instanceof WC_Order ) {
+			return;
+		}
+
+		$contact_id = \array_key_exists( '_pronamic_moneybird_contact_id', $_POST ) ? \sanitize_text_field( \wp_unslash( $_POST['_pronamic_moneybird_contact_id'] ) ) : '';
+
+		$order->update_meta_data( '_pronamic_moneybird_contact_id', $contact_id );
+
+		$external_sales_invoice_id = \array_key_exists( '_pronamic_moneybird_external_sales_invoice_id', $_POST ) ? \sanitize_text_field( \wp_unslash( $_POST['_pronamic_moneybird_external_sales_invoice_id'] ) ) : '';
+
+		$order->update_meta_data( '_pronamic_moneybird_external_sales_invoice_id', $external_sales_invoice_id );
+
+		$order->save();
 	}
 }
