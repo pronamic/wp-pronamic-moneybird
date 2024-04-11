@@ -11,6 +11,7 @@
 namespace Pronamic\Moneybird;
 
 use Exception;
+use Pronamic\WordPress\Http\Facades\Http;
 
 /**
  * External sales invoices endpoint class
@@ -69,11 +70,6 @@ final class ExternalSalesInvoicesEndpoint extends ResourceEndpoint {
 
 		$boundary = \hash( 'sha256', \uniqid( '', true ) );
 
-		// Headers.
-		$headers = [
-			'Content-Type' => 'multipart/mixed; boundary=' . $boundary,
-		];
-
 		// Body.
 		$body = '';
 
@@ -93,16 +89,28 @@ final class ExternalSalesInvoicesEndpoint extends ResourceEndpoint {
 
 		$body .= $attachment->contents . "\r\n";
 
+
 		$body .= '--' . $boundary . '--';
 
 		// Request.
-		$response = $this->client->post( $url, $body, $headers );
-var_dump( $response );
-exit;
+		$response = Http::post(
+			$url,
+			[
+				'headers' => [
+					'Content-Type'   => 'multipart/mixed; boundary=' . $boundary,
+					'Authorization'  => 'Bearer ' . $this->client->api_token,
+				],
+				'body'    => $body,
+				'timeout' => 30,
+			]
+		);
+
 		$response_status = (string) $response->status();
 
 		if ( '200' !== $response_status ) {
 			$http_exception = new Exception( 'Unexpected HTTP response: ' . $response_status, (int) $response_status );
+
+			$response_data = $response->json();
 
 			throw Error::from_response_object( $response_data, (int) $response_status, $http_exception );
 		}

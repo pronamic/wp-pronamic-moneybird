@@ -21,7 +21,7 @@ final class Client {
 	 * 
 	 * @var string
 	 */
-	private $api_token;
+	public $api_token;
 
 	/**
 	 * Construct client.
