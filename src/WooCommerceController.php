@@ -33,6 +33,8 @@ final class WooCommerceController {
 
 		\add_action( 'init', [ $this, 'init' ] );
 
+		\add_action( 'admin_init', [ $this, 'admin_init' ] );
+
 		\add_action( 'cli_init', [ $this, 'cli_init' ] );
 
 		if ( \is_admin() ) {
@@ -49,6 +51,37 @@ final class WooCommerceController {
 	 */
 	public function init() {
 		\add_post_type_support( 'product', 'pronamic_moneybird_product' );
+
+		\register_setting(
+			'pronamic_moneybird',
+			'pronamic_moneybird_woocommerce_tax_rates',
+			[
+				'type' => 'array',
+			]
+		);
+	}
+
+	/**
+	 * Admin initialize.
+	 */
+	public function admin_init() {
+		\add_settings_section(
+			'pronamic_moneybird_woocommerce',
+			\__( 'WooCommerce', 'pronamic-moneybird' ),
+			function () {
+			},
+			'pronamic_moneybird'
+		);
+
+		\add_settings_field(
+			'pronamic_moneybird_woocommerce_tax_rates',
+			\__( 'Tax rates', 'pronamic-moneybird' ),
+			function () {
+				include __DIR__ . '/../admin/settings-field-woocommerce-tax-rates.php';
+			},
+			'pronamic_moneybird',
+			'pronamic_moneybird_woocommerce'
+		);
 	}
 
 	/**
@@ -253,6 +286,12 @@ final class WooCommerceController {
 		$external_sales_invoices_endpoint = $administration_endpoint->get_external_sales_invoices_endpoint();
 
 		/**
+		 * Tax rates.
+		 */
+		$tax_rates = get_option( 'pronamic_moneybird_woocommerce_tax_rates' );
+		$tax_rates = is_array( $tax_rates ) ? $tax_rates : [];
+
+		/**
 		 * WooCommerce orders.
 		 * 
 		 * @link https://github.com/woocommerce/woocommerce/wiki/HPOS:-new-order-querying-APIs
@@ -338,9 +377,31 @@ final class WooCommerceController {
 					}
 				}
 
+				if ( \method_exists( $item, 'get_taxes' ) ) {
+					$taxes = $item->get_taxes();
+
+					if ( ! \array_key_exists( 'total', $taxes ) ) {
+						throw new \Exception( 'Order item taxes data does not contain total.' );
+					}
+
+					$totals = $taxes['total'];
+
+					$values = \array_filter( $totals );
+
+					if ( \count( $values ) > 1 ) {
+						throw new \Exception( 'Moneybird does not support multiple tax rates per line.' );
+					}
+
+					$rate_id = \array_key_first( $values );
+
+					if ( \array_key_exists( $rate_id, $tax_rates ) ) {
+						$detail->tax_rate_id = $tax_rates[ $rate_id ];
+					}
+				}
+
 				$external_sales_invoice->details[] = $detail;
 			}
-var_dump( $external_sales_invoice->remote_serialize( 'create' ) );
+
 			$external_sales_invoice = $external_sales_invoices_endpoint->create_external_sales_invoice( $external_sales_invoice );
 
 			$order->update_meta_data( '_pronamic_moneybird_external_sales_invoice_id', $external_sales_invoice->id );
