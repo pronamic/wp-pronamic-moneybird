@@ -73,7 +73,7 @@ final class Period {
 
 		return new self(
 			$start_date->setTime( 0, 0, 0 ),
-			$end_date->setTime( 0, 0, 0 )
+			$end_date->setTime( 23, 59, 59 )
 		);
 	}
 }

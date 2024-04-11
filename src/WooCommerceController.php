@@ -12,6 +12,7 @@ namespace Pronamic\Moneybird;
 
 use WP_CLI;
 use WC_Order;
+use WP_Post;
 
 /**
  * WooCommerce controller class
@@ -32,6 +33,9 @@ final class WooCommerceController {
 		if ( \is_admin() ) {
 			\add_action( 'add_meta_boxes', [ $this, 'maybe_add_pronamic_moneybird_meta_box_to_wc_order' ], 10, 2 );
 		}
+
+		\add_action( 'woocommerce_process_product_meta', [ $this, 'process_product_meta' ], 10, 2 );
+		\add_action( 'woocommerce_process_shop_order_meta', [ $this, 'process_shop_order_meta' ] );
 	}
 
 	/**
@@ -329,5 +333,29 @@ final class WooCommerceController {
 			'advanced',
 			'default'
 		);
+	}
+
+	/**
+	 * Process product meta.
+	 * 
+	 * @link https://github.com/woocommerce/woocommerce/blob/deef144a433ae8765b01883ff13fad221d98c918/plugins/woocommerce/includes/admin/class-wc-admin-meta-boxes.php#L265-L273
+	 * @link https://github.com/search?q=repo%3Awoocommerce%2Fwoocommerce%20woocommerce_process_product_meta&type=code
+	 * @link https://github.com/woocommerce/woocommerce/blob/deef144a433ae8765b01883ff13fad221d98c918/plugins/woocommerce/includes/admin/meta-boxes/class-wc-meta-box-product-data.php#L322-L435
+	 * @param int     $post_id WP post id.
+	 * @param WP_Post $post Post object.
+	 */
+	public function process_product_meta( $post_id, $post ) {
+
+	}
+
+	/**
+	 * Process shop order meta.
+	 * 
+	 * @link https://github.com/woocommerce/woocommerce/blob/deef144a433ae8765b01883ff13fad221d98c918/plugins/woocommerce/includes/admin/class-wc-admin-meta-boxes.php#L255-L263
+	 * @link https://github.com/woocommerce/woocommerce/blob/deef144a433ae8765b01883ff13fad221d98c918/plugins/woocommerce/includes/admin/meta-boxes/class-wc-meta-box-order-data.php#L632-L771
+	 * @param int $order_id Order ID.
+	 */
+	public function process_shop_order_meta( $order_id ) {
+
 	}
 }
