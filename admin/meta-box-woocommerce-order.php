@@ -1,6 +1,6 @@
 <?php
 /**
- * Meta box WooCommercer order
+ * Meta box WooCommerce order
  *
  * @author    Pronamic <info@pronamic.eu>
  * @copyright 2005-2024 Pronamic
