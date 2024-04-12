@@ -42,3 +42,12 @@ require_once __DIR__ . '/vendor/autoload_packages.php';
 		Plugin::instance()->setup();
 	}
 );
+
+add_action(
+	'before_woocommerce_init',
+	function () {
+		if ( class_exists( \Automattic\WooCommerce\Utilities\FeaturesUtil::class ) ) {
+			\Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility( 'custom_order_tables', __FILE__, true );
+		}
+	} 
+);

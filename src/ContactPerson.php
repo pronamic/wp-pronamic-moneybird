@@ -51,4 +51,16 @@ final class ContactPerson implements RemoteSerializable {
 		$this->first_name = $first_name;
 		$this->last_name  = $last_name;
 	}
+
+	/**
+	 * Remote serialize.
+	 *
+	 * @param string $context Context.
+	 * @return mixed
+	 */
+	public function remote_serialize( $context = '' ) {
+		$serializer = new RemoteSerializer( $context );
+
+		return $serializer->serialize( $this );
+	}
 }

@@ -140,7 +140,7 @@ final class WooCommerceController {
 				'meta_query' => [
 					[
 						'key'     => '_pronamic_moneybird_contact_id',
-						'compare' => 'NOT EXISTS',   
+						'compare' => 'NOT EXISTS',
 					],
 				],
 				'orderby'    => 'date',
@@ -157,6 +157,7 @@ final class WooCommerceController {
 				$contact = $this->create_contact_based_on_woocommerce_order( $contacts_endpoint, $order );
 
 				WP_CLI::log( $order->get_edit_order_url() );
+				WP_CLI::log( $contact->get_remote_link() );
 			} catch ( \Exception $e ) {
 				WP_CLI::error( $e->getMessage() );
 			}

@@ -297,6 +297,30 @@ final class Contact implements RemoteSerializable {
 	public $contact_person;
 
 	/**
+	 * Get remote link.
+	 * 
+	 * @return string
+	 * @throws \Exception Throws an exception if remote link cannot be constructed.
+	 */
+	public function get_remote_link() {
+		if ( null === $this->administration_id ) {
+			throw new \Exception( 'Contact administration ID is undefined, remote link cannot be constructed.' );
+		}
+
+		if ( null === $this->id ) {
+			throw new \Exception( 'Contact ID is undefined, remote link cannot be constructed.' );
+		}
+
+		return \strtr(
+			'https://moneybird.com/:administration_id/contacts/:id',
+			[
+				':administration_id' => $this->administration_id,
+				':id'                => $this->id,
+			]
+		);
+	}
+
+	/**
 	 * Remote serialize.
 	 * 
 	 * @link https://developer.moneybird.com/api/financial_statements/#post_financial_statements
