@@ -202,14 +202,14 @@ final class WooCommerceController {
 
 		$contact = new Contact();
 
-		$contact->company_name                = $company_name;
-		$contact->address_1                   = $order->get_billing_address_1();
-		$contact->address_2                   = $order->get_billing_address_2();
-		$contact->zip_code                    = $order->get_billing_postcode();
-		$contact->city                        = $order->get_billing_city();
-		$contact->country_code                = $order->get_billing_country();
-		$contact->phone                       = $order->get_billing_phone();
-		$contact->customer_id                 = \strtr(
+		$contact->company_name = $company_name;
+		$contact->address_1    = $order->get_billing_address_1();
+		$contact->address_2    = $order->get_billing_address_2();
+		$contact->zip_code     = $order->get_billing_postcode();
+		$contact->city         = $order->get_billing_city();
+		$contact->country_code = $order->get_billing_country();
+		$contact->phone        = $order->get_billing_phone();
+		$contact->customer_id  = \strtr(
 			\get_option( 'pronamic_moneybird_customer_id_template', '{customer_id}' ),
 			[
 				'{customer_id}' => $order->get_customer_id(),
