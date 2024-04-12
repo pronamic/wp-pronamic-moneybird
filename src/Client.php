@@ -73,7 +73,7 @@ final class Client {
 			return;
 		}
 
-		$http_exception = new Exception( 'Unexpected HTTP response: ' . $response_status, (int) $response_status );
+		$http_exception = new \Exception( 'Unexpected HTTP response: ' . $response_status, (int) $response_status );
 
 		$response_data = $response->json();
 
