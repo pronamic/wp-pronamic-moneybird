@@ -154,9 +154,10 @@ final class WooCommerceController {
 			WP_CLI::log( 'Order: ' . $order->get_id() );
 
 			try {
+				WP_CLI::log( $order->get_edit_order_url() );
+
 				$contact = $this->create_contact_based_on_woocommerce_order( $contacts_endpoint, $order );
 
-				WP_CLI::log( $order->get_edit_order_url() );
 				WP_CLI::log( $contact->get_remote_link() );
 			} catch ( \Exception $e ) {
 				WP_CLI::error( $e->getMessage() );
@@ -223,7 +224,7 @@ final class WooCommerceController {
 
 		$contact = new Contact();
 
-		$contact->company_name = $order->get_billing_company();
+		$contact->company_name = ( '' === $company_name ) ? null : $company_name;
 		$contact->address_1    = $order->get_billing_address_1();
 		$contact->address_2    = $order->get_billing_address_2();
 		$contact->zip_code     = $order->get_billing_postcode();
@@ -246,7 +247,11 @@ final class WooCommerceController {
 		$contact->tax_number = null;
 
 		if ( \function_exists( '\wc_eu_vat_get_vat_from_order' ) ) {
-			$contact->tax_number = \wc_eu_vat_get_vat_from_order( $order );
+			$value = \wc_eu_vat_get_vat_from_order( $order );
+
+			if ( '' !== $value ) {
+				$contact->tax_number = $value;
+			}
 		}
 
 		$contact->first_name                  = $order->get_billing_first_name();
@@ -296,7 +301,16 @@ final class WooCommerceController {
 		$contact->email_ubl            = null;
 		$contact->direct_debit         = null;
 		$contact->custom_fields        = [];
-		$contact->contact_person       = new ContactPerson( $contact->first_name, $contact->last_name );
+
+		/**
+		 * Contact person.
+		 * 
+		 * Please note: a contact without a company name is a private individual
+		 * and cannot contain a contact person.
+		 */
+		if ( '' !== $company_name ) {
+			$contact->contact_person = new ContactPerson( $contact->first_name, $contact->last_name );
+		}
 
 		$contact = $contacts_endpoint->create_contact( $contact );
 

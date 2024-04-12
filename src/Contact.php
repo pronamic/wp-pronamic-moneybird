@@ -291,6 +291,26 @@ final class Contact implements RemoteSerializable {
 	/**
 	 * Contact person.
 	 * 
+	 * Please note: a contact without a company name is a private individual
+	 * and cannot contain a contact person. This is not well documented by 
+	 * Moneybird, it will result in the following error message:
+	 * 
+	 * ```json
+	 * {
+	 *     "error": {
+	 *         "company_name": [
+	 *             "is verplicht"
+	 *         ],
+	 *         "firstname": [
+	 *             "is verplicht"
+	 *         ],
+	 *         "lastname": [
+	 *             "is verplicht"
+	 *         ]
+	 *     }
+	 * }
+	 * ```
+	 *
 	 * @var ContactPerson|null
 	 */
 	#[RemoteApiProperty( 'contact_person' )]
