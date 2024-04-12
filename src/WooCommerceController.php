@@ -388,18 +388,20 @@ final class WooCommerceController {
 		 */
 		$orders = \wc_get_orders(
 			[
-				'status'     => [
+				'status'         => [
 					'completed',
 				],
-				'limit'      => $assoc_args['limit'],
-				'meta_query' => [
+				'type'           => 'shop_order',
+				'date_completed' => '>=2024-01-01',
+				'limit'          => $assoc_args['limit'],
+				'meta_query'     => [
 					[
 						'key'     => '_pronamic_moneybird_external_sales_invoice_id',
 						'compare' => 'NOT EXISTS',   
 					],
 				],
-				'orderby'    => 'date',
-				'order'      => 'ASC',
+				'orderby'        => 'date',
+				'order'          => 'ASC',
 			]
 		);
 
@@ -516,7 +518,23 @@ final class WooCommerceController {
 					$external_sales_invoice->details[] = $detail_discount;
 				}
 			}
+			
+			/**
+			 * Add detail with transaction ID.
+			 */
+			$detail = new ExternalSalesInvoiceDetail();
 
+			$detail->description = \sprintf(
+				/* translators: %s: Transaction ID. */
+				_x( '*Transaction ID:* %s', 'Moneybird invoice line description', 'pronamic-moneybird' ),
+				$order->get_transaction_id()
+			);
+
+			$external_sales_invoice->details[] = $detail;
+
+			/**
+			 * Create remote.
+			 */
 			$external_sales_invoice = $external_sales_invoices_endpoint->create_external_sales_invoice( $external_sales_invoice );
 
 			WP_CLI::log( $external_sales_invoice->get_remote_link() );

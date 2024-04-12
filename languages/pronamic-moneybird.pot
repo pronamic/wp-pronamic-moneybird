@@ -9,14 +9,14 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2024-04-12T07:17:26+00:00\n"
+"POT-Creation-Date: 2024-04-12T14:52:38+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: pronamic-moneybird\n"
 
 #. Plugin Name of the plugin
 #: pronamic-moneybird.php
-#: src/WooCommerceController.php:478
+#: src/WooCommerceController.php:577
 msgid "Pronamic Moneybird"
 msgstr ""
 
@@ -80,47 +80,47 @@ msgstr ""
 msgid "External sales invoice ID"
 msgstr ""
 
-#: admin/settings-field-woocommerce-tax-rates.php:27
+#: admin/settings-field-woocommerce-tax-rates.php:35
 msgid "Class"
 msgstr ""
 
-#: admin/settings-field-woocommerce-tax-rates.php:28
+#: admin/settings-field-woocommerce-tax-rates.php:36
 msgid "Country"
 msgstr ""
 
-#: admin/settings-field-woocommerce-tax-rates.php:29
+#: admin/settings-field-woocommerce-tax-rates.php:37
 msgid "State"
 msgstr ""
 
-#: admin/settings-field-woocommerce-tax-rates.php:30
+#: admin/settings-field-woocommerce-tax-rates.php:38
 msgid "Rate"
 msgstr ""
 
-#: admin/settings-field-woocommerce-tax-rates.php:31
+#: admin/settings-field-woocommerce-tax-rates.php:39
 msgid "Name"
 msgstr ""
 
-#: admin/settings-field-woocommerce-tax-rates.php:32
+#: admin/settings-field-woocommerce-tax-rates.php:40
 msgid "Priority"
 msgstr ""
 
-#: admin/settings-field-woocommerce-tax-rates.php:33
+#: admin/settings-field-woocommerce-tax-rates.php:41
 msgid "Compound"
 msgstr ""
 
-#: admin/settings-field-woocommerce-tax-rates.php:34
+#: admin/settings-field-woocommerce-tax-rates.php:42
 msgid "Shipping"
 msgstr ""
 
-#: admin/settings-field-woocommerce-tax-rates.php:35
+#: admin/settings-field-woocommerce-tax-rates.php:43
 msgid "Order"
 msgstr ""
 
-#: admin/settings-field-woocommerce-tax-rates.php:36
+#: admin/settings-field-woocommerce-tax-rates.php:44
 msgid "Moneybird tax rate ID"
 msgstr ""
 
-#: admin/settings-field-woocommerce-tax-rates.php:53
+#: admin/settings-field-woocommerce-tax-rates.php:61
 msgid "Standard rate"
 msgstr ""
 
@@ -395,7 +395,7 @@ msgstr ""
 msgid "Tax rates"
 msgstr ""
 
-#: src/WooCommerceController.php:424
+#: src/WooCommerceController.php:506
 msgid "Discount"
 msgstr ""
 
