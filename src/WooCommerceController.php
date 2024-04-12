@@ -237,20 +237,45 @@ final class WooCommerceController {
 		$contact->send_estimates_to_attention = null;
 		$contact->send_estimates_to_email     = null;
 		$contact->sepa_active                 = null;
-		$contact->sepa_iban                   = null;
-		$contact->sepa_iban_account_name      = null;
-		$contact->sepa_bic                    = null;
-		$contact->sepa_mandate_id             = null;
-		$contact->sepa_mandate_date           = null;
-		$contact->sepa_sequence_type          = null;
-		$contact->si_identifier_type          = null;
-		$contact->si_identifier               = null;
-		$contact->invoice_workflow_id         = null;
-		$contact->estimate_workflow_id        = null;
-		$contact->email_ubl                   = null;
-		$contact->direct_debit                = null;
-		$contact->custom_fields               = [];
-		$contact->contact_person              = new ContactPerson( $contact->first_name, $contact->last_name );
+
+		/**
+		 * IBAN.
+		 *
+		 * Pronamic Pay.
+		 *
+		 * @link https://github.com/pronamic/wp-pay-core/blob/6bb82841cb2059e1eceedbafac31d73e5493c4c0/src/Payments/PaymentInfo.php#L130-L135
+		 */
+		$contact->sepa_iban              = null;
+		$contact->sepa_iban_account_name = null;
+		$contact->sepa_bic               = null;
+
+		if ( \function_exists( '\get_pronamic_payment' ) ) {
+			$payment_id = (int) $order->get_meta( '_pronamic_payment_id' );
+
+			$payment = \get_pronamic_payment( $payment_id );
+
+			if ( null !== $payment ) {
+				$consumer_bank_details = $payment->get_consumer_bank_details();
+
+				if ( null !== $consumer_bank_details ) {
+					$contact->sepa_iban              = $consumer_bank_details->get_iban();
+					$contact->sepa_iban_account_name = $consumer_bank_details->get_name();
+					$contact->sepa_bic               = $consumer_bank_details->get_bic();
+				}
+			}
+		}
+
+		$contact->sepa_mandate_id      = null;
+		$contact->sepa_mandate_date    = null;
+		$contact->sepa_sequence_type   = null;
+		$contact->si_identifier_type   = null;
+		$contact->si_identifier        = null;
+		$contact->invoice_workflow_id  = null;
+		$contact->estimate_workflow_id = null;
+		$contact->email_ubl            = null;
+		$contact->direct_debit         = null;
+		$contact->custom_fields        = [];
+		$contact->contact_person       = new ContactPerson( $contact->first_name, $contact->last_name );
 
 		$contact = $contacts_endpoint->create_contact( $contact );
 

@@ -13,6 +13,7 @@
 	],
 	"mappings": {
 		"wp-content/plugins/pronamic-customer-type-for-woocommerce": "pronamic/pronamic-customer-type-for-woocommerce",
+		"wp-content/plugins/pronamic-ideal": "https://downloads.wordpress.org/plugin/pronamic-ideal.zip",
 		"wp-content/plugins/pronamic-moneybird-dev": "./",
 		"wp-content/plugins/pronamic-moneybird": "./build/project/",
 		"wp-content/plugins/woocommerce": "https://downloads.wordpress.org/plugin/woocommerce.zip",
