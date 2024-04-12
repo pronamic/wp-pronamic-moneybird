@@ -216,7 +216,18 @@ final class WooCommerceController {
 				'{user_id}'     => $order->get_user_id(),
 			]
 		);
-		$contact->tax_number                  = null;
+
+		/**
+		 * Tax number.
+		 * 
+		 * @link https://github.com/pronamic/woocommerce-eu-vat-number/blob/615b15d02888209137a6ba4e95a1e8c1181e834b/includes/wc-eu-vat-functions.php#L8-L27
+		 */
+		$contact->tax_number = null;
+
+		if ( \function_exists( '\wc_eu_vat_get_vat_from_order' ) ) {
+			$contact->tax_number = \wc_eu_vat_get_vat_from_order( $order );
+		}
+
 		$contact->first_name                  = $order->get_billing_first_name();
 		$contact->last_name                   = $order->get_billing_last_name(); 
 		$contact->chamber_of_commerce         = null;
@@ -256,6 +267,14 @@ final class WooCommerceController {
 		return $contact;
 	}
 
+	private function format_price_no_html( $price, $args = [] ) {
+		return \html_entity_decode(
+			\strip_tags(
+				\wc_price( $price, $args )
+			)
+		);
+	}
+
 	/**
 	 * WP-CLI create external sales invoices for WooCommerce orders.
 	 * 
@@ -286,10 +305,12 @@ final class WooCommerceController {
 		$external_sales_invoices_endpoint = $administration_endpoint->get_external_sales_invoices_endpoint();
 
 		/**
-		 * Tax rates.
+		 * Tax.
 		 */
 		$tax_rates = get_option( 'pronamic_moneybird_woocommerce_tax_rates' );
 		$tax_rates = is_array( $tax_rates ) ? $tax_rates : [];
+
+		$inc_tax = false;
 
 		/**
 		 * WooCommerce orders.
@@ -328,7 +349,7 @@ final class WooCommerceController {
 			$external_sales_invoice->reference           = $wcpdf_invoice->get_number()->get_formatted();
 			$external_sales_invoice->date                = $wcpdf_invoice->get_date()->format( 'Y-m-d' );
 			$external_sales_invoice->currency            = $order->get_currency();
-			$external_sales_invoice->prices_are_incl_tax = false;
+			$external_sales_invoice->prices_are_incl_tax = $inc_tax;
 			$external_sales_invoice->source              = \get_bloginfo( 'name' );
 			$external_sales_invoice->source_url          = $order->get_edit_order_url();
 
@@ -344,7 +365,8 @@ final class WooCommerceController {
 				$detail = new ExternalSalesInvoiceDetail();
 
 				$detail->description = $item->get_name();
-				$detail->price       = $item->get_total();
+				$detail->amount      = $item->get_quantity();
+				$detail->price       = $order->get_item_subtotal( $item, $inc_tax, true );
 
 				if ( $item instanceof WC_Order_Item_Product ) {
 					$product = $item->get_product();
@@ -400,6 +422,30 @@ final class WooCommerceController {
 				}
 
 				$external_sales_invoice->details[] = $detail;
+
+				/**
+				 * Discount.
+				 * 
+				 * @link https://github.com/woocommerce/woocommerce/blob/deef144a433ae8765b01883ff13fad221d98c918/plugins/woocommerce/includes/admin/meta-boxes/views/html-order-item.php#L102-L117
+				 */
+				if ( $item->get_subtotal() !== $item->get_total() ) {
+					$detail_discount = clone $detail;
+
+					$detail_discount->description = '└─ _' . \sprintf(
+						\__( 'Discount', 'pronamic-moneybird' ),
+						$this->format_price_no_html(
+							\wc_format_decimal( $item->get_subtotal() - $item->get_total(), '' ),
+							[
+								'currency' => $order->get_currency(),
+							]
+						)
+					) . '_';
+
+					$detail_discount->amount = null;
+					$detail_discount->price  = $item->get_total() - $item->get_subtotal();
+
+					$external_sales_invoice->details[] = $detail_discount;
+				}
 			}
 
 			$external_sales_invoice = $external_sales_invoices_endpoint->create_external_sales_invoice( $external_sales_invoice );

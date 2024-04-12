@@ -16,6 +16,7 @@
 		"wp-content/plugins/pronamic-moneybird": "./build/project/",
 		"wp-content/plugins/woocommerce": "https://downloads.wordpress.org/plugin/woocommerce.zip",
 		"wp-content/plugins/woocommerce-subscriptions": "pronamic/woocommerce-subscriptions",
+		"wp-content/plugins/woocommerce-eu-vat-number": "pronamic/woocommerce-eu-vat-number",
 		"wp-content/plugins/woocommerce-pdf-invoices-packing-slips": "https://downloads.wordpress.org/plugin/woocommerce-pdf-invoices-packing-slips.zip"
 	}
 }
