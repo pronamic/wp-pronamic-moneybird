@@ -106,7 +106,7 @@ final class WooCommerceController {
 		$assoc_args = \wp_parse_args(
 			$assoc_args,
 			[
-				'limit' => 10,
+				'limit' => 1,
 			]
 		);
 
@@ -320,7 +320,7 @@ final class WooCommerceController {
 		$assoc_args = \wp_parse_args(
 			$assoc_args,
 			[
-				'limit' => 10,
+				'limit' => 1,
 			]
 		);
 
