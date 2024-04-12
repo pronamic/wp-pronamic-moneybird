@@ -54,7 +54,8 @@ abstract class ResourceEndpoint extends Endpoint {
 	/**
 	 * Post data.
 	 * 
-	 * @param mixed $data Data.
+	 * @param string $resource_path Resource path.
+	 * @param mixed  $data          Data.
 	 * @return mixed
 	 */
 	public function post( $resource_path, $data ) {

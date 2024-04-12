@@ -1,4 +1,12 @@
 <?php
+/**
+ * Settings field WooCommerce tax rates
+ *
+ * @author    Pronamic <info@pronamic.eu>
+ * @copyright 2005-2024 Pronamic
+ * @license   GPL-2.0-or-later
+ * @package   Pronamic\Moneybird
+ */
 
 $tax_rates = get_option( 'pronamic_moneybird_woocommerce_tax_rates' );
 $tax_rates = is_array( $tax_rates ) ? $tax_rates : [];

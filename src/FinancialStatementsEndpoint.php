@@ -19,7 +19,7 @@ final class FinancialStatementsEndpoint extends ResourceEndpoint {
 	/**
 	 * Array filter null.
 	 * 
-	 * @param array
+	 * @param array $items Items.
 	 * @return array
 	 */
 	public static function array_filter_null( $items ) {
@@ -37,6 +37,7 @@ final class FinancialStatementsEndpoint extends ResourceEndpoint {
 	 * @link https://developer.moneybird.com/api/financial_statements/#post_financial_statements
 	 * @param FinancialStatement $financial_statement Financial statement.
 	 * @return FinancialStatement
+	 * @throws Error Throws an exception if financial statement creation fails.
 	 */
 	public function create( FinancialStatement $financial_statement ) {
 		$url = $this->get_api_url( 'financial_statements' );
@@ -53,7 +54,9 @@ final class FinancialStatementsEndpoint extends ResourceEndpoint {
 		if ( '201' !== $response_status ) {
 			$http_exception = new Exception( 'Unexpected HTTP response: ' . $response_status, (int) $response_status );
 
-			throw Error::from_response_object( $response_data, (int) $response_status, $http_exception );
+			$error = Error::from_response_object( $response_data, (int) $response_status, $http_exception );
+
+			throw $error;
 		}
 
 		return FinancialStatement::from_object( $response_data );

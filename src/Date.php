@@ -22,7 +22,9 @@ final class Date extends DateTimeImmutable implements JsonSerializable, RemoteSe
 	/**
 	 * Date from string.
 	 * 
+	 * @param string $value Value.
 	 * @return Date
+	 * @throws \Exception Throws an exception if string has unexpected format.
 	 */
 	public static function from_string( $value ) {
 		$result = self::createFromFormat( 'Y-m-d', $value, new DateTimeZone( 'UTC' ) );

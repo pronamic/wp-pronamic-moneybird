@@ -19,6 +19,7 @@ final class RemoteUnserializer {
 	/**
 	 * Serialize.
 	 * 
+	 * @param object $item Item.
 	 * @param object $data Data.
 	 * @return object
 	 */

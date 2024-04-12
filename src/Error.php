@@ -11,6 +11,7 @@
 namespace Pronamic\Moneybird;
 
 use Exception;
+use Throwable;
 
 /**
  * Error class
@@ -26,11 +27,17 @@ final class Error extends Exception {
 	/**
 	 * Error from response object.
 	 * 
+	 * @param object    $data     Data.
+	 * @param int       $code     Code.
+	 * @param Throwable $previous The previous exception used for the exception chaining.
 	 * @return Error
+	 * @throws \Exception Throws an exception if response data does not contain an error.
 	 */
 	public static function from_response_object( $data, $code = 0, $previous = null ) {
 		if ( ! \property_exists( $data, 'error' ) ) {
-			throw new Exception( 'Response object does not contain an error property.', $code, $previous );
+			$exception = new Exception( 'Response object does not contain an error property.', $code, $previous );
+
+			throw $exception;
 		}
 
 		$messages = [

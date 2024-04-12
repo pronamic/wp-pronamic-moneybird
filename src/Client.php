@@ -45,6 +45,7 @@ final class Client {
 	/**
 	 * Get headers.
 	 * 
+	 * @param array $headers Headers.
 	 * @return array
 	 */
 	private function get_headers( $headers = [] ) {
@@ -81,7 +82,9 @@ final class Client {
 	/**
 	 * Post data.
 	 * 
-	 * @param mixed $data Data.
+	 * @param string $api_url API URL.
+	 * @param mixed  $data    Data.
+	 * @param array  $headers Headers.
 	 * @return mixed
 	 */
 	public function post( $api_url, $data, $headers = [] ) {

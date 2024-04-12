@@ -23,6 +23,7 @@ final class ExternalSalesInvoicesEndpoint extends ResourceEndpoint {
 	 * @link https://developer.moneybird.com/api/contacts/#post_contacts
 	 * @param ExternalSalesInvoice $external_sales_invoice External sales invoice.
 	 * @return ExternalSalesInvoice
+	 * @throws Error Throws an exception if external sales invoice creation fails.
 	 */
 	public function create_external_sales_invoice( ExternalSalesInvoice $external_sales_invoice ) {
 		$url = $this->get_api_url( 'external_sales_invoices' );
@@ -39,7 +40,9 @@ final class ExternalSalesInvoicesEndpoint extends ResourceEndpoint {
 		if ( '201' !== $response_status ) {
 			$http_exception = new Exception( 'Unexpected HTTP response: ' . $response_status, (int) $response_status );
 
-			throw Error::from_response_object( $response_data, (int) $response_status, $http_exception );
+			$error = Error::from_response_object( $response_data, (int) $response_status, $http_exception );
+
+			throw $error;
 		}
 
 		return ExternalSalesInvoice::from_object( $response_data );
@@ -53,6 +56,7 @@ final class ExternalSalesInvoicesEndpoint extends ResourceEndpoint {
 	 * @param ExternalSalesInvoice $external_sales_invoice External sales invoice.
 	 * @param Attachment           $attachment             Attachment.
 	 * @return void
+	 * @throws \Exception Throws an exception if external sales invoice has no ID.
 	 */
 	public function add_attachment_to_external_sales_invoice( ExternalSalesInvoice $external_sales_invoice, Attachment $attachment ) {
 		if ( null === $external_sales_invoice->id ) {
@@ -101,6 +105,7 @@ final class ExternalSalesInvoicesEndpoint extends ResourceEndpoint {
 					'Authorization' => 'Bearer ' . $this->client->api_token,
 				],
 				'body'    => $body,
+				// phpcs:ignore WordPressVIPMinimum.Performance.RemoteRequestTimeout.timeout_timeout -- For file uploads this is acceptable.
 				'timeout' => 30,
 			]
 		);
@@ -112,7 +117,9 @@ final class ExternalSalesInvoicesEndpoint extends ResourceEndpoint {
 
 			$response_data = $response->json();
 
-			throw Error::from_response_object( $response_data, (int) $response_status, $http_exception );
+			$error = Error::from_response_object( $response_data, (int) $response_status, $http_exception );
+
+			throw $error;
 		}
 	}
 }

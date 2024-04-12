@@ -35,6 +35,7 @@ final class RemoteSerializer {
 	/**
 	 * Serialize.
 	 * 
+	 * @param object $item Item.
 	 * @return object
 	 */
 	public function serialize( $item ) {
@@ -63,6 +64,12 @@ final class RemoteSerializer {
 		return (object) $data;
 	}
 
+	/**
+	 * Get value.
+	 * 
+	 * @param mixed $value Value.
+	 * @return mixed
+	 */
 	private function get_value( $value ) {
 		if ( $value instanceof RemoteSerializable ) {
 			return $value->remote_serialize();

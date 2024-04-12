@@ -163,7 +163,10 @@ final class WooCommerceController {
 	 * This method tries to create a contact based on a WooCommerce order.
 	 * 
 	 * @link https://developer.moneybird.com/api/contacts/#get_contacts
-	 * @param WC_Order $order WooCommerce order.
+	 * @param ContactsEndpoint $contacts_endpoint Contacts endpoint.
+	 * @param WC_Order         $order             WooCommerce order.
+	 * @return Contact
+	 * @throws \Exception Throws an exception if contact creation fails.
 	 */
 	private function create_contact_based_on_woocommerce_order( $contacts_endpoint, WC_Order $order ) {
 		$user = $order->get_user();
@@ -174,7 +177,7 @@ final class WooCommerceController {
 			$value = \get_user_meta( $user->ID, '_pronamic_moneybird_contact_id', true );
 
 			if ( '' !== $value ) {
-				throw new \Exception( 'Found Moneybird contact ID in user meta: ' . $order->get_id() );
+				throw new \Exception( 'Found Moneybird contact ID in user meta: ' . \esc_html( $order->get_id() ) );
 			}
 		}
 
@@ -187,7 +190,7 @@ final class WooCommerceController {
 		$company_name = $order->get_billing_company();
 
 		if ( '' === $company_name ) {
-			throw new \Exception( 'Company name is empty for order: ' . $order->get_id() );
+			throw new \Exception( 'Company name is empty for order: ' . \esc_html( $order->get_id() ) );
 		}
 
 		$moneybird_contacts = $contacts_endpoint->get_contacts(
@@ -197,7 +200,7 @@ final class WooCommerceController {
 		);
 
 		if ( \count( $moneybird_contacts ) > 0 ) {
-			throw new \Exception( 'Found Moneybird contacts for order: ' . $order->get_id() );
+			throw new \Exception( 'Found Moneybird contacts for order: ' . \esc_html( $order->get_id() ) );
 		}
 
 		$contact = new Contact();
@@ -290,9 +293,16 @@ final class WooCommerceController {
 		return $contact;
 	}
 
+	/**
+	 * Format price with no HTML.
+	 * 
+	 * @param float $price Price.
+	 * @param array $args  Arguments.
+	 * @return string
+	 */
 	private function format_price_no_html( $price, $args = [] ) {
 		return \html_entity_decode(
-			\strip_tags(
+			\wp_strip_all_tags(
 				\wc_price( $price, $args )
 			)
 		);
@@ -304,6 +314,7 @@ final class WooCommerceController {
 	 * @param array $args       Arguments.
 	 * @param array $assoc_args Associative arguments.
 	 * @return void
+	 * @throws \Exception Throws an exception if external sales invoice creation fails.
 	 */
 	public function cli_create_external_sales_invoices_for_wc_orders( $args, $assoc_args ) {
 		$assoc_args = \wp_parse_args(

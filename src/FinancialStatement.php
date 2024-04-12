@@ -40,21 +40,21 @@ final class FinancialStatement implements JsonSerializable {
 	/**
 	 * Official date.
 	 * 
-	 * @param null|Date
+	 * @var null|Date
 	 */
 	public $official_date;
 
 	/**
 	 * Official balance.
 	 * 
-	 * @param null|string
+	 * @var null|string
 	 */
 	public $official_balance;
 
 	/**
 	 * Importer key.
 	 * 
-	 * @param null|string
+	 * @var null|string
 	 */
 	public $importer_key;
 
@@ -132,7 +132,8 @@ final class FinancialStatement implements JsonSerializable {
 	/**
 	 * From object.
 	 * 
-	 * @retrun self
+	 * @param object $data Data.
+	 * @return self
 	 */
 	public static function from_object( $data ) {
 		$object_access = new ObjectAccess( $data );

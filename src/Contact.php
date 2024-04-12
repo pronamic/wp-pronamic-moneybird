@@ -312,7 +312,8 @@ final class Contact implements RemoteSerializable {
 	/**
 	 * From object.
 	 * 
-	 * @retrun self
+	 * @param object $data Data.
+	 * @return self
 	 */
 	public static function from_object( $data ) {
 		$contact = new self();

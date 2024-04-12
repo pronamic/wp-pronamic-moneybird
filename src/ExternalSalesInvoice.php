@@ -106,7 +106,7 @@ final class ExternalSalesInvoice implements RemoteSerializable {
 	 * Remote serialize.
 	 * 
 	 * @link https://developer.moneybird.com/api/external_sales_invoices/#post_external_sales_invoices
-	 * @param string $context Context. 
+	 * @param string $context Context.
 	 * @return mixed
 	 */
 	public function remote_serialize( $context = '' ) {
@@ -118,7 +118,8 @@ final class ExternalSalesInvoice implements RemoteSerializable {
 	/**
 	 * From object.
 	 * 
-	 * @retrun self
+	 * @param object $data Data.
+	 * @return self
 	 */
 	public static function from_object( $data ) {
 		$external_sales_invoice = new self();
