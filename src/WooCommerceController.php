@@ -408,6 +408,8 @@ final class WooCommerceController {
 		foreach ( $orders as $order ) {
 			WP_CLI::log( 'Order: ' . $order->get_id() );
 
+			WP_CLI::log( $order->get_edit_order_url() );
+
 			$wcpdf_invoice = \wcpdf_get_invoice( $order, true );
 
 			$external_sales_invoice = new ExternalSalesInvoice();
@@ -516,6 +518,8 @@ final class WooCommerceController {
 			}
 
 			$external_sales_invoice = $external_sales_invoices_endpoint->create_external_sales_invoice( $external_sales_invoice );
+
+			WP_CLI::log( $external_sales_invoice->get_remote_link() );
 
 			$order->update_meta_data( '_pronamic_moneybird_external_sales_invoice_id', $external_sales_invoice->id );
 
