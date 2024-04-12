@@ -6,7 +6,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/pronamic-"
 "moneybird\n"
 "POT-Creation-Date: 2024-04-12T07:17:26+00:00\n"
-"PO-Revision-Date: 2024-04-12 09:19+0200\n"
+"PO-Revision-Date: 2024-04-12 10:16+0200\n"
 "Last-Translator: Remco Tolsma <info@remcotolsma.nl>\n"
 "Language-Team: \n"
 "Language: nl_NL\n"
@@ -57,7 +57,7 @@ msgstr "Je kunt een API-token aanmaken via %s."
 
 #: admin/meta-box-authorization-settings.php:56
 msgid "Default administration"
-msgstr ""
+msgstr "Standaard administratie"
 
 #: admin/meta-box-authorization-settings.php:62
 msgid "This administration ID is used by default for API requests."
@@ -77,55 +77,55 @@ msgstr "Product-ID"
 
 #: admin/meta-box-product.php:31
 msgid "Ledger account ID"
-msgstr ""
+msgstr "Grootboekrekening-ID"
 
 #: admin/meta-box-woocommerce-order.php:31
 msgid "External sales invoice ID"
-msgstr ""
+msgstr "Externe verkoopfactuur-ID"
 
 #: admin/settings-field-woocommerce-tax-rates.php:27
 msgid "Class"
-msgstr ""
+msgstr "Klasse"
 
 #: admin/settings-field-woocommerce-tax-rates.php:28
 msgid "Country"
-msgstr ""
+msgstr "Land"
 
 #: admin/settings-field-woocommerce-tax-rates.php:29
 msgid "State"
-msgstr ""
+msgstr "Staat"
 
 #: admin/settings-field-woocommerce-tax-rates.php:30
 msgid "Rate"
-msgstr ""
+msgstr "Tarief"
 
 #: admin/settings-field-woocommerce-tax-rates.php:31
 msgid "Name"
-msgstr ""
+msgstr "Naam"
 
 #: admin/settings-field-woocommerce-tax-rates.php:32
 msgid "Priority"
-msgstr ""
+msgstr "Prioriteit"
 
 #: admin/settings-field-woocommerce-tax-rates.php:33
 msgid "Compound"
-msgstr ""
+msgstr "Samengesteld"
 
 #: admin/settings-field-woocommerce-tax-rates.php:34
 msgid "Shipping"
-msgstr ""
+msgstr "Verzending"
 
 #: admin/settings-field-woocommerce-tax-rates.php:35
 msgid "Order"
-msgstr ""
+msgstr "Volgorde"
 
 #: admin/settings-field-woocommerce-tax-rates.php:36
 msgid "Moneybird tax rate ID"
-msgstr ""
+msgstr "Moneybird-belastingtarief-ID"
 
 #: admin/settings-field-woocommerce-tax-rates.php:53
 msgid "Standard rate"
-msgstr ""
+msgstr "Standaardtarief"
 
 #: src/AdminController.php:94 src/AdminController.php:95
 #: templates/financial-statement-new.php:39 templates/sales-invoice-new.php:41
@@ -287,11 +287,11 @@ msgstr "Moneybird-administratie-ID."
 
 #: src/FinancialStatementsController.php:75
 msgid "Moneybird financial statement."
-msgstr ""
+msgstr "Moneybird-afschrift."
 
 #: src/FinancialStatementsController.php:80
 msgid "Moneybird financial account ID."
-msgstr ""
+msgstr "Moneybird-rekening-ID."
 
 #: src/FinancialStatementsController.php:86 src/SalesInvoicesController.php:83
 msgid "Reference."
@@ -299,27 +299,27 @@ msgstr "Referentie."
 
 #: src/FinancialStatementsController.php:90
 msgid "Official date."
-msgstr ""
+msgstr "Officiële datum."
 
 #: src/FinancialStatementsController.php:94
 msgid "Official balance."
-msgstr ""
+msgstr "Officieel saldo."
 
 #: src/FinancialStatementsController.php:98
 msgid "Importer key."
-msgstr ""
+msgstr "Importeer sleutel."
 
 #: src/FinancialStatementsController.php:102
 msgid "Contains the financial mutations."
-msgstr ""
+msgstr "Bevat de financiële mutaties."
 
 #: src/FinancialStatementsController.php:108
 msgid "Date."
-msgstr ""
+msgstr "Datum."
 
 #: src/FinancialStatementsController.php:112
 msgid "Message."
-msgstr ""
+msgstr "Omschrijving."
 
 #: src/FinancialStatementsController.php:116
 #: src/SalesInvoicesController.php:101
@@ -376,7 +376,7 @@ msgstr "— Selecteer autorisatie —"
 
 #: src/SettingsController.php:76
 msgid "Customer ID template"
-msgstr ""
+msgstr "Sjabloon voor klant-ID"
 
 #: src/SettingsController.php:106
 msgid "— Select a page —"
@@ -388,7 +388,7 @@ msgstr "WooCommerce"
 
 #: src/WooCommerceController.php:78
 msgid "Tax rates"
-msgstr ""
+msgstr "Belastingtarieven"
 
 #: src/WooCommerceController.php:424
 msgid "Discount"
@@ -396,11 +396,11 @@ msgstr "Korting"
 
 #: templates/financial-statement-new.php:44
 msgid "Moneybird financial statement created."
-msgstr ""
+msgstr "Moneybird-afschrift gemaakt."
 
 #: templates/financial-statement-new.php:49
 msgid "Add financial statement"
-msgstr ""
+msgstr "Afschrift toevoegen"
 
 #: templates/financial-statement-new.php:74 templates/sales-invoice-new.php:76
 msgid "Base"
@@ -412,7 +412,7 @@ msgstr "Administratie"
 
 #: templates/financial-statement-new.php:89
 msgid "Financial account"
-msgstr ""
+msgstr "Rekening"
 
 #: templates/financial-statement-new.php:94 templates/sales-invoice-new.php:96
 msgid "Reference"
@@ -420,15 +420,15 @@ msgstr "Referentie"
 
 #: templates/financial-statement-new.php:99
 msgid "Official date"
-msgstr ""
+msgstr "Officiële datum"
 
 #: templates/financial-statement-new.php:104
 msgid "Importer key"
-msgstr ""
+msgstr "Importeer sleutel"
 
 #: templates/financial-statement-new.php:112
 msgid "Mutations"
-msgstr ""
+msgstr "Mutaties"
 
 #: templates/financial-statement-new.php:120
 msgid "Date"
@@ -436,7 +436,7 @@ msgstr "Datum"
 
 #: templates/financial-statement-new.php:121
 msgid "Message"
-msgstr ""
+msgstr "Omschrijving"
 
 #: templates/financial-statement-new.php:122
 #: templates/sales-invoice-new.php:114
@@ -445,7 +445,7 @@ msgstr "Bedrag"
 
 #: templates/financial-statement-new.php:189
 msgid "Create financial statement"
-msgstr ""
+msgstr "Afschrift maken"
 
 #: templates/sales-invoice-new.php:46
 msgid "Moneybird inoice created."
