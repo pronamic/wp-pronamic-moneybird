@@ -251,8 +251,6 @@ final class WooCommerceController {
 		$contact->direct_debit                = null;
 		$contact->custom_fields               = [];
 		$contact->contact_person              = new ContactPerson( $contact->first_name, $contact->last_name );
-		$contact->type                        = null;
-		$contact->from_checkout               = null;
 
 		$contact = $contacts_endpoint->create_contact( $contact );
 

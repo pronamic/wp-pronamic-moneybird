@@ -297,22 +297,6 @@ final class Contact implements RemoteSerializable {
 	public $contact_person;
 
 	/**
-	 * Type.
-	 * 
-	 * @var string|null
-	 */
-	#[RemoteApiProperty( 'type' )]
-	public $type;
-
-	/**
-	 * From checkout.
-	 * 
-	 * @var bool|null
-	 */
-	#[RemoteApiProperty( 'from_checkout' )]
-	public $from_checkout;
-
-	/**
 	 * Get create parameters.
 	 * 
 	 * @link https://developer.moneybird.com/api/financial_statements/#post_financial_statements
