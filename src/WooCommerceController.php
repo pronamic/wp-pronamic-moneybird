@@ -136,6 +136,7 @@ final class WooCommerceController {
 				'status'     => [
 					'completed',
 				],
+				'type'       => 'shop_order',
 				'limit'      => $assoc_args['limit'],
 				'meta_query' => [
 					[
