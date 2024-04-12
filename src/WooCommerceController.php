@@ -518,19 +518,6 @@ final class WooCommerceController {
 					$external_sales_invoice->details[] = $detail_discount;
 				}
 			}
-			
-			/**
-			 * Add detail with transaction ID.
-			 */
-			$detail = new ExternalSalesInvoiceDetail();
-
-			$detail->description = \sprintf(
-				/* translators: %s: Transaction ID. */
-				_x( '*Transaction ID:* %s', 'Moneybird invoice line description', 'pronamic-moneybird' ),
-				$order->get_transaction_id()
-			);
-
-			$external_sales_invoice->details[] = $detail;
 
 			/**
 			 * Create remote.
