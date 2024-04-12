@@ -23,7 +23,6 @@ final class ExternalSalesInvoicesEndpoint extends ResourceEndpoint {
 	 * @link https://developer.moneybird.com/api/contacts/#post_contacts
 	 * @param ExternalSalesInvoice $external_sales_invoice External sales invoice.
 	 * @return ExternalSalesInvoice
-	 * @throws Error Throws an exception if external sales invoice creation fails.
 	 */
 	public function create_external_sales_invoice( ExternalSalesInvoice $external_sales_invoice ) {
 		$url = $this->get_api_url( 'external_sales_invoices' );
@@ -32,18 +31,9 @@ final class ExternalSalesInvoicesEndpoint extends ResourceEndpoint {
 			'external_sales_invoice' => $external_sales_invoice->remote_serialize( 'create' ),
 		];
 
-		$response = $this->client->post( $url, $data );
+		$response = $this->client->post( $url, $data, '201' );
 
-		$response_status = (string) $response->status();
-		$response_data   = $response->json();
-
-		if ( '201' !== $response_status ) {
-			$http_exception = new Exception( 'Unexpected HTTP response: ' . $response_status, (int) $response_status );
-
-			$error = Error::from_response_object( $response_data, (int) $response_status, $http_exception );
-
-			throw $error;
-		}
+		$response_data = $response->json();
 
 		return ExternalSalesInvoice::from_object( $response_data );
 	}
@@ -110,16 +100,6 @@ final class ExternalSalesInvoicesEndpoint extends ResourceEndpoint {
 			]
 		);
 
-		$response_status = (string) $response->status();
-
-		if ( '200' !== $response_status ) {
-			$http_exception = new Exception( 'Unexpected HTTP response: ' . $response_status, (int) $response_status );
-
-			$response_data = $response->json();
-
-			$error = Error::from_response_object( $response_data, (int) $response_status, $http_exception );
-
-			throw $error;
-		}
+		$this->ensure_response_status( $response, '200' );
 	}
 }

@@ -21,7 +21,6 @@ final class SalesInvoicesEndpoint extends ResourceEndpoint {
 	 * 
 	 * @param SalesInvoice $sales_invoice Sales invoice.
 	 * @return void
-	 * @throws Error Throws an exception if sales invoice creation fails.
 	 */
 	public function create( SalesInvoice $sales_invoice ) {
 		$url = $this->get_api_url( 'sales_invoices' );
@@ -30,17 +29,8 @@ final class SalesInvoicesEndpoint extends ResourceEndpoint {
 			'sales_invoice' => $sales_invoice,
 		];
 
-		$response = $this->client->post( $url, $data );
+		$response = $this->client->post( $url, $data, '201' );
 
-		$response_status = (string) $response->status();
-		$response_data   = $response->json();
-
-		if ( '201' !== $response_status ) {
-			$http_exception = new Exception( 'Unexpected HTTP response: ' . \esc_html( $response_status ), (int) $response_status );
-
-			$error = Error::from_response_object( $response_data, (int) $response_status, $http_exception );
-
-			throw $error;
-		}
+		$response_data = $response->json();
 	}
 }

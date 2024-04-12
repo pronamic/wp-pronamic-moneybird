@@ -46,18 +46,9 @@ final class FinancialStatementsEndpoint extends ResourceEndpoint {
 			'financial_statement' => $financial_statement->get_create_parameters(),
 		];
 
-		$response = $this->client->post( $url, $data );
+		$response = $this->client->post( $url, $data, '201' );
 
-		$response_status = (string) $response->status();
-		$response_data   = $response->json();
-
-		if ( '201' !== $response_status ) {
-			$http_exception = new Exception( 'Unexpected HTTP response: ' . $response_status, (int) $response_status );
-
-			$error = Error::from_response_object( $response_data, (int) $response_status, $http_exception );
-
-			throw $error;
-		}
+		$response_data = $response->json();
 
 		return FinancialStatement::from_object( $response_data );
 	}

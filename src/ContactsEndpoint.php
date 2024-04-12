@@ -22,7 +22,6 @@ final class ContactsEndpoint extends ResourceEndpoint {
 	 * @link https://developer.moneybird.com/api/contacts/#post_contacts
 	 * @param Contact $contact Contact.
 	 * @return Contact
-	 * @throws Error Throws an exception if contact creation fails.
 	 */
 	public function create_contact( Contact $contact ) {
 		$url = $this->get_api_url( 'contacts' );
@@ -31,18 +30,9 @@ final class ContactsEndpoint extends ResourceEndpoint {
 			'contact' => $contact->get_create_parameters(),
 		];
 
-		$response = $this->client->post( $url, $data );
+		$response = $this->client->post( $url, $data, '201' );
 
-		$response_status = (string) $response->status();
-		$response_data   = $response->json();
-
-		if ( '201' !== $response_status ) {
-			$http_exception = new Exception( 'Unexpected HTTP response: ' . $response_status, (int) $response_status );
-
-			$error = Error::from_response_object( $response_data, (int) $response_status, $http_exception );
-
-			throw $error;
-		}
+		$response_data = $response->json();
 
 		return Contact::from_object( $response_data );
 	}
@@ -58,18 +48,9 @@ final class ContactsEndpoint extends ResourceEndpoint {
 	public function get_contacts( array $parameters = [] ) {
 		$url = $this->get_api_url( 'contacts' );
 
-		$response = $this->client->get( $url, $parameters );
+		$response = $this->client->get( $url, $parameters, '200' );
 
-		$response_status = (string) $response->status();
-		$response_data   = $response->json();
-
-		if ( '200' !== $response_status ) {
-			$http_exception = new Exception( 'Unexpected HTTP response: ' . $response_status, (int) $response_status );
-
-			$error = Error::from_response_object( $response_data, (int) $response_status, $http_exception );
-
-			throw $error;
-		}
+		$response_data = $response->json();
 
 		return $response_data;
 	}

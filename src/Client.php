@@ -45,28 +45,52 @@ final class Client {
 	/**
 	 * Get headers.
 	 * 
-	 * @param array $headers Headers.
 	 * @return array
 	 */
-	private function get_headers( $headers = [] ) {
-		return \wp_parse_args(
-			$headers,
-			[
-				'Authorization' => 'Bearer ' . $this->api_token,
-				'Content-Type'  => 'application/json',
-				'Time-Zone'     => 'UTC',
-			]
-		);
+	private function get_headers() {
+		return [
+			'Authorization' => 'Bearer ' . $this->api_token,
+			'Content-Type'  => 'application/json',
+			'Time-Zone'     => 'UTC',
+		];
+	}
+
+	/**
+	 * Ensure response status.
+	 * 
+	 * @param Response    $response                 Response.
+	 * @param null|string $expected_response_status Expected response status.
+	 * @throws Error Throws an exception if the response status does not meet expectations.
+	 */
+	public function ensure_response_status( $response, $expected_response_status ) {
+		if ( null == $expected_response_status ) {
+			return;
+		}
+
+		$response_status = (string) $response->status();
+
+		if ( $expected_response_status === $response_status ) {
+			return;
+		}
+
+		$http_exception = new Exception( 'Unexpected HTTP response: ' . $response_status, (int) $response_status );
+
+		$response_data = $response->json();
+
+		$error = Error::from_response_object( $response_data, (int) $response_status, $http_exception );
+
+		throw $error;
 	}
 
 	/**
 	 * Get data.
 	 * 
-	 * @param string $api_url    API URL.
-	 * @param array  $parameters Parameters.
+	 * @param string      $api_url    API URL.
+	 * @param array       $parameters Parameters.
+	 * @param null|string $expected_response_status Expected response status.
 	 * @return mixed
 	 */
-	public function get( $api_url, $parameters ) {
+	public function get( $api_url, $parameters, $expected_response_status = null ) {
 		$api_url .= '?' . \http_build_query( $parameters, '', '&' );
 
 		$response = Http::get(
@@ -76,25 +100,29 @@ final class Client {
 			]
 		);
 
+		$this->ensure_response_status( $response, $expected_response_status );
+
 		return $response;
 	}
 
 	/**
 	 * Post data.
 	 * 
-	 * @param string $api_url API URL.
-	 * @param mixed  $data    Data.
-	 * @param array  $headers Headers.
+	 * @param string      $api_url API URL.
+	 * @param mixed       $data    Data.
+	 * @param null|string $expected_response_status Expected response status.
 	 * @return mixed
 	 */
-	public function post( $api_url, $data, $headers = [] ) {
+	public function post( $api_url, $data, $expected_response_status = null ) {
 		$response = Http::post(
 			$api_url,
 			[
-				'headers' => $this->get_headers( $headers ),
+				'headers' => $this->get_headers(),
 				'body'    => \wp_json_encode( $data ),
 			]
 		);
+
+		$this->ensure_response_status( $response, $expected_response_status );
 
 		return $response;
 	}
