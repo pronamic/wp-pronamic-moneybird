@@ -297,14 +297,15 @@ final class Contact implements RemoteSerializable {
 	public $contact_person;
 
 	/**
-	 * Get create parameters.
+	 * Remote serialize.
 	 * 
 	 * @link https://developer.moneybird.com/api/financial_statements/#post_financial_statements
 	 * @link https://www.php.net/manual/en/language.attributes.overview.php#127899
-	 * @return array
+	 * @param string $context Context.
+	 * @return mixed
 	 */
-	public function get_create_parameters() {
-		$serializer = new RemoteSerializer();
+	public function remote_serialize( $context = '' ) {
+		$serializer = new RemoteSerializer( $context );
 
 		return $serializer->serialize( $this );
 	}

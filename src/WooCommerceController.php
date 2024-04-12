@@ -143,6 +143,8 @@ final class WooCommerceController {
 						'compare' => 'NOT EXISTS',   
 					],
 				],
+				'orderby'    => 'date',
+				'order'      => 'ASC',
 			]
 		);
 
@@ -153,6 +155,8 @@ final class WooCommerceController {
 
 			try {
 				$contact = $this->create_contact_based_on_woocommerce_order( $contacts_endpoint, $order );
+
+				WP_CLI::log( $order->get_edit_order_url() );
 			} catch ( \Exception $e ) {
 				WP_CLI::error( $e->getMessage() );
 			}
@@ -366,7 +370,7 @@ final class WooCommerceController {
 					],
 				],
 				'orderby'    => 'date',
-				'order'      => 'DESC',
+				'order'      => 'ASC',
 			]
 		);
 

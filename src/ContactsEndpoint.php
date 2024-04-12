@@ -27,7 +27,7 @@ final class ContactsEndpoint extends ResourceEndpoint {
 		$url = $this->get_api_url( 'contacts' );
 
 		$data = [
-			'contact' => $contact->get_create_parameters(),
+			'contact' => $contact->remote_serialize( 'create' ),
 		];
 
 		$response = $this->client->post( $url, $data, '201' );
