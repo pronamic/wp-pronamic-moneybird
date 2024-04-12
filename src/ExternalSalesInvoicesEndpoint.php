@@ -100,6 +100,6 @@ final class ExternalSalesInvoicesEndpoint extends ResourceEndpoint {
 			]
 		);
 
-		$this->ensure_response_status( $response, '200' );
+		$this->client->ensure_response_status( $response, '200' );
 	}
 }
