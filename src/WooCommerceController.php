@@ -187,20 +187,33 @@ final class WooCommerceController {
 		}
 
 		/**
-		 * Step 1: Query Moneybird contacts to check whether contacts are found with company name.
+		 * Step 1: Query Moneybird contacts to check whether contacts are found.
 		 * 
 		 * @link https://github.com/pronamic/pronamic.shop/issues/48#issuecomment-2045339077
 		 * @link https://developer.moneybird.com/api/contacts/#get_contacts
 		 */
+		$search_terms = '';
+
 		$company_name = $order->get_billing_company();
 
+		if ( '' !== $company_name ) {
+			$search_terms = $company_name;
+		}
+
 		if ( '' === $company_name ) {
-			throw new \Exception( 'Company name is empty for order: ' . \esc_html( $order->get_id() ) );
+			$first_name = $order->get_billing_first_name();
+			$last_name  = $order->get_billing_last_name();
+
+			$search_terms = \trim( $first_name . ' ' . $last_name );
+		}
+
+		if ( '' === $search_terms ) {
+			throw new \Exception( 'Contact search query is empty for order: ' . \esc_html( $order->get_id() ) );
 		}
 
 		$moneybird_contacts = $contacts_endpoint->get_contacts(
 			[
-				'query' => $company_name,
+				'query' => $search_terms,
 			]
 		);
 
@@ -210,7 +223,7 @@ final class WooCommerceController {
 
 		$contact = new Contact();
 
-		$contact->company_name = $company_name;
+		$contact->company_name = $order->get_billing_company();
 		$contact->address_1    = $order->get_billing_address_1();
 		$contact->address_2    = $order->get_billing_address_2();
 		$contact->zip_code     = $order->get_billing_postcode();
@@ -237,7 +250,7 @@ final class WooCommerceController {
 		}
 
 		$contact->first_name                  = $order->get_billing_first_name();
-		$contact->last_name                   = $order->get_billing_last_name(); 
+		$contact->last_name                   = $order->get_billing_last_name();
 		$contact->chamber_of_commerce         = null;
 		$contact->bank_account                = null;
 		$contact->send_invoices_to_attention  = null;
