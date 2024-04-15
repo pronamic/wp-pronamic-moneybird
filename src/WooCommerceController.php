@@ -134,7 +134,8 @@ final class WooCommerceController {
 		$orders = \wc_get_orders(
 			[
 				'status'     => [
-					'completed',
+					'wc-completed',
+					'wc-refunded',
 				],
 				'type'       => 'shop_order',
 				'limit'      => $assoc_args['limit'],
@@ -389,7 +390,8 @@ final class WooCommerceController {
 		$orders = \wc_get_orders(
 			[
 				'status'         => [
-					'completed',
+					'wc-completed',
+					'wc-refunded',
 				],
 				'type'           => 'shop_order',
 				'date_completed' => '>=2024-01-01',
