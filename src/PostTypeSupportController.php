@@ -36,6 +36,10 @@ final class PostTypeSupportController {
 			return true;
 		}
 
+		if ( \post_type_supports( $post_type, 'pronamic_moneybird_ledger_account' ) ) {
+			return true;
+		}
+
 		if ( \post_type_supports( $post_type, 'pronamic_moneybird_product' ) ) {
 			return true;
 		}
@@ -104,12 +108,27 @@ final class PostTypeSupportController {
 			return;
 		}
 
-		$product_id = \array_key_exists( '_pronamic_moneybird_product_id', $_POST ) ? \sanitize_text_field( \wp_unslash( $_POST['_pronamic_moneybird_product_id'] ) ) : '';
+		$keys = [
+			'_pronamic_moneybird_contact_id',
+			'_pronamic_moneybird_ledger_account_id',
+			'_pronamic_moneybird_product_id',
+			'_pronamic_moneybird_project_id',
+		];
 
-		\update_post_meta( $post_id, '_pronamic_moneybird_product_id', $product_id );
+		foreach ( $keys as $key ) {
+			if ( ! \array_key_exists( $key, $_POST ) ) {
+				continue;
+			}
 
-		$ledger_account_id = \array_key_exists( '_pronamic_moneybird_ledger_account_id', $_POST ) ? \sanitize_text_field( \wp_unslash( $_POST['_pronamic_moneybird_ledger_account_id'] ) ) : '';
+			$value = \sanitize_text_field( \wp_unslash( $_POST[ $key ] ) );
 
-		\update_post_meta( $post_id, '_pronamic_moneybird_ledger_account_id', $ledger_account_id );
+			if ( '' === $value ) {
+				\delete_post_meta( $post_id, $key );
+			}
+
+			if ( '' !== $value ) {
+				\update_post_meta( $post_id, $key, $value );
+			}
+		}
 	}
 }
