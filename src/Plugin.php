@@ -45,6 +45,7 @@ final class Plugin {
 			new ContactPostTypeSupportController(),
 			new FinancialAccountPostTypeSupportController(),
 			new FinancialStatementsController(),
+			new PostTypeSupportController(),
 			new ProductPostTypeSupportController(),
 			new RewriteController(),
 			new SalesInvoicesController(),
