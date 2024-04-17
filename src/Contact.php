@@ -331,13 +331,7 @@ final class Contact implements RemoteSerializable {
 			throw new \Exception( 'Contact ID is undefined, remote link cannot be constructed.' );
 		}
 
-		return \strtr(
-			'https://moneybird.com/:administration_id/contacts/:id',
-			[
-				':administration_id' => $this->administration_id,
-				':id'                => $this->id,
-			]
-		);
+		return self::get_remote_link_by_id( $this->administration_id, $this->id );
 	}
 
 	/**
@@ -368,5 +362,22 @@ final class Contact implements RemoteSerializable {
 		$unserializer->unserialize( $contact, $data );
 
 		return $contact;
+	}
+
+	/**
+	 * Get remote link by ID.
+	 * 
+	 * @param string $administration_id Administration ID.
+	 * @param string $contact_id        Contact ID.
+	 * @return string
+	 */
+	public static function get_remote_link_by_id( $administration_id, $contact_id ) {
+		return \strtr(
+			'https://moneybird.com/:administration_id/contacts/:id',
+			[
+				':administration_id' => $administration_id,
+				':id'                => $contact_id,
+			]
+		);
 	}
 }
