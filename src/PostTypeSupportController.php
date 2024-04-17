@@ -22,6 +22,9 @@ final class PostTypeSupportController {
 	public function setup() {
 		\add_action( 'add_meta_boxes', [ $this, 'add_meta_boxes' ] );
 
+		\add_filter( 'manage_posts_columns', [ $this, 'manage_posts_columns' ], 10, 2 );
+		\add_action( 'manage_posts_custom_column', [ $this, 'manage_posts_custom_column' ], 10, 2 );
+
 		\add_action( 'save_post', [ $this, 'save_post' ] );
 	}
 
@@ -70,6 +73,94 @@ final class PostTypeSupportController {
 			'normal',
 			'default'
 		);
+	}
+
+	/**
+	 * Manage posts columns.
+	 * 
+	 * @link https://developer.wordpress.org/reference/hooks/manage_posts_columns/
+	 * @param string[] $columns   Columns.
+	 * @param string   $post_type Post type.
+	 * @return string[]
+	 */
+	public function manage_posts_columns( $columns, $post_type ) {
+		if ( ! $this->post_type_supports_moneybird( $post_type ) ) {
+			return $columns;
+		}
+
+		$columns['pronamic_moneybird'] = \__( 'Moneybird', 'pronamic-moneybird' );
+
+		$new_columns = [];
+
+		foreach ( $columns as $name => $label ) {
+			if ( \in_array( $name, [ 'comments', 'date' ], true ) ) {
+				$new_columns['pronamic_moneybird'] = $columns['pronamic_moneybird'];
+			}
+
+			$new_columns[ $name ] = $label;
+		}
+
+		$columns = $new_columns;
+
+		return $columns;
+	}
+
+	/**
+	 * Manage posts custom column.
+	 * 
+	 * @link https://developer.wordpress.org/reference/hooks/manage_posts_custom_column/
+	 * @param string $column_name Column name.
+	 * @param int    $post_id     Post ID.
+	 */
+	public function manage_posts_custom_column( $column_name, $post_id ) {
+		if ( 'pronamic_moneybird' !== $column_name ) {
+			return;
+		}
+
+		$authorization_id  = (int) \get_option( 'pronamic_moneybird_authorization_post_id' );
+		$administration_id = ( 0 === $authorization_id ) ? 0 : (int) \get_post_meta( $authorization_id, '_pronamic_moneybird_administration_id', true );
+
+		$contact_id = \get_post_meta( $post_id, '_pronamic_moneybird_contact_id', true );
+
+		if ( '' !== $contact_id ) {
+			printf(
+				'<a href="%s" title="%s"><span class="dashicons dashicons-businessperson"></span></a>',
+				\esc_url(
+					Contact::get_remote_link_by_id(
+						$administration_id,
+						$contact_id
+					)
+				),
+				\esc_attr(
+					\sprintf(
+						/* translators: %s: Contact ID. */
+						__( 'Contact ID: %s', 'pronamic-moneybird' ),
+						$contact_id
+					)
+				)
+			);
+		}
+
+		$product_id = \get_post_meta( $post_id, '_pronamic_moneybird_product_id', true );
+
+		if ( '' !== $product_id ) {
+			printf(
+				'<a href="%s" title="%s"><span class="dashicons dashicons-products"></span></a>',
+				\esc_url(
+					Product::get_remote_link_by_id(
+						$administration_id,
+						$product_id
+					)
+				),
+				\esc_attr(
+					\sprintf(
+						/* translators: %s: Product ID. */
+						__( 'Product ID: %s', 'pronamic-moneybird' ),
+						$product_id
+					)
+				)
+			);
+		}
 	}
 
 	/**
