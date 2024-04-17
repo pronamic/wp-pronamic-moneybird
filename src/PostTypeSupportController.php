@@ -173,7 +173,7 @@ final class PostTypeSupportController {
 	public function meta_box( // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found -- Used in include.
 		$post
 	) {
-		\wp_nonce_field( 'pronamic_moneybird_save', 'pronamic_moneybird_nonce' );
+		\wp_nonce_field( 'pronamic_moneybird_post_save', 'pronamic_moneybird_nonce' );
 
 		include __DIR__ . '/../admin/meta-box-post.php';
 	}
@@ -195,7 +195,7 @@ final class PostTypeSupportController {
 
 		$nonce = \sanitize_key( $_POST['pronamic_moneybird_nonce'] );
 
-		if ( ! \wp_verify_nonce( $nonce, 'pronamic_moneybird_save' ) ) {
+		if ( ! \wp_verify_nonce( $nonce, 'pronamic_moneybird_post_save' ) ) {
 			return;
 		}
 
