@@ -117,13 +117,7 @@ final class ExternalSalesInvoice implements RemoteSerializable {
 			throw new \Exception( 'Contact ID is undefined, remote link cannot be constructed.' );
 		}
 
-		return \strtr(
-			'https://moneybird.com/:administration_id/external_sales_invoices/:id',
-			[
-				':administration_id' => $this->administration_id,
-				':id'                => $this->id,
-			]
-		);
+		return self::get_remote_link_by_id( $this->administration_id, $this->id );
 	}
 
 	/**
@@ -153,5 +147,22 @@ final class ExternalSalesInvoice implements RemoteSerializable {
 		$unserializer->unserialize( $external_sales_invoice, $data );
 
 		return $external_sales_invoice;
+	}
+
+	/**
+	 * Get remote link by ID.
+	 * 
+	 * @param string $administration_id         Administration ID.
+	 * @param string $external_sales_invoice_id External sales invoice ID.
+	 * @return string
+	 */
+	public static function get_remote_link_by_id( $administration_id, $external_sales_invoice_id ) {
+		return \strtr(
+			'https://moneybird.com/:administration_id/external_sales_invoices/:id',
+			[
+				':administration_id' => $administration_id,
+				':id'                => $external_sales_invoice_id,
+			]
+		);
 	}
 }

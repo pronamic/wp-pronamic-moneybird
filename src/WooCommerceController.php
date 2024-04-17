@@ -42,6 +42,25 @@ final class WooCommerceController {
 		}
 
 		\add_action( 'woocommerce_process_shop_order_meta', [ $this, 'process_shop_order_meta' ] );
+
+		// Orders as CPT.
+		\add_filter( 'manage_edit-shop_order_columns', [ $this, 'add_column' ], 20 );
+		\add_action(
+			'manage_shop_order_posts_custom_column',
+			function ( $column_name, $post_id ) {
+				$order = \wc_get_order( $post_id );
+
+				if ( $order instanceof WC_Order ) {
+					$this->show_column( $column_name, $order );
+				}
+			},
+			5,
+			2 
+		);
+
+		// Orders with HPOS.
+		\add_filter( 'manage_woocommerce_page_wc-orders_columns', [ $this, 'add_column' ], 20 );
+		\add_action( 'manage_woocommerce_page_wc-orders_custom_column', [ $this, 'show_column' ], 5, 2 );
 	}
 
 	/**
@@ -622,5 +641,89 @@ final class WooCommerceController {
 		}
 
 		$order->save();
+	}
+
+	/**
+	 * Add column.
+	 *
+	 * @param string[] $columns Columns.
+	 * @return string[]
+	 */
+	public function add_column( $columns ) {
+		$columns['pronamic_moneybird'] = \__( 'Moneybird', 'pronamic-moneybird' );
+
+		$new_columns = [];
+
+		foreach ( $columns as $name => $label ) {
+			if ( \in_array( $name, [ 'order_total' ], true ) ) {
+				$new_columns['pronamic_moneybird'] = $columns['pronamic_moneybird'];
+			}
+
+			$new_columns[ $name ] = $label;
+		}
+
+		$columns = $new_columns;
+
+		return $columns;
+	}
+
+	/**
+	 * Show column.
+	 *
+	 * @link https://github.com/woocommerce/woocommerce/blob/9888ee7f4bb8e3170cb7345c1a5c8603f316de35/plugins/woocommerce/src/Internal/Admin/Orders/ListTable.php#L186-L194
+	 * @param string   $column_name Column name.
+	 * @param WC_Order $order       Order.
+	 */
+	public function show_column( $column_name, $order ) {
+		if ( 'pronamic_moneybird' !== $column_name ) {
+			return;
+		}
+
+		$authorization_id  = (int) \get_option( 'pronamic_moneybird_authorization_post_id' );
+		$administration_id = ( 0 === $authorization_id ) ? 0 : (int) \get_post_meta( $authorization_id, '_pronamic_moneybird_administration_id', true );
+
+		$contact_id = $order->get_meta( '_pronamic_moneybird_contact_id' );
+
+		if ( '' !== $contact_id ) {
+			printf(
+				'<a href="%s" title="%s"><span class="dashicons dashicons-businessperson"></span></a>',
+				\esc_url(
+					Contact::get_remote_link_by_id(
+						$administration_id,
+						$contact_id
+					)
+				),
+				\esc_attr(
+					\sprintf(
+						/* translators: %s: Contact ID. */
+						__( 'Contact ID: %s', 'pronamic-moneybird' ),
+						$contact_id
+					)
+				)
+			);
+		}
+
+		echo ' ';
+
+		$external_sales_invoice_id = $order->get_meta( '_pronamic_moneybird_external_sales_invoice_id' );
+
+		if ( '' !== $external_sales_invoice_id ) {
+			printf(
+				'<a href="%s" title="%s"><span class="dashicons dashicons-media-spreadsheet"></span></a>',
+				\esc_url(
+					ExternalSalesInvoice::get_remote_link_by_id(
+						$administration_id,
+						$external_sales_invoice_id
+					)
+				),
+				\esc_attr(
+					\sprintf(
+						/* translators: %s: Product ID. */
+						__( 'External sales invoice ID: %s', 'pronamic-moneybird' ),
+						$external_sales_invoice_id
+					)
+				)
+			);
+		}
 	}
 }
