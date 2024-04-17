@@ -5,8 +5,8 @@ msgstr ""
 "Project-Id-Version: Pronamic Moneybird 1.0.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/pronamic-"
 "moneybird\n"
-"POT-Creation-Date: 2024-04-12T14:57:12+00:00\n"
-"PO-Revision-Date: 2024-04-12 16:57+0200\n"
+"POT-Creation-Date: 2024-04-17T07:58:12+00:00\n"
+"PO-Revision-Date: 2024-04-17 09:58+0200\n"
 "Last-Translator: Remco Tolsma <info@remcotolsma.nl>\n"
 "Language-Team: \n"
 "Language: nl_NL\n"
@@ -17,7 +17,7 @@ msgstr ""
 "X-Domain: pronamic-moneybird\n"
 
 #. Plugin Name of the plugin
-#: pronamic-moneybird.php src/WooCommerceController.php:565
+#: pronamic-moneybird.php src/WooCommerceController.php:567
 msgid "Pronamic Moneybird"
 msgstr "Pronamic Moneybird"
 
@@ -63,21 +63,25 @@ msgstr "Standaard administratie"
 msgid "This administration ID is used by default for API requests."
 msgstr "Deze administratie-ID wordt standaard gebruikt voor API-aanvragen."
 
-#: admin/meta-box-contact.php:21 admin/meta-box-woocommerce-order.php:23
+#: admin/meta-box-post.php:21 admin/meta-box-woocommerce-order.php:23
 msgid "Contact ID"
 msgstr "Contact-ID"
 
-#: admin/meta-box-financial-account.php:21
+#: admin/meta-box-post.php:27
 msgid "Financial account ID"
 msgstr "Rekening-ID"
 
-#: admin/meta-box-product.php:23 templates/sales-invoice-new.php:115
+#: admin/meta-box-post.php:33
+msgid "Ledger account ID"
+msgstr "Grootboekrekening-ID"
+
+#: admin/meta-box-post.php:39 templates/sales-invoice-new.php:115
 msgid "Product ID"
 msgstr "Product-ID"
 
-#: admin/meta-box-product.php:31
-msgid "Ledger account ID"
-msgstr "Grootboekrekening-ID"
+#: admin/meta-box-post.php:45
+msgid "Project ID"
+msgstr "Project-ID"
 
 #: admin/meta-box-woocommerce-order.php:31
 msgid "External sales invoice ID"
@@ -128,6 +132,7 @@ msgid "Standard rate"
 msgstr "Standaardtarief"
 
 #: src/AdminController.php:94 src/AdminController.php:95
+#: src/PostTypeSupportController.php:67
 #: templates/financial-statement-new.php:39 templates/sales-invoice-new.php:41
 msgid "Moneybird"
 msgstr "Moneybird"
@@ -269,14 +274,6 @@ msgstr "Authenticatie"
 msgid "Default"
 msgstr "Standaard"
 
-#: src/ContactPostTypeSupportController.php:41
-msgid "Moneybird contact"
-msgstr "Moneybird-contact"
-
-#: src/FinancialAccountPostTypeSupportController.php:41
-msgid "Moneybird financial account"
-msgstr "Moneybird-rekening"
-
 #: src/FinancialStatementsController.php:61 src/SalesInvoicesController.php:60
 msgid "Authorization post ID."
 msgstr "Autorisatiebericht-ID."
@@ -329,10 +326,6 @@ msgstr "Hoeveelheid."
 #: src/FinancialStatementsController.php:120
 msgid "Code."
 msgstr "Code."
-
-#: src/ProductPostTypeSupportController.php:41
-msgid "Moneybird product"
-msgstr "Moneybird-product"
 
 #: src/SalesInvoicesController.php:72
 msgid "Moneybird sales invoice."
@@ -390,7 +383,7 @@ msgstr "WooCommerce"
 msgid "Tax rates"
 msgstr "Belastingtarieven"
 
-#: src/WooCommerceController.php:506
+#: src/WooCommerceController.php:508
 msgid "Discount"
 msgstr "Korting"
 
@@ -478,6 +471,15 @@ msgstr "Periode"
 #: templates/sales-invoice-new.php:205
 msgid "Create invoice"
 msgstr "Factuur maken"
+
+#~ msgid "Moneybird contact"
+#~ msgstr "Moneybird-contact"
+
+#~ msgid "Moneybird financial account"
+#~ msgstr "Moneybird-rekening"
+
+#~ msgid "Moneybird product"
+#~ msgstr "Moneybird-product"
 
 #~ msgid "Administration ID"
 #~ msgstr "Administratie-ID"

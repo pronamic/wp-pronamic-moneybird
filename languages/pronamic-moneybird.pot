@@ -9,14 +9,14 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2024-04-12T14:57:12+00:00\n"
+"POT-Creation-Date: 2024-04-17T07:58:12+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: pronamic-moneybird\n"
 
 #. Plugin Name of the plugin
 #: pronamic-moneybird.php
-#: src/WooCommerceController.php:565
+#: src/WooCommerceController.php:567
 msgid "Pronamic Moneybird"
 msgstr ""
 
@@ -58,22 +58,26 @@ msgstr ""
 msgid "This administration ID is used by default for API requests."
 msgstr ""
 
-#: admin/meta-box-contact.php:21
+#: admin/meta-box-post.php:21
 #: admin/meta-box-woocommerce-order.php:23
 msgid "Contact ID"
 msgstr ""
 
-#: admin/meta-box-financial-account.php:21
+#: admin/meta-box-post.php:27
 msgid "Financial account ID"
 msgstr ""
 
-#: admin/meta-box-product.php:23
+#: admin/meta-box-post.php:33
+msgid "Ledger account ID"
+msgstr ""
+
+#: admin/meta-box-post.php:39
 #: templates/sales-invoice-new.php:115
 msgid "Product ID"
 msgstr ""
 
-#: admin/meta-box-product.php:31
-msgid "Ledger account ID"
+#: admin/meta-box-post.php:45
+msgid "Project ID"
 msgstr ""
 
 #: admin/meta-box-woocommerce-order.php:31
@@ -126,6 +130,7 @@ msgstr ""
 
 #: src/AdminController.php:94
 #: src/AdminController.php:95
+#: src/PostTypeSupportController.php:67
 #: templates/financial-statement-new.php:39
 #: templates/sales-invoice-new.php:41
 msgid "Moneybird"
@@ -271,14 +276,6 @@ msgstr ""
 msgid "Default"
 msgstr ""
 
-#: src/ContactPostTypeSupportController.php:41
-msgid "Moneybird contact"
-msgstr ""
-
-#: src/FinancialAccountPostTypeSupportController.php:41
-msgid "Moneybird financial account"
-msgstr ""
-
 #: src/FinancialStatementsController.php:61
 #: src/SalesInvoicesController.php:60
 msgid "Authorization post ID."
@@ -333,10 +330,6 @@ msgstr ""
 
 #: src/FinancialStatementsController.php:120
 msgid "Code."
-msgstr ""
-
-#: src/ProductPostTypeSupportController.php:41
-msgid "Moneybird product"
 msgstr ""
 
 #: src/SalesInvoicesController.php:72
@@ -395,7 +388,7 @@ msgstr ""
 msgid "Tax rates"
 msgstr ""
 
-#: src/WooCommerceController.php:506
+#: src/WooCommerceController.php:508
 msgid "Discount"
 msgstr ""
 
