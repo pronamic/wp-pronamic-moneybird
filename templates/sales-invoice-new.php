@@ -146,9 +146,9 @@ $created = \array_key_exists( 'pronamic_moneybird_sales_invoice_created', $_GET 
 									<?php
 
 									\printf(
-										'<input name="%s" value="%s" type="text" class="form-control" />',
+										'<textarea name="%s" cols="20" rows="3" class="form-control">%s</textarea>',
 										\esc_attr( $name . '[description]' ),
-										\esc_attr( $detail->description ?? '' )
+										\esc_textarea( $detail->description ?? '' )
 									);
 
 									?>
