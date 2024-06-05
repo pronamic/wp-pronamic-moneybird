@@ -10,6 +10,7 @@
 
 namespace Pronamic\Moneybird;
 
+use Pronamic\WooSubscriptionsPeriod\Period as WooPeriod;
 use WP_CLI;
 use WC_Order;
 use WC_Product;
@@ -488,6 +489,23 @@ final class WooCommerceController {
 								$detail->period = new Period( $start_date, $end_date );
 							}
 						}
+					}
+				}
+
+				/**
+				 * Pronamic period information for Woo Subscriptions.
+				 * 
+				 * @link https://github.com/pronamic/pronamic-woocommerce-subscriptions-period
+				 * @link https://github.com/pronamic/wp-pronamic-moneybird/issues/9
+				 */
+				if ( \class_exists( WooPeriod::class ) ) {
+					$woo_period = WooPeriod::from_woocommerce_order_item( $item );
+
+					if ( null !== $woo_period ) {
+						$detail->period = new Period(
+							$woo_period->start_date,
+							$woo_period->end_date->modify( '-1 day' )
+						);
 					}
 				}
 
