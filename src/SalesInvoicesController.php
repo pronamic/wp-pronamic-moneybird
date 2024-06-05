@@ -105,6 +105,10 @@ final class SalesInvoicesController {
 											'description' => \__( 'Product ID.', 'pronamic-moneybird' ),
 											'type'        => 'string',
 										],
+										'project_id'  => [
+											'description' => \__( 'Project ID.', 'pronamic-moneybird' ),
+											'type'        => 'string',
+										],
 										'period'      => [
 											'description' => \__( 'Period.', 'pronamic-moneybird' ),
 											'type'        => 'string',
