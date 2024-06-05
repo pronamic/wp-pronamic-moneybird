@@ -113,6 +113,7 @@ $created = \array_key_exists( 'pronamic_moneybird_sales_invoice_created', $_GET 
 							<th scope="col"><?php \esc_html_e( 'Description', 'pronamic-moneybird' ); ?></th>
 							<th scope="col"><?php \esc_html_e( 'Amount', 'pronamic-moneybird' ); ?></th>
 							<th scope="col"><?php \esc_html_e( 'Product ID', 'pronamic-moneybird' ); ?></th>
+							<th scope="col"><?php \esc_html_e( 'Project ID', 'pronamic-moneybird' ); ?></th>
 							<th scope="col"><?php \esc_html_e( 'Period', 'pronamic-moneybird' ); ?></th>
 						</tr>
 					</thead>
@@ -170,6 +171,17 @@ $created = \array_key_exists( 'pronamic_moneybird_sales_invoice_created', $_GET 
 										'<input name="%s" value="%s" type="text" class="form-control" />',
 										\esc_attr( $name . '[product_id]' ),
 										\esc_attr( $detail->product_id ?? '' )
+									);
+
+									?>
+								</td>
+								<td>
+									<?php
+
+									\printf(
+										'<input name="%s" value="%s" type="text" class="form-control" />',
+										\esc_attr( $name . '[project_id]' ),
+										\esc_attr( $detail->project_id ?? '' )
 									);
 
 									?>
