@@ -1,6 +1,6 @@
 <?php
 /**
- * Meta box contact
+ * User profile
  *
  * @author    Pronamic <info@pronamic.eu>
  * @copyright 2005-2024 Pronamic
@@ -8,13 +8,11 @@
  * @package   Pronamic\Moneybird
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
-
-$contact_id = get_post_meta( $post->ID, '_pronamic_moneybird_contact_id', true );
+$contact_id = \get_user_meta( $user->ID, '_pronamic_moneybird_contact_id', true );
 
 ?>
+<h3><?php _e( 'Moneybird', 'pronamic-moneybird' ); ?></h3>
+
 <table class="form-table">
 	<tr valign="top">
 		<th scope="row">
