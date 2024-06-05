@@ -55,4 +55,12 @@ final class SalesInvoiceDetail implements RemoteSerializable {
 	 */
 	#[RemoteApiProperty( 'product_id' )]
 	public $product_id;
+
+	/**
+	 * Project ID.
+	 * 
+	 * @var int|null
+	 */
+	#[RemoteApiProperty( 'project_id' )]
+	public $project_id;
 }
