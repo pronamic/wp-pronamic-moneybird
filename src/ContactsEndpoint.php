@@ -42,7 +42,7 @@ final class ContactsEndpoint extends ResourceEndpoint {
 	 * 
 	 * @link https://developer.moneybird.com/api/contacts/#get_contacts
 	 * @param array $parameters Parameters.
-	 * @return array
+	 * @return Contact[]
 	 * @throws Error Throws an exception if get contacts fails.
 	 */
 	public function get_contacts( array $parameters = [] ) {
@@ -52,6 +52,13 @@ final class ContactsEndpoint extends ResourceEndpoint {
 
 		$response_data = $response->json();
 
-		return $response_data;
+		$contacts = \array_map(
+			function ( $item ) {
+				return Contact::from_object( $item );
+			},
+			$response_data
+		);
+
+		return $contacts;
 	}
 }

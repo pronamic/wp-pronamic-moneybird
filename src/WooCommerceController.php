@@ -178,6 +178,93 @@ final class WooCommerceController {
 			try {
 				WP_CLI::log( $order->get_edit_order_url() );
 
+				$contact = $this->new_contact_based_on_woocommerce_order( $order );
+
+				$moneybird_contacts = $this->get_similar_contacts( $contacts_endpoint, $contact );
+
+				if ( \count( $moneybird_contacts ) > 0 ) {
+					WP_CLI::log(
+						\sprintf(
+							'Similar Moneybird contacts have been found for: %s',
+							\wp_json_encode( $contact->remote_serialize(), \JSON_PRETTY_PRINT )
+						)
+					);
+
+					$items = [];
+
+					foreach ( $moneybird_contacts as $moneybird_contact ) {
+						$similarity_report = $contact->get_similarity_report( $moneybird_contact );
+
+						if ( $similarity_report->is_perfect_match() ) {
+							WP_CLI::log(
+								\sprintf(
+									'Foud perfect match with: %s',
+									\wp_json_encode( $moneybird_contact->remote_serialize(), \JSON_PRETTY_PRINT )
+								)
+							);
+
+							$connect_confirmed = $this->cli_confirm( 
+								\sprintf(
+									'Do you want to connect contact `%s` to WooCommerce order `%s`?',
+									$moneybird_contact->id,
+									$order->get_id()
+								),
+								$assoc_args
+							);
+
+							if ( true === $connect_confirmed ) {
+								$order->update_meta_data( '_pronamic_moneybird_contact_id', $moneybird_contact->id );
+
+								$order->save();
+
+								continue 2;
+							}
+						}
+
+						$items[] = [
+							'id'                     => $moneybird_contact->id,
+							'company_name'           => $moneybird_contact->company_name,
+							'address_1'              => $moneybird_contact->address_1,
+							'address_2'              => $moneybird_contact->address_2,
+							'zip_code'               => $moneybird_contact->zip_code,
+							'city'                   => $moneybird_contact->city,
+							'country_code'           => $moneybird_contact->country_code,
+							'send_invoices_to_email' => $moneybird_contact->send_invoices_to_email,
+							'similarity'             => $similarity_report->get_average_similarity(),
+						];
+					}
+
+					\WP_CLI\Utils\format_items(
+						'table',
+						$items,
+						[
+							'id',
+							'company_name',
+							'address_1',
+							'address_2',
+							'zip_code',
+							'city',
+							'country_code',
+							'send_invoices_to_email',
+							'similarity',
+						]
+					);
+
+					$is_in_list = $this->cli_confirm( 'Is the contact in the list above?' );
+
+					if ( true === $is_in_list ) {
+						WP_CLI::error( 'The contact is in the list, this path still needs to be implemented.' );
+					}
+
+					$create_confirmed = $this->cli_confirm( 'Are you sure that a new Moneybird contact needs to be created?' );
+
+					if ( false === $create_confirmed ) {
+						WP_CLI::confirm( 'Do you want to continue creating contacts for other WooCommerce orders?', $assoc_args );
+
+						continue;
+					}
+				}
+
 				$contact = $this->create_contact_based_on_woocommerce_order( $contacts_endpoint, $order );
 
 				WP_CLI::log( $contact->get_remote_link() );
@@ -187,6 +274,23 @@ final class WooCommerceController {
 				WP_CLI::confirm( 'Do you want to continue creating contacts for other WooCommerce orders?', $assoc_args );
 			}
 		}
+	}
+
+	/**
+	 * CLI confirm.
+	 *
+	 * @link https://github.com/wp-cli/wp-cli/blob/0ca6d920123ac904c918d69181edc5071dc92c9d/php/class-wp-cli.php#L963-L991
+	 * @param string $question Question.
+	 * @return bool
+	 */
+	private function cli_confirm( $question ) {
+		\fwrite( \STDOUT, $question . ' [y/n] ' );
+
+		$answer = strtolower( trim( fgets( STDIN ) ) );
+
+		$result = ( 'y' === $answer );
+
+		return $result;
 	}
 
 	/**
@@ -201,8 +305,6 @@ final class WooCommerceController {
 	private function create_contact_based_on_woocommerce_order( $contacts_endpoint, WC_Order $order ) {
 		$user = $order->get_user();
 
-		$contact_id = null;
-
 		if ( false !== $user ) {
 			$value = \get_user_meta( $user->ID, '_pronamic_moneybird_contact_id', true );
 
@@ -211,6 +313,30 @@ final class WooCommerceController {
 			}
 		}
 
+		$contact = $this->new_contact_based_on_woocommerce_order( $order );
+
+		$contact = $contacts_endpoint->create_contact( $contact );
+
+		$order->update_meta_data( '_pronamic_moneybird_contact_id', $contact->id );
+
+		$order->save();
+
+		if ( false !== $user ) {
+			\update_user_meta( $user->ID, '_pronamic_moneybird_contact_id', $contact->id );
+		}
+
+		return $contact;
+	}
+
+	/**
+	 * Get similar contacts.
+	 * 
+	 * @link https://developer.moneybird.com/api/contacts/#get_contacts
+	 * @param ContactsEndpoint $contacts_endpoint Contacts endpoint.
+	 * @param Contact          $contact           Moneybird contact.
+	 * @return array
+	 */
+	private function get_similar_contacts( $contacts_endpoint, Contact $contact ) {
 		/**
 		 * Step 1: Query Moneybird contacts to check whether contacts are found.
 		 * 
@@ -219,21 +345,19 @@ final class WooCommerceController {
 		 */
 		$search_terms = '';
 
-		$company_name = $order->get_billing_company();
-
-		if ( '' !== $company_name ) {
-			$search_terms = $company_name;
+		if ( null !== $contact->company_name ) {
+			$search_terms = $contact->company_name;
 		}
 
-		if ( '' === $company_name ) {
-			$first_name = $order->get_billing_first_name();
-			$last_name  = $order->get_billing_last_name();
+		if ( null === $contact->company_name ) {
+			$first_name = $contact->first_name ?? '';
+			$last_name  = $contact->last_name ?? '';
 
 			$search_terms = \trim( $first_name . ' ' . $last_name );
 		}
 
 		if ( '' === $search_terms ) {
-			throw new \Exception( 'Contact search query is empty for order: ' . \esc_html( $order->get_id() ) );
+			throw new \Exception( 'Contact search query is empty for contact: ' . \esc_html( \wp_json_encode( $contact->remote_serialize(), \JSON_PRETTY_PRINT ) ) );
 		}
 
 		$moneybird_contacts = $contacts_endpoint->get_contacts(
@@ -242,15 +366,25 @@ final class WooCommerceController {
 			]
 		);
 
-		if ( \count( $moneybird_contacts ) > 0 ) {
-			throw new \Exception( 'Found Moneybird contacts for order: ' . \esc_html( $order->get_id() ) );
-		}
+		return $moneybird_contacts;
+	}
 
+	/**
+	 * This method creates a new contact based on a WooCommerce order.
+	 * 
+	 * @param WC_Order $order WooCommerce order.
+	 * @return Contact
+	 */
+	private function new_contact_based_on_woocommerce_order( WC_Order $order ) {
 		$contact = new Contact();
 
+		$company_name = $order->get_billing_company();
+		$address_1    = $order->get_billing_address_1();
+		$address_2    = $order->get_billing_address_2();
+
 		$contact->company_name = ( '' === $company_name ) ? null : $company_name;
-		$contact->address_1    = $order->get_billing_address_1();
-		$contact->address_2    = $order->get_billing_address_2();
+		$contact->address_1    = ( '' === $address_1 ) ? null : $address_1;
+		$contact->address_2    = ( '' === $address_2 ) ? null : $address_2;
 		$contact->zip_code     = $order->get_billing_postcode();
 		$contact->city         = $order->get_billing_city();
 		$contact->country_code = $order->get_billing_country();
@@ -334,16 +468,6 @@ final class WooCommerceController {
 		 */
 		if ( '' !== $company_name ) {
 			$contact->contact_person = new ContactPerson( $contact->first_name, $contact->last_name );
-		}
-
-		$contact = $contacts_endpoint->create_contact( $contact );
-
-		$order->update_meta_data( '_pronamic_moneybird_contact_id', $contact->id );
-
-		$order->save();
-
-		if ( false !== $user ) {
-			\update_user_meta( $user->ID, '_pronamic_moneybird_contact_id', $contact->id );
 		}
 
 		return $contact;

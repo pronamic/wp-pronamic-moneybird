@@ -27,7 +27,7 @@
 		"yoast/phpunit-polyfills": "^2.0"
 	},
 	"scripts": {
-		"build": "vendor/bin/pronamic wp-build",
+		"build": "@php build/scripts/build.php",
 		"translate": [
 			"@build",
 			"rsync --recursive --delete --verbose ./build/project/languages/ ./languages/"

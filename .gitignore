@@ -1,5 +1,9 @@
 # Build
-/build/
+/build/artifacts/
+/build/project/
+/build/stage-1/
+/build/stage-2/
+/build/*.zip
 
 # Composer
 /vendor/

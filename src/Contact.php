@@ -349,6 +349,43 @@ final class Contact implements RemoteSerializable {
 	}
 
 	/**
+	 * Get similarity report.
+	 * 
+	 * @return SimilarityReport
+	 */
+	public function get_similarity_report( Contact $contact ) {
+		$report = new SimilarityReport();
+
+		$properties = [
+			'company_name',
+			'address_1',
+			'address_2',
+			'zip_code',
+			'city',
+			'country_code',
+			'send_invoices_to_email',
+		];
+
+		$contact_1 = $this;
+		$contact_2 = $contact;
+
+		foreach ( $properties as $property ) {
+			$value_1 = (string) $contact_1->{$property};
+			$value_2 = (string) $contact_2->{$property};
+
+			\similar_text( $value_1, $value_2, $percent );
+
+			if ( '' === $value_1 && '' === $value_2 ) {
+				$percent = 100;
+			}
+
+			$report->property_similarities[ $property ] = $percent;
+		}
+
+		return $report;
+	}
+
+	/**
 	 * From object.
 	 * 
 	 * @param object $data Data.
