@@ -182,7 +182,9 @@ final class WooCommerceController {
 
 				WP_CLI::log( $contact->get_remote_link() );
 			} catch ( \Exception $e ) {
-				WP_CLI::error( $e->getMessage() );
+				WP_CLI::error( $e->getMessage(), false );
+
+				WP_CLI::confirm( 'Do you want to continue creating contacts for other WooCommerce orders?', $assoc_args );
 			}
 		}
 	}
