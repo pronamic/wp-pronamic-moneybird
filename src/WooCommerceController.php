@@ -285,6 +285,16 @@ final class WooCommerceController {
 	 * @throws \Exception Throws an exception if contact creation fails.
 	 */
 	private function create_contact_based_on_woocommerce_order( $contacts_endpoint, WC_Order $order ) {
+		$user = $order->get_user();
+
+		if ( false !== $user ) {
+			$value = \get_user_meta( $user->ID, '_pronamic_moneybird_contact_id', true );
+
+			if ( '' !== $value ) {
+				throw new \Exception( 'Found Moneybird contact ID in user meta: ' . \esc_html( $order->get_id() ) );
+			}
+		}
+
 		$contact = $this->new_contact_based_on_woocommerce_order( $order );
 
 		$contact = $contacts_endpoint->create_contact( $contact );
@@ -293,14 +303,8 @@ final class WooCommerceController {
 
 		$order->save();
 
-		$user = $order->get_user();
-
 		if ( false !== $user ) {
-			$value = \get_user_meta( $user->ID, '_pronamic_moneybird_contact_id', true );
-
-			if ( '' === $value ) {
-				\update_user_meta( $user->ID, '_pronamic_moneybird_contact_id', $contact->id );
-			}
+			\update_user_meta( $user->ID, '_pronamic_moneybird_contact_id', $contact->id );
 		}
 
 		return $contact;
