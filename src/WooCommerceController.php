@@ -196,29 +196,11 @@ final class WooCommerceController {
 						$similarity_report = $contact->get_similarity_report( $moneybird_contact );
 
 						if ( $similarity_report->is_perfect_match() ) {
-							WP_CLI::log(
-								\sprintf(
-									'Foud perfect match with: %s',
-									\wp_json_encode( $moneybird_contact->remote_serialize(), \JSON_PRETTY_PRINT )
-								)
-							);
+							$order->update_meta_data( '_pronamic_moneybird_contact_id', $moneybird_contact->id );
 
-							$connect_confirmed = $this->cli_confirm( 
-								\sprintf(
-									'Do you want to connect contact `%s` to WooCommerce order `%s`?',
-									$moneybird_contact->id,
-									$order->get_id()
-								),
-								$assoc_args
-							);
+							$order->save();
 
-							if ( true === $connect_confirmed ) {
-								$order->update_meta_data( '_pronamic_moneybird_contact_id', $moneybird_contact->id );
-
-								$order->save();
-
-								continue 2;
-							}
+							continue 2;
 						}
 
 						$items[] = [
