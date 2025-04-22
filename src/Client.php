@@ -83,6 +83,23 @@ final class Client {
 	}
 
 	/**
+	 * Helper function to check if the HTTP timeout could be increased.
+	 *
+	 * @link https://github.com/pronamic/wp-pay-core/issues/170
+	 * @link https://github.com/pronamic/wp-mollie/blob/751ec4d5995691d253211964e09efc071e4de5e1/src/Client.php#L102-L116
+	 * @return bool
+	 */
+	private function should_increase_http_timeout() {
+		return (
+			\wp_doing_cron()
+				||
+			\defined( 'WP_CLI' ) && WP_CLI
+				||
+			\defined( 'PRONAMIC_ACTION_SCHEDULER_CONTEXT' )
+		);
+	}
+
+	/**
 	 * Get data.
 	 * 
 	 * @param string      $api_url    API URL.
@@ -97,6 +114,7 @@ final class Client {
 			$api_url,
 			[
 				'headers' => $this->get_headers(),
+				'timeout' => $this->should_increase_http_timeout() ? 30 : 5,
 			]
 		);
 
@@ -119,6 +137,7 @@ final class Client {
 			[
 				'headers' => $this->get_headers(),
 				'body'    => \wp_json_encode( $data ),
+				'timeout' => $this->should_increase_http_timeout() ? 30 : 5,
 			]
 		);
 
