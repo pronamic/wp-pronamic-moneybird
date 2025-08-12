@@ -10,6 +10,7 @@
 
 namespace Pronamic\Moneybird;
 
+use DateTimeInterface;
 use Pronamic\WooSubscriptionsPeriod\Period as WooPeriod;
 use WP_CLI;
 use WC_Order;
@@ -24,7 +25,7 @@ use WP_Post;
 final class WooCommerceController {
 	/**
 	 * Setup.
-	 * 
+	 *
 	 * @return void
 	 */
 	public function setup() {
@@ -56,7 +57,7 @@ final class WooCommerceController {
 				}
 			},
 			5,
-			2 
+			2
 		);
 
 		// Orders with HPOS.
@@ -66,7 +67,7 @@ final class WooCommerceController {
 
 	/**
 	 * Initialize.
-	 * 
+	 *
 	 * @return void
 	 */
 	public function init() {
@@ -106,7 +107,7 @@ final class WooCommerceController {
 
 	/**
 	 * WP-CLI initialize.
-	 * 
+	 *
 	 * @link https://github.com/wp-cli/wp-cli/blob/9aec20fd711a8b7442cc2f89e32af276e3f16045/php/WP_CLI/Runner.php#L1724
 	 * @return void
 	 */
@@ -117,7 +118,7 @@ final class WooCommerceController {
 
 	/**
 	 * WP-CLI create contact for WooCommerce orders.
-	 * 
+	 *
 	 * @param array $args       Arguments.
 	 * @param array $assoc_args Associative arguments.
 	 * @return void
@@ -146,7 +147,7 @@ final class WooCommerceController {
 
 		/**
 		 * WooCommerce orders.
-		 * 
+		 *
 		 * @link https://github.com/woocommerce/woocommerce/wiki/HPOS:-new-order-querying-APIs
 		 * @link https://developer.wordpress.org/reference/classes/wp_query/#custom-field-post-meta-parameters
 		 * @link https://wordpress.stackexchange.com/questions/337852/query-woocommerce-orders-where-meta-data-does-not-exist
@@ -277,7 +278,7 @@ final class WooCommerceController {
 
 	/**
 	 * This method tries to create a contact based on a WooCommerce order.
-	 * 
+	 *
 	 * @link https://developer.moneybird.com/api/contacts/#get_contacts
 	 * @param ContactsEndpoint $contacts_endpoint Contacts endpoint.
 	 * @param WC_Order         $order             WooCommerce order.
@@ -312,7 +313,7 @@ final class WooCommerceController {
 
 	/**
 	 * Get similar contacts.
-	 * 
+	 *
 	 * @link https://developer.moneybird.com/api/contacts/#get_contacts
 	 * @param ContactsEndpoint $contacts_endpoint Contacts endpoint.
 	 * @param Contact          $contact           Moneybird contact.
@@ -321,7 +322,7 @@ final class WooCommerceController {
 	private function get_similar_contacts( $contacts_endpoint, Contact $contact ) {
 		/**
 		 * Step 1: Query Moneybird contacts to check whether contacts are found.
-		 * 
+		 *
 		 * @link https://github.com/pronamic/pronamic.shop/issues/48#issuecomment-2045339077
 		 * @link https://developer.moneybird.com/api/contacts/#get_contacts
 		 */
@@ -353,7 +354,7 @@ final class WooCommerceController {
 
 	/**
 	 * This method creates a new contact based on a WooCommerce order.
-	 * 
+	 *
 	 * @param WC_Order $order WooCommerce order.
 	 * @return Contact
 	 */
@@ -381,7 +382,7 @@ final class WooCommerceController {
 
 		/**
 		 * Tax number.
-		 * 
+		 *
 		 * @link https://github.com/pronamic/woocommerce-eu-vat-number/blob/615b15d02888209137a6ba4e95a1e8c1181e834b/includes/wc-eu-vat-functions.php#L8-L27
 		 */
 		$contact->tax_number = null;
@@ -444,7 +445,7 @@ final class WooCommerceController {
 
 		/**
 		 * Contact person.
-		 * 
+		 *
 		 * Please note: a contact without a company name is a private individual
 		 * and cannot contain a contact person.
 		 */
@@ -457,7 +458,7 @@ final class WooCommerceController {
 
 	/**
 	 * Format price with no HTML.
-	 * 
+	 *
 	 * @param float $price Price.
 	 * @param array $args  Arguments.
 	 * @return string
@@ -472,7 +473,7 @@ final class WooCommerceController {
 
 	/**
 	 * WP-CLI create external sales invoices for WooCommerce orders.
-	 * 
+	 *
 	 * @param array $args       Arguments.
 	 * @param array $assoc_args Associative arguments.
 	 * @return void
@@ -510,7 +511,7 @@ final class WooCommerceController {
 
 		/**
 		 * WooCommerce orders.
-		 * 
+		 *
 		 * @link https://github.com/woocommerce/woocommerce/wiki/HPOS:-new-order-querying-APIs
 		 * @link https://developer.wordpress.org/reference/classes/wp_query/#custom-field-post-meta-parameters
 		 * @link https://wordpress.stackexchange.com/questions/337852/query-woocommerce-orders-where-meta-data-does-not-exist
@@ -527,7 +528,7 @@ final class WooCommerceController {
 				'meta_query'     => [
 					[
 						'key'     => '_pronamic_moneybird_external_sales_invoice_id',
-						'compare' => 'NOT EXISTS',   
+						'compare' => 'NOT EXISTS',
 					],
 				],
 				'orderby'        => 'date',
@@ -544,11 +545,17 @@ final class WooCommerceController {
 
 			$wcpdf_invoice = \wcpdf_get_invoice( $order, true );
 
+			$wcpdf_invoice_date = $wcpdf_invoice->get_date();
+
+			if ( ! $wcpdf_invoice_date instanceof DateTimeInterface ) {
+				WP_CLI::error( 'Could not get invoice date for order: ' . $order->get_id() );
+			}
+
 			$external_sales_invoice = new ExternalSalesInvoice();
 
 			$external_sales_invoice->contact_id          = $order->get_meta( '_pronamic_moneybird_contact_id' );
 			$external_sales_invoice->reference           = $wcpdf_invoice->get_number()->get_formatted();
-			$external_sales_invoice->date                = $wcpdf_invoice->get_date()->format( 'Y-m-d' );
+			$external_sales_invoice->date                = $wcpdf_invoice_date->format( 'Y-m-d' );
 			$external_sales_invoice->currency            = $order->get_currency();
 			$external_sales_invoice->prices_are_incl_tax = $inc_tax;
 			$external_sales_invoice->source              = \get_bloginfo( 'name' );
@@ -602,7 +609,7 @@ final class WooCommerceController {
 
 				/**
 				 * Pronamic period information for Woo Subscriptions.
-				 * 
+				 *
 				 * @link https://github.com/pronamic/pronamic-woocommerce-subscriptions-period
 				 * @link https://github.com/pronamic/wp-pronamic-moneybird/issues/9
 				 */
@@ -643,7 +650,7 @@ final class WooCommerceController {
 
 				/**
 				 * Discount.
-				 * 
+				 *
 				 * @link https://github.com/woocommerce/woocommerce/blob/deef144a433ae8765b01883ff13fad221d98c918/plugins/woocommerce/includes/admin/meta-boxes/views/html-order-item.php#L102-L117
 				 */
 				if ( $item->get_subtotal() !== $item->get_total() ) {
@@ -689,7 +696,7 @@ final class WooCommerceController {
 
 	/**
 	 * Maybe add a Pronamic Moneybird meta box the WooCommerce order.
-	 * 
+	 *
 	 * @link https://github.com/pronamic/wp-pronamic-pay-woocommerce/issues/41
 	 * @link https://developer.wordpress.org/reference/hooks/add_meta_boxes/
 	 * @param string           $post_type_or_screen_id Post type or screen ID.
@@ -723,7 +730,7 @@ final class WooCommerceController {
 
 	/**
 	 * Process shop order meta.
-	 * 
+	 *
 	 * @link https://github.com/woocommerce/woocommerce/blob/deef144a433ae8765b01883ff13fad221d98c918/plugins/woocommerce/includes/admin/class-wc-admin-meta-boxes.php#L255-L263
 	 * @link https://github.com/woocommerce/woocommerce/blob/deef144a433ae8765b01883ff13fad221d98c918/plugins/woocommerce/includes/admin/meta-boxes/class-wc-meta-box-order-data.php#L632-L771
 	 * @param int $order_id Order ID.
