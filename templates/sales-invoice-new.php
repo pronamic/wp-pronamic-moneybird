@@ -94,7 +94,7 @@ $created = \array_key_exists( 'pronamic_moneybird_sales_invoice_created', $_GET 
 
 				<div class="mb-3">
 					<label for="pronamic_moneybird_reference" class="form-label"><?php \esc_html_e( 'Reference', 'pronamic-moneybird' ); ?></label>
-					<input id="pronamic_moneybird_reference" name="sales_invoice[reference]" value="<?php echo \esc_attr( $sales_invoice->reference ?? '' ); ?>" type="text" class="form-control" required>
+					<input id="pronamic_moneybird_reference" name="sales_invoice[reference]" value="<?php echo \esc_attr( $sales_invoice->reference ?? '' ); ?>" type="text" class="form-control">
 				</div>
 			</div>
 		</div>
