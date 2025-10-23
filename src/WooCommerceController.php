@@ -691,6 +691,24 @@ final class WooCommerceController {
 			);
 
 			$external_sales_invoices_endpoint->add_attachment_to_external_sales_invoice( $external_sales_invoice, $attachment );
+
+			/**
+			 * Note.
+			 */
+			$note = new Note(
+					\sprintf(
+					\__( 'Details: %s', 'pronamic-moneybird' ),
+					\wp_json_encode(
+						[
+							'payment_method' => $order->get_payment_method(),
+							'transaction_id' => $order->get_transaction_id(),
+						],
+						\JSON_PRETTY_PRINT
+					)
+				)
+			);
+
+			$external_sales_invoices_endpoint->add_note_to_external_sales_invoice( $external_sales_invoice, $note );
 		}
 	}
 

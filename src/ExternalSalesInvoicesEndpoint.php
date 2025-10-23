@@ -19,7 +19,7 @@ use Pronamic\WordPress\Http\Facades\Http;
 final class ExternalSalesInvoicesEndpoint extends ResourceEndpoint {
 	/**
 	 * Create external sales invoice.
-	 * 
+	 *
 	 * @link https://developer.moneybird.com/api/contacts/#post_contacts
 	 * @param ExternalSalesInvoice $external_sales_invoice External sales invoice.
 	 * @return ExternalSalesInvoice
@@ -40,7 +40,7 @@ final class ExternalSalesInvoicesEndpoint extends ResourceEndpoint {
 
 	/**
 	 * Add attachment to external sales invoices.
-	 * 
+	 *
 	 * @link https://developer.moneybird.com/api/external_sales_invoices/#post_external_sales_invoices_id_attachment
 	 * @link https://github.com/pronamic/wp-lookup/blob/7f28c51974b5b8a418da1663565730165392d836/classes/BaseconeController.php#L571-L636
 	 * @param ExternalSalesInvoice $external_sales_invoice External sales invoice.
@@ -101,5 +101,35 @@ final class ExternalSalesInvoicesEndpoint extends ResourceEndpoint {
 		);
 
 		$this->client->ensure_response_status( $response, '200' );
+	}
+
+	/**
+	 * Add note to external sales invoice.
+	 *
+	 * @link https://developer.moneybird.com/api/external_sales_invoices/#post_external_sales_invoices_id_notes
+	 * @param ExternalSalesInvoice $external_sales_invoice External sales invoice.
+	 * @param Note                 $note                   Note.
+	 * @return void
+	 * @throws Exception Throws an exception if external sales invoice has no ID.
+	 */
+	public function add_note_to_external_sales_invoice( ExternalSalesInvoice $external_sales_invoice, Note $note ) {
+		if ( null === $external_sales_invoice->id ) {
+			throw new \Exception( 'Cannot add a note remotely to an external sales invoice without an ID.' );
+		}
+
+		$url = $this->get_api_url(
+			\strtr(
+				'external_sales_invoices/:id/notes',
+				[
+					':id' => $external_sales_invoice->id,
+				]
+			)
+		);
+
+		$data = [
+			'note' => $note->remote_serialize( 'create' ),
+		];
+
+		$this->client->post( $url, $data, '201' );
 	}
 }
