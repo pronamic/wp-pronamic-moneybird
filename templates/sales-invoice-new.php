@@ -215,7 +215,7 @@ $created = \array_key_exists( 'pronamic_moneybird_sales_invoice_created', $_GET 
 			\printf(
 				'<button name="pronamic_moneybird_create_sales_invoice" value="true" type="submit" class="btn btn-primary">%s</button>',
 				\esc_html__( 'Create invoice', 'pronamic-moneybird' )
-			); 
+			);
 
 			?>
 		</div>
