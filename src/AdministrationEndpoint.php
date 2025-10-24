@@ -16,14 +16,14 @@ namespace Pronamic\Moneybird;
 final class AdministrationEndpoint extends Endpoint {
 	/**
 	 * Administration ID.
-	 * 
+	 *
 	 * @var string
 	 */
 	public $administration_id;
 
 	/**
 	 * Construct administration endpoint.
-	 * 
+	 *
 	 * @param Client $client            Client.
 	 * @param string $administration_id Administration ID.
 	 */
@@ -35,7 +35,7 @@ final class AdministrationEndpoint extends Endpoint {
 
 	/**
 	 * Get contacts endpoint.
-	 * 
+	 *
 	 * @return ContactsEndpoint
 	 */
 	public function get_contacts_endpoint() {
@@ -44,7 +44,7 @@ final class AdministrationEndpoint extends Endpoint {
 
 	/**
 	 * Get external sales invoices endpoint.
-	 * 
+	 *
 	 * @return ExternalSalesInvoicesEndpoint
 	 */
 	public function get_external_sales_invoices_endpoint() {
@@ -52,8 +52,17 @@ final class AdministrationEndpoint extends Endpoint {
 	}
 
 	/**
+	 * Get financial mutations endpoint.
+	 *
+	 * @return FinancialMutationsEndpoint
+	 */
+	public function get_financial_mutations_endpoint() {
+		return new FinancialMutationsEndpoint( $this->client, $this->administration_id );
+	}
+
+	/**
 	 * Get financial statements endpoint.
-	 * 
+	 *
 	 * @return FinancialStatementsEndpoint
 	 */
 	public function get_financial_statements_endpoint() {
@@ -62,7 +71,7 @@ final class AdministrationEndpoint extends Endpoint {
 
 	/**
 	 * Get sales invoices endpoint.
-	 * 
+	 *
 	 * @return SalesInvoicesEndpoint
 	 */
 	public function get_sales_invoices_endpoint() {

@@ -18,6 +18,31 @@ use Pronamic\WordPress\Http\Facades\Http;
  */
 final class ExternalSalesInvoicesEndpoint extends ResourceEndpoint {
 	/**
+	 * Get external sales invoices.
+	 *
+	 * @link https://developer.moneybird.com/api/external-sales-invoices#list-all-external-invoices
+	 * @param array $parameters Parameters.
+	 * @return ExternalSalesInvoice[]
+	 * @throws Error Throws an exception if get external sales invoices fails.
+	 */
+	public function get_external_sales_invoices( array $parameters = [] ) {
+		$url = $this->get_api_url( 'external_sales_invoices' );
+
+		$response = $this->client->get( $url, $parameters, '200' );
+
+		$response_data = $response->json();
+
+		$external_sales_invoices = \array_map(
+			function ( $item ) {
+				return ExternalSalesInvoice::from_object( $item );
+			},
+			$response_data
+		);
+
+		return $external_sales_invoices;
+	}
+
+	/**
 	 * Create external sales invoice.
 	 *
 	 * @link https://developer.moneybird.com/api/contacts/#post_contacts

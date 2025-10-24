@@ -114,6 +114,7 @@ final class WooCommerceController {
 	public function cli_init() {
 		WP_CLI::add_command( 'pronamic-moneybird create-contacts-for-wc-orders', [ $this, 'cli_create_contacts_for_wc_orders' ] );
 		WP_CLI::add_command( 'pronamic-moneybird create-external-sales-invoices-for-wc-orders', [ $this, 'cli_create_external_sales_invoices_for_wc_orders' ] );
+		WP_CLI::add_command( 'pronamic-moneybird register-payments-for-external-sales-invoices', [ $this, 'cli_register_payments_for_external_sales_invoices' ] );
 	}
 
 	/**
@@ -874,6 +875,72 @@ final class WooCommerceController {
 						$external_sales_invoice_id
 					)
 				)
+			);
+		}
+	}
+
+	/**
+	 * WP-CLI register payments for external sales invoices.
+	 *
+	 * @param array $args       Arguments.
+	 * @param array $assoc_args Associative arguments.
+	 * @return void
+	 */
+	public function cli_register_payments_for_external_sales_invoices( $args, $assoc_args ) {
+		/**
+		 * Moneybird client.
+		 */
+		$authorization_id  = (int) \get_option( 'pronamic_moneybird_authorization_post_id' );
+		$administration_id = ( 0 === $authorization_id ) ? 0 : (int) \get_post_meta( $authorization_id, '_pronamic_moneybird_administration_id', true );
+
+		$api_token = \get_post_meta( $authorization_id, '_pronamic_moneybird_api_token', true );
+
+		$client = new Client( $api_token );
+
+		$administration_endpoint = $client->get_administration_endpoint( $administration_id );
+
+		$external_sales_invoices_endpoint = $administration_endpoint->get_external_sales_invoices_endpoint();
+
+		$financial_mutations_endpoint = $administration_endpoint->get_financial_mutations_endpoint();
+
+		/**
+		 * External sales invoices.
+		 */
+		$external_sales_invoices = $external_sales_invoices_endpoint->get_external_sales_invoices(
+			[
+				'filter'   => 'state:new|open',
+				'per_page' => 1,
+			]
+		);
+
+		foreach ( $external_sales_invoices as $external_sales_invoice ) {
+			$url_query = \wp_parse_url( $external_sales_invoice->source_url, \PHP_URL_QUERY );
+
+			\parse_str( $url_query, $url_query_vars );
+
+			if ( ! \array_key_exists( 'id', $url_query_vars ) ) {
+				continue;
+			}
+
+			$order_id = $url_query_vars['id'];
+
+			$order = \wc_get_order( $order_id );
+
+			if ( ! ( $order instanceof WC_Order ) ) {
+				continue;
+			}
+
+			$financial_mutations = $financial_mutations_endpoint->get_financial_mutations(
+				[
+					'filter' => \implode(
+						',',
+						[
+							'state:unprocessed',
+							'amount_from:' . $order->get_total(),
+							'amount_to:' . $order->get_total(),
+						]
+					)
+				]
 			);
 		}
 	}
