@@ -20,29 +20,23 @@ $data = \json_decode( $json );
 
 $sales_invoice = new SalesInvoice();
 
+$detail_properties = [
+	'amount',
+	'description',
+	'price',
+	'product_id',
+	'project_id',
+];
+
 if ( \is_object( $data ) ) {
 	if ( \property_exists( $data, 'details_attributes' ) && \is_array( $data->details_attributes ) ) {
 		foreach ( $data->details_attributes as $detail_data ) {
 			$detail = new SalesInvoiceDetail();
 
-			if ( \property_exists( $detail_data, 'amount' ) ) {
-				$detail->amount = $detail_data->amount;
-			}
-
-			if ( \property_exists( $detail_data, 'description' ) ) {
-				$detail->description = $detail_data->description;
-			}
-
-			if ( \property_exists( $detail_data, 'price' ) ) {
-				$detail->price = $detail_data->price;
-			}
-
-			if ( \property_exists( $detail_data, 'product_id' ) ) {
-				$detail->product_id = $detail_data->product_id;
-			}
-
-			if ( \property_exists( $detail_data, 'project_id' ) ) {
-				$detail->project_id = $detail_data->project_id;
+			foreach ( $detail_properties as $property ) {
+				if ( \property_exists( $detail_data, $property ) ) {
+					$detail->$property = $detail_data->$property;
+				}
 			}
 
 			$sales_invoice->details_attributes[] = $detail;
@@ -57,7 +51,7 @@ $sales_invoice->details_attributes[] = new SalesInvoiceDetail();
 <table>
 	<thead>
 		<tr>
-			<th scope="col"><?php \esc_html_e( 'Amount', 'pronamic-moneybird' ); ?></th>
+			<th scope="col"><?php \esc_html( \_x( 'Amount', 'quantity', 'pronamic-moneybird' ) ); ?></th>
 			<th scope="col"><?php \esc_html_e( 'Description', 'pronamic-moneybird' ); ?></th>
 			<th scope="col"><?php \esc_html_e( 'Price', 'pronamic-moneybird' ); ?></th>
 			<th scope="col"><?php \esc_html_e( 'Product ID', 'pronamic-moneybird' ); ?></th>
