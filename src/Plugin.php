@@ -43,6 +43,7 @@ final class Plugin {
 		$controllers = [
 			new AuthorizationPostTypeController(),
 			new FinancialStatementsController(),
+			new PostSalesInvoiceController(),
 			new PostTypeSupportController(),
 			new RewriteController(),
 			new SalesInvoicesController(),
