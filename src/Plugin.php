@@ -16,14 +16,14 @@ namespace Pronamic\Moneybird;
 final class Plugin {
 	/**
 	 * Instance.
-	 * 
+	 *
 	 * @var self
 	 */
 	private static $instance;
 
 	/**
 	 * Instance.
-	 * 
+	 *
 	 * @return self
 	 */
 	public static function instance() {
@@ -36,7 +36,7 @@ final class Plugin {
 
 	/**
 	 * Setup.
-	 * 
+	 *
 	 * @return void
 	 */
 	public function setup() {
