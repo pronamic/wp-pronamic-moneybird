@@ -20,20 +20,9 @@ final class PostSalesInvoiceController {
 	 * @return void
 	 */
 	public function setup() {
-		\add_action( 'init', $this->init( ... ) );
-
 		\add_action( 'add_meta_boxes', $this->add_meta_boxes( ... ) );
 
 		\add_action( 'save_post', $this->save_post( ... ) );
-	}
-
-	/**
-	 * Initialize.
-	 *
-	 * @return void
-	 */
-	private function init() {
-		\add_post_type_support( 'post', 'pronamic_moneybird_sales_invoice_details' );
 	}
 
 	/**
@@ -43,12 +32,12 @@ final class PostSalesInvoiceController {
 	 * @return void
 	 */
 	private function add_meta_boxes( $post_type ) {
-		if ( ! \post_type_supports( $post_type, 'pronamic_moneybird_sales_invoice_details' ) ) {
+		if ( ! \post_type_supports( $post_type, 'pronamic_moneybird_sales_invoice' ) ) {
 			return;
 		}
 
 		\add_meta_box(
-			'pronamic_moneybird',
+			'pronamic_moneybird_sales_invoice',
 			\__( 'Moneybird sales invoice', 'pronamic-moneybird' ),
 			$this->meta_box( ... ),
 			$post_type,
@@ -67,7 +56,7 @@ final class PostSalesInvoiceController {
 	private function meta_box( // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found -- Used in include.
 		$post
 	) {
-		\wp_nonce_field( 'pronamic_moneybird_sales_invoice_post_save', 'pronamic_moneybird_nonce' );
+		\wp_nonce_field( 'pronamic_moneybird_sales_invoice_post_save', 'pronamic_moneybird_sales_invoice_nonce' );
 
 		include __DIR__ . '/../admin/meta-box-post-sales-invoice.php';
 	}
@@ -83,11 +72,11 @@ final class PostSalesInvoiceController {
 			return;
 		}
 
-		if ( ! \array_key_exists( 'pronamic_moneybird_nonce', $_POST ) ) {
+		if ( ! \array_key_exists( 'pronamic_moneybird_sales_invoice_nonce', $_POST ) ) {
 			return;
 		}
 
-		$nonce = \sanitize_key( $_POST['pronamic_moneybird_nonce'] );
+		$nonce = \sanitize_key( $_POST['pronamic_moneybird_sales_invoice_nonce'] );
 
 		if ( ! \wp_verify_nonce( $nonce, 'pronamic_moneybird_sales_invoice_post_save' ) ) {
 			return;
