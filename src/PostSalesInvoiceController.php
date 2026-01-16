@@ -96,6 +96,8 @@ final class PostSalesInvoiceController {
 				);
 			}
 
+			$data = \array_filter( $data );
+
 			\update_post_meta( $post_id, '_pronamic_moneybird_sales_invoice', \wp_slash( \wp_json_encode( $data ) ) );
 		}
 	}
