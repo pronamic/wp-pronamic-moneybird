@@ -15,7 +15,7 @@ use Stringable;
 /**
  * Note class
  */
-final class Note implements RemoteSerializable, Stringable{
+final class Note implements RemoteSerializable, Stringable {
 	/**
 	 * Note.
 	 *

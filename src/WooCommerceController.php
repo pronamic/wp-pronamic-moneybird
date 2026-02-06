@@ -697,7 +697,7 @@ final class WooCommerceController {
 			 * Note.
 			 */
 			$note = new Note(
-					\sprintf(
+				\sprintf(
 					\__( 'Details: %s', 'pronamic-moneybird' ),
 					\wp_json_encode(
 						[
@@ -939,7 +939,7 @@ final class WooCommerceController {
 							'amount_from:' . $order->get_total(),
 							'amount_to:' . $order->get_total(),
 						]
-					)
+					),
 				]
 			);
 		}
