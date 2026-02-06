@@ -82,21 +82,38 @@ final class PostSalesInvoiceController {
 			return;
 		}
 
-		if ( isset( $_POST['_pronamic_moneybird_sales_invoice'] ) ) {
-			$data = \map_deep( $_POST['_pronamic_moneybird_sales_invoice'], 'sanitize_text_field' );
+		if ( isset( $_POST['_pronamic_moneybird_sales_invoice'] ) && \is_array( $_POST['_pronamic_moneybird_sales_invoice'] ) ) {
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Each field sanitized individually below.
+			$input = \wp_unslash( $_POST['_pronamic_moneybird_sales_invoice'] );
+			$data  = [];
 
-			if ( \array_key_exists( 'details_attributes', $data ) && \is_array( $data['details_attributes'] ) ) {
-				$data['details_attributes'] = \array_filter(
-					\array_map(
-						function ( $data ) {
-							return \is_array( $data ) ? \array_filter( $data ) : $data;
-						},
-						$data['details_attributes']
-					)
-				);
+			if ( isset( $input['details_attributes'] ) && \is_array( $input['details_attributes'] ) ) {
+				$details = [];
+
+				foreach ( $input['details_attributes'] as $detail_input ) {
+					if ( ! \is_array( $detail_input ) ) {
+						continue;
+					}
+
+					$detail = [
+						'amount'      => isset( $detail_input['amount'] ) ? \sanitize_text_field( $detail_input['amount'] ) : '',
+						'description' => isset( $detail_input['description'] ) ? \sanitize_textarea_field( $detail_input['description'] ) : '',
+						'price'       => isset( $detail_input['price'] ) ? \sanitize_text_field( $detail_input['price'] ) : '',
+						'product_id'  => isset( $detail_input['product_id'] ) ? \sanitize_text_field( $detail_input['product_id'] ) : '',
+						'project_id'  => isset( $detail_input['project_id'] ) ? \sanitize_text_field( $detail_input['project_id'] ) : '',
+					];
+
+					$detail = \array_filter( $detail );
+
+					if ( ! empty( $detail ) ) {
+						$details[] = $detail;
+					}
+				}
+
+				if ( ! empty( $details ) ) {
+					$data['details_attributes'] = $details;
+				}
 			}
-
-			$data = \array_filter( $data );
 
 			\update_post_meta( $post_id, '_pronamic_moneybird_sales_invoice', \wp_slash( \wp_json_encode( $data ) ) );
 		}
