@@ -213,18 +213,46 @@ final class SalesInvoicesController {
 			$request->set_param( 'administration_id', \sanitize_text_field( \wp_unslash( $_POST['administration_id'] ) ) );
 		}
 
-		if ( isset( $_POST['sales_invoice'] ) ) {
-			$data = \map_deep( $_POST['sales_invoice'], 'sanitize_text_field' );
+		if ( isset( $_POST['sales_invoice'] ) && \is_array( $_POST['sales_invoice'] ) ) {
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Each field sanitized individually below.
+			$input = \wp_unslash( $_POST['sales_invoice'] );
+			$data  = [];
 
-			if ( \array_key_exists( 'details_attributes', $data ) && \is_array( $data['details_attributes'] ) ) {
-				$data['details_attributes'] = \array_filter(
-					\array_map(
-						function ( $data ) {
-							return \is_array( $data ) ? \array_filter( $data ) : $data;
-						},
-						$data['details_attributes']
-					)
-				);
+			if ( isset( $input['contact_id'] ) ) {
+				$data['contact_id'] = \sanitize_text_field( $input['contact_id'] );
+			}
+
+			if ( isset( $input['reference'] ) ) {
+				$data['reference'] = \sanitize_text_field( $input['reference'] );
+			}
+
+			if ( isset( $input['details_attributes'] ) && \is_array( $input['details_attributes'] ) ) {
+				$details = [];
+
+				foreach ( $input['details_attributes'] as $detail_input ) {
+					if ( ! \is_array( $detail_input ) ) {
+						continue;
+					}
+
+					$detail = [
+						'description' => isset( $detail_input['description'] ) ? \sanitize_textarea_field( $detail_input['description'] ) : '',
+						'price'       => isset( $detail_input['price'] ) ? \sanitize_text_field( $detail_input['price'] ) : '',
+						'amount'      => isset( $detail_input['amount'] ) ? \sanitize_text_field( $detail_input['amount'] ) : '',
+						'product_id'  => isset( $detail_input['product_id'] ) ? \sanitize_text_field( $detail_input['product_id'] ) : '',
+						'project_id'  => isset( $detail_input['project_id'] ) ? \sanitize_text_field( $detail_input['project_id'] ) : '',
+						'period'      => isset( $detail_input['period'] ) ? \sanitize_text_field( $detail_input['period'] ) : '',
+					];
+
+					$detail = \array_filter( $detail );
+
+					if ( ! empty( $detail ) ) {
+						$details[] = $detail;
+					}
+				}
+
+				if ( ! empty( $details ) ) {
+					$data['details_attributes'] = $details;
+				}
 			}
 
 			$request->set_param( 'sales_invoice', $data );
