@@ -47,11 +47,18 @@ if ( \is_object( $data ) ) {
 $sales_invoice->details_attributes[] = new SalesInvoiceDetail();
 
 ?>
+<style type="text/css">
+	table.pronamic-moneybird-meta-box-table {
+		border: 0;
 
-<table>
+		width: auto;
+	}
+</style>
+
+<table class="widefat pronamic-moneybird-meta-box-table">
 	<thead>
 		<tr>
-			<th scope="col"><?php \esc_html( \_x( 'Amount', 'quantity', 'pronamic-moneybird' ) ); ?></th>
+			<th scope="col"><?php echo \esc_html( \_x( 'Amount', 'quantity', 'pronamic-moneybird' ) ); ?></th>
 			<th scope="col"><?php \esc_html_e( 'Description', 'pronamic-moneybird' ); ?></th>
 			<th scope="col"><?php \esc_html_e( 'Price', 'pronamic-moneybird' ); ?></th>
 			<th scope="col"><?php \esc_html_e( 'Product ID', 'pronamic-moneybird' ); ?></th>
@@ -87,7 +94,7 @@ $sales_invoice->details_attributes[] = new SalesInvoiceDetail();
 					<?php
 
 					\printf(
-						'<textarea name="%s" cols="20" rows="3" class="form-control">%s</textarea>',
+						'<textarea name="%s" cols="50" rows="3" class="form-control">%s</textarea>',
 						\esc_attr( $name . '[description]' ),
 						\esc_textarea( $detail->description ?? '' )
 					);
