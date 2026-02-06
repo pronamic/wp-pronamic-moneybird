@@ -22,14 +22,14 @@ use WP_REST_Server;
 final class SalesInvoicesController {
 	/**
 	 * Error.
-	 * 
+	 *
 	 * @var WP_Error|null
 	 */
 	private $error;
 
 	/**
 	 * Setup.
-	 * 
+	 *
 	 * @return void
 	 */
 	public function setup() {
@@ -125,7 +125,7 @@ final class SalesInvoicesController {
 
 	/**
 	 * Permission callback.
-	 * 
+	 *
 	 * @return bool
 	 */
 	public function permission_callback() {
@@ -134,7 +134,7 @@ final class SalesInvoicesController {
 
 	/**
 	 * REST API new sales invoice.
-	 * 
+	 *
 	 * @param WP_REST_Request $request Request.
 	 * @return WP_REST_Response
 	 */
@@ -189,7 +189,7 @@ final class SalesInvoicesController {
 
 	/**
 	 * Maybe create new sales invoice.
-	 * 
+	 *
 	 * @return void
 	 */
 	public function maybe_create_new_sales_invoice() {
@@ -252,7 +252,7 @@ final class SalesInvoicesController {
 
 	/**
 	 * Errors.
-	 * 
+	 *
 	 * @param array $errors Errors.
 	 * @return array
 	 */
