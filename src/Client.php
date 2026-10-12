@@ -142,4 +142,28 @@ final class Client {
 
 		return $response;
 	}
+
+	/**
+	 * Patch data.
+	 *
+	 * @param string      $api_url API URL.
+	 * @param mixed       $data    Data.
+	 * @param null|string $expected_response_status Expected response status.
+	 * @return mixed
+	 */
+	public function patch( $api_url, $data, $expected_response_status = null ) {
+		$response = Http::request(
+			$api_url,
+			[
+				'method'  => 'PATCH',
+				'headers' => $this->get_headers(),
+				'body'    => \wp_json_encode( $data ),
+				'timeout' => $this->should_increase_http_timeout() ? 30 : 5,
+			]
+		);
+
+		$this->ensure_response_status( $response, $expected_response_status );
+
+		return $response;
+	}
 }

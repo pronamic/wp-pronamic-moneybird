@@ -103,6 +103,30 @@ final class ExternalSalesInvoice implements RemoteSerializable {
 	public $details;
 
 	/**
+	 * State.
+	 *
+	 * @var string|null
+	 */
+	#[RemoteApiProperty( 'state' )]
+	public $state;
+
+	/**
+	 * Total unpaid.
+	 *
+	 * @var string|null
+	 */
+	#[RemoteApiProperty( 'total_unpaid' )]
+	public $total_unpaid;
+
+	/**
+	 * Notes.
+	 *
+	 * @var object[]|null
+	 */
+	#[RemoteApiProperty( 'notes' )]
+	public $notes;
+
+	/**
 	 * Get remote link.
 	 * 
 	 * @return string

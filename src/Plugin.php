@@ -42,6 +42,7 @@ final class Plugin {
 	public function setup() {
 		$controllers = [
 			new AuthorizationPostTypeController(),
+			new FinancialMutationsController(),
 			new FinancialStatementsController(),
 			new PostSalesInvoiceController(),
 			new PostTypeSupportController(),
