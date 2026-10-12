@@ -17,6 +17,10 @@ phpcs.xml.dist
 
 phpunit.xml.dist
 
+/deploy.php
+
+/rector.php
+
 /build/
 /tests/
 

@@ -16,6 +16,7 @@
 		}
 	},
 	"require": {
+		"php": "^8.2",
 		"automattic/jetpack-autoloader": "^3.0",
 		"pronamic/wp-http": "^1.2",
 		"pronamic/wp-html": "^2.2"
@@ -23,10 +24,12 @@
 	"require-dev": {
 		"pronamic/wp-coding-standards": "^2.1",
 		"pronamic/pronamic-cli": "^1.1",
-		"roots/wordpress-no-content": "^6.4",
+		"roots/wordpress-no-content": "^7.1",
 		"yoast/phpunit-polyfills": "^2.0",
 		"wp-cli/dist-archive-command": "*",
-		"wp-cli/wp-cli-bundle": "*"
+		"wp-cli/wp-cli-bundle": "*",
+		"deployer/deployer": "^7.5",
+		"rector/rector": "^2.6"
 	},
 	"scripts": {
 		"build": [
@@ -38,11 +41,16 @@
 			"vendor/bin/wp i18n make-mo ./build/pronamic-moneybird/languages/",
 			"vendor/bin/wp dist-archive ./build/pronamic-moneybird/ --plugin-dirname=pronamic-moneybird --force"
 		],
+		"deploy": [
+			"Composer\\Config::disableProcessTimeout",
+			"DEPLOYER_IMPORT=${DEPLOYER_IMPORT:-$HOME/deployer.php} vendor/bin/dep deploy"
+		],
 		"dist-archive": "wp dist-archive . --plugin-dirname=pronamic-moneybird",
 		"make-pot": [
 			"@build",
 			"rsync --recursive --delete --verbose ./build/pronamic-moneybird/languages/ ./languages/",
 			"vendor/bin/wp i18n update-po ./languages/pronamic-moneybird.pot"
-		]
+		],
+		"rector": "vendor/bin/rector"
 	}
 }

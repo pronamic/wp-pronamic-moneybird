@@ -12,8 +12,8 @@
  * Plugin URI:        https://wp.pronamic.directory/plugins/pronamic-moneybird/
  * Description:       This WordPress plugin provides the link between your WordPress website and your Moneybird administration.
  * Version:           1.0.0
- * Requires at least: 6.2
- * Requires PHP:      8.0
+ * Requires at least: 7.1
+ * Requires PHP:      8.2
  * Author:            Pronamic
  * Author URI:        https://www.pronamic.eu/
  * Text Domain:       pronamic-moneybird
