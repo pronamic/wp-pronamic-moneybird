@@ -24,20 +24,6 @@ final class FinancialStatement implements JsonSerializable {
 	public $id;
 
 	/**
-	 * Financial account ID.
-	 * 
-	 * @var int
-	 */
-	public $financial_account_id;
-
-	/**
-	 * Reference.
-	 * 
-	 * @var string
-	 */
-	public $reference;
-
-	/**
 	 * Official date.
 	 * 
 	 * @var null|Date
@@ -71,9 +57,16 @@ final class FinancialStatement implements JsonSerializable {
 	 * @param int    $financial_account_id Financial account ID.
 	 * @param string $reference            Reference.
 	 */
-	public function __construct( $financial_account_id, $reference ) {
-		$this->financial_account_id = $financial_account_id;
-		$this->reference            = $reference;
+	public function __construct(
+		/**
+		 * Financial account ID.
+		 */
+		public $financial_account_id,
+		/**
+		 * Reference.
+		 */
+		public $reference
+	) {
 	}
 
 	/**
@@ -87,19 +80,15 @@ final class FinancialStatement implements JsonSerializable {
 			[
 				'financial_account_id'           => $this->financial_account_id,
 				'reference'                      => $this->reference,
-				'official_date'                  => ( null === $this->official_date ) ? null : $this->official_date->format( 'Y-m-d' ),
+				'official_date'                  => $this->official_date?->format( 'Y-m-d' ),
 				'official_balance'               => $this->official_balance,
 				'importer_key'                   => $this->importer_key,
 				'financial_mutations_attributes' => \array_map(
-					function ( $financial_mutation ) {
-						return $financial_mutation->get_create_parameters();
-					},
+					fn( $financial_mutation ) => $financial_mutation->get_create_parameters(),
 					$this->financial_mutations
 				),
 			],
-			function ( $value ) {
-				return ( null !== $value );
-			}
+			fn( $value ) => null !== $value
 		);
 	}
 
@@ -113,19 +102,15 @@ final class FinancialStatement implements JsonSerializable {
 			[
 				'financial_account_id' => $this->financial_account_id,
 				'reference'            => $this->reference,
-				'official_date'        => ( null === $this->official_date ) ? null : $this->official_date->format( 'Y-m-d' ),
+				'official_date'        => $this->official_date?->format( 'Y-m-d' ),
 				'official_balance'     => $this->official_balance,
 				'importer_key'         => $this->importer_key,
 				'financial_mutations'  => \array_map(
-					function ( $financial_mutation ) {
-						return $financial_mutation->jsonSerialize();
-					},
+					fn( $financial_mutation ) => $financial_mutation->jsonSerialize(),
 					$this->financial_mutations
 				),
 			],
-			function ( $value ) {
-				return ( null !== $value );
-			}
+			fn( $value ) => null !== $value
 		);
 	}
 
@@ -150,9 +135,7 @@ final class FinancialStatement implements JsonSerializable {
 
 		if ( $object_access->has_property( 'financial_mutations' ) ) {
 			$financial_statement->financial_mutations = \array_map(
-				function ( $item ) {
-					return FinancialMutation::from_object( $item );
-				},
+				fn( $item ) => FinancialMutation::from_object( $item ),
 				$object_access->get_property( 'financial_mutations' )
 			);
 		}

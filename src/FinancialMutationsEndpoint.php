@@ -30,9 +30,7 @@ final class FinancialMutationsEndpoint extends ResourceEndpoint {
 		$response_data = $response->json();
 
 		$financial_mutations = \array_map(
-			function ( $item ) {
-				return FinancialMutation::from_object( $item );
-			},
+			fn( $item ) => FinancialMutation::from_object( $item ),
 			$response_data
 		);
 

@@ -25,9 +25,7 @@ final class FinancialStatementsEndpoint extends ResourceEndpoint {
 	public static function array_filter_null( $items ) {
 		return \array_filter(
 			$items,
-			function ( $item ) {
-				return ( null !== $item );
-			}
+			fn( $item ) => null !== $item
 		);
 	}
 

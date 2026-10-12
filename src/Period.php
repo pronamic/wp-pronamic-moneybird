@@ -18,30 +18,23 @@ use JsonSerializable;
 /**
  * Period class
  */
-final class Period implements JsonSerializable, RemoteSerializable {
-	/**
-	 * Start date.
-	 * 
-	 * @var DateTimeInterface
-	 */
-	public $start_date;
-
-	/**
-	 * End date.
-	 * 
-	 * @var DateTimeInterface
-	 */
-	public $end_date;
-
+final class Period implements JsonSerializable, RemoteSerializable, \Stringable {
 	/**
 	 * Construct period.
 	 * 
 	 * @param DateTimeInterface $start_date Start date.
 	 * @param DateTimeInterface $end_date   End date.
 	 */
-	public function __construct( $start_date, $end_date ) {
-		$this->start_date = $start_date;
-		$this->end_date   = $end_date;
+	public function __construct(
+		/**
+		 * Start date.
+		 */
+		public $start_date,
+		/**
+		 * End date.
+		 */
+		public $end_date
+	) {
 	}
 
 	/**
@@ -68,7 +61,7 @@ final class Period implements JsonSerializable, RemoteSerializable {
 	 * 
 	 * @return string
 	 */
-	public function __toString() {
+	public function __toString(): string {
 		return $this->start_date->format( 'Ymd' ) . '..' . $this->end_date->format( 'Ymd' );
 	}
 

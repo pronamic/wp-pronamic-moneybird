@@ -26,30 +26,23 @@ final class ContactPerson implements RemoteSerializable {
 	public $id;
 
 	/**
-	 * First name.
-	 * 
-	 * @var string
-	 */
-	#[RemoteApiProperty( 'firstname' )]
-	public $first_name;
-
-	/**
-	 * Last name.
-	 * 
-	 * @var string
-	 */
-	#[RemoteApiProperty( 'lastname' )]
-	public $last_name;
-
-	/**
 	 * Construct contact person.
 	 * 
 	 * @param string $first_name First name.
 	 * @param string $last_name  Last Name.
 	 */
-	public function __construct( $first_name, $last_name ) {
-		$this->first_name = $first_name;
-		$this->last_name  = $last_name;
+	public function __construct(
+		/**
+		 * First name.
+		 */
+		#[RemoteApiProperty( 'firstname' )]
+		public $first_name,
+		/**
+		 * Last name.
+		 */
+		#[RemoteApiProperty( 'lastname' )]
+		public $last_name
+	) {
 	}
 
 	/**

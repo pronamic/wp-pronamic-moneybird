@@ -33,9 +33,7 @@ final class ExternalSalesInvoicesEndpoint extends ResourceEndpoint {
 		$response_data = $response->json();
 
 		$external_sales_invoices = \array_map(
-			function ( $item ) {
-				return ExternalSalesInvoice::from_object( $item );
-			},
+			fn( $item ) => ExternalSalesInvoice::from_object( $item ),
 			$response_data
 		);
 

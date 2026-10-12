@@ -33,23 +33,23 @@ final class WooCommerceController {
 			return;
 		}
 
-		\add_action( 'init', [ $this, 'init' ] );
+		\add_action( 'init', $this->init( ... ) );
 
-		\add_action( 'admin_init', [ $this, 'admin_init' ] );
+		\add_action( 'admin_init', $this->admin_init( ... ) );
 
-		\add_action( 'cli_init', [ $this, 'cli_init' ] );
+		\add_action( 'cli_init', $this->cli_init( ... ) );
 
 		if ( \is_admin() ) {
-			\add_action( 'add_meta_boxes', [ $this, 'maybe_add_pronamic_moneybird_meta_box_to_wc_order' ], 10, 2 );
+			\add_action( 'add_meta_boxes', $this->maybe_add_pronamic_moneybird_meta_box_to_wc_order( ... ), 10, 2 );
 		}
 
-		\add_action( 'woocommerce_process_shop_order_meta', [ $this, 'process_shop_order_meta' ] );
+		\add_action( 'woocommerce_process_shop_order_meta', $this->process_shop_order_meta( ... ) );
 
 		// Orders as CPT.
-		\add_filter( 'manage_edit-shop_order_columns', [ $this, 'add_column' ], 20 );
+		\add_filter( 'manage_edit-shop_order_columns', $this->add_column( ... ), 20 );
 		\add_action(
 			'manage_shop_order_posts_custom_column',
-			function ( $column_name, $post_id ) {
+			function ( $column_name, $post_id ): void {
 				$order = \wc_get_order( $post_id );
 
 				if ( $order instanceof WC_Order ) {
@@ -61,8 +61,8 @@ final class WooCommerceController {
 		);
 
 		// Orders with HPOS.
-		\add_filter( 'manage_woocommerce_page_wc-orders_columns', [ $this, 'add_column' ], 20 );
-		\add_action( 'manage_woocommerce_page_wc-orders_custom_column', [ $this, 'show_column' ], 5, 2 );
+		\add_filter( 'manage_woocommerce_page_wc-orders_columns', $this->add_column( ... ), 20 );
+		\add_action( 'manage_woocommerce_page_wc-orders_custom_column', $this->show_column( ... ), 5, 2 );
 	}
 
 	/**
@@ -89,7 +89,7 @@ final class WooCommerceController {
 		\add_settings_section(
 			'pronamic_moneybird_woocommerce',
 			\__( 'WooCommerce', 'pronamic-moneybird' ),
-			function () {
+			function (): void {
 			},
 			'pronamic_moneybird'
 		);
@@ -97,7 +97,7 @@ final class WooCommerceController {
 		\add_settings_field(
 			'pronamic_moneybird_woocommerce_tax_rates',
 			\__( 'Tax rates', 'pronamic-moneybird' ),
-			function () {
+			function (): void {
 				include __DIR__ . '/../admin/settings-field-woocommerce-tax-rates.php';
 			},
 			'pronamic_moneybird',
@@ -112,9 +112,9 @@ final class WooCommerceController {
 	 * @return void
 	 */
 	public function cli_init() {
-		WP_CLI::add_command( 'pronamic-moneybird create-contacts-for-wc-orders', [ $this, 'cli_create_contacts_for_wc_orders' ] );
-		WP_CLI::add_command( 'pronamic-moneybird create-external-sales-invoices-for-wc-orders', [ $this, 'cli_create_external_sales_invoices_for_wc_orders' ] );
-		WP_CLI::add_command( 'pronamic-moneybird register-payments-for-external-sales-invoices', [ $this, 'cli_register_payments_for_external_sales_invoices' ] );
+		WP_CLI::add_command( 'pronamic-moneybird create-contacts-for-wc-orders', $this->cli_create_contacts_for_wc_orders( ... ) );
+		WP_CLI::add_command( 'pronamic-moneybird create-external-sales-invoices-for-wc-orders', $this->cli_create_external_sales_invoices_for_wc_orders( ... ) );
+		WP_CLI::add_command( 'pronamic-moneybird register-payments-for-external-sales-invoices', $this->cli_register_payments_for_external_sales_invoices( ... ) );
 	}
 
 	/**
@@ -737,7 +737,7 @@ final class WooCommerceController {
 		\add_meta_box(
 			'woocommerce-order-pronamic-moneybird',
 			\__( 'Pronamic Moneybird', 'pronamic-moneybird' ),
-			function () use ( $order ) {
+			function () use ( $order ): void {
 				\wp_nonce_field( 'pronamic_moneybird_save_wc_order', 'pronamic_moneybird_nonce' );
 
 				include __DIR__ . '/../admin/meta-box-woocommerce-order.php';

@@ -31,11 +31,11 @@ final class FinancialStatementsController {
 	 * @return void
 	 */
 	public function setup() {
-		\add_action( 'init', [ $this, 'maybe_create_new_financial_statement' ] );
+		\add_action( 'init', $this->maybe_create_new_financial_statement( ... ) );
 
-		\add_action( 'rest_api_init', [ $this, 'rest_api_init' ] );
+		\add_action( 'rest_api_init', $this->rest_api_init( ... ) );
 
-		\add_filter( 'pronamic_moneybird_errors', [ $this, 'errors' ] );
+		\add_filter( 'pronamic_moneybird_errors', $this->errors( ... ) );
 	}
 
 	/**
@@ -55,7 +55,7 @@ final class FinancialStatementsController {
 			[
 				'methods'             => 'POST',
 				'callback'            => [ $this, 'rest_api_new_financial_statement' ],
-				'permission_callback' => [ $this, 'permission_callback' ],
+				'permission_callback' => $this->permission_callback( ... ),
 				'args'                => [
 					'authorization_id'    => [
 						'description'       => \__( 'Authorization post ID.', 'pronamic-moneybird' ),
@@ -200,9 +200,7 @@ final class FinancialStatementsController {
 			if ( \array_key_exists( 'financial_mutations', $data ) && \is_array( $data['financial_mutations'] ) ) {
 				$data['financial_mutations'] = \array_filter(
 					\array_map(
-						function ( $data ) {
-							return \is_array( $data ) ? \array_filter( $data ) : $data;
-						},
+						fn( $data ) => \is_array( $data ) ? \array_filter( $data ) : $data,
 						$data['financial_mutations']
 					)
 				);
@@ -210,9 +208,7 @@ final class FinancialStatementsController {
 
 			$data = \array_filter(
 				$data,
-				function ( $item ) { 
-					return ( '' !== $item );
-				} 
+				fn( $item ) => '' !== $item 
 			);
 
 			$request->set_param( 'financial_statement', $data );

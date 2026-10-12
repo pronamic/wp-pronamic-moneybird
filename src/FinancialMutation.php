@@ -102,7 +102,7 @@ final class FinancialMutation implements JsonSerializable {
 	public function get_create_parameters() {
 		return \array_filter(
 			[
-				'date'                            => ( null === $this->date ) ? null : $this->date->format( 'Y-m-d' ),
+				'date'                            => $this->date?->format( 'Y-m-d' ),
 				'message'                         => $this->message,
 				'amount'                          => $this->amount,
 				'code'                            => $this->code,
@@ -113,9 +113,7 @@ final class FinancialMutation implements JsonSerializable {
 				'account_servicer_transaction_id' => $this->account_servicer_transaction_id,
 				'account_servicer_metadata'       => $this->account_servicer_metadata,
 			],
-			function ( $value ) {
-				return ( null !== $value );
-			}
+			fn( $value ) => null !== $value
 		);
 	}
 
@@ -127,7 +125,7 @@ final class FinancialMutation implements JsonSerializable {
 	public function jsonSerialize() {
 		return (object) \array_filter(
 			[
-				'date'                            => ( null === $this->date ) ? null : $this->date->format( 'Y-m-d' ),
+				'date'                            => $this->date?->format( 'Y-m-d' ),
 				'message'                         => $this->message,
 				'amount'                          => $this->amount,
 				'code'                            => $this->code,
@@ -138,9 +136,7 @@ final class FinancialMutation implements JsonSerializable {
 				'account_servicer_transaction_id' => $this->account_servicer_transaction_id,
 				'account_servicer_metadata'       => $this->account_servicer_metadata,
 			],
-			function ( $value ) {
-				return ( null !== $value );
-			}
+			fn( $value ) => null !== $value
 		);
 	}
 

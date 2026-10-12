@@ -21,28 +21,21 @@ use Attribute;
 #[Attribute( Attribute::TARGET_PROPERTY )]
 final class RemoteApiProperty {
 	/**
-	 * Name.
-	 * 
-	 * @var string
-	 */
-	public string $name;
-
-	/**
-	 * Create name.
-	 * 
-	 * @var string
-	 */
-	public ?string $create_name;
-
-	/**
 	 * Construct property.
 	 * 
 	 * @param string $name        Name.
 	 * @param string $create_name Create name.
 	 */
-	public function __construct( $name, $create_name = null ) {
-		$this->name        = $name;
-		$this->create_name = $create_name;
+	public function __construct(
+		/**
+		 * Name.
+		 */
+		public string $name,
+		/**
+		 * Create name.
+		 */
+		public ?string $create_name = null
+	) {
 	}
 
 	/**

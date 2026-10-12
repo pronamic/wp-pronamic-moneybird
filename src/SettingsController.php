@@ -20,9 +20,9 @@ final class SettingsController {
 	 * Setup.
 	 */
 	public function setup() {
-		\add_action( 'init', [ $this, 'init' ] );
+		\add_action( 'init', $this->init( ... ) );
 
-		\add_action( 'admin_init', [ $this, 'admin_init' ] );
+		\add_action( 'admin_init', $this->admin_init( ... ) );
 	}
 
 	/**
@@ -54,14 +54,14 @@ final class SettingsController {
 		\add_settings_section(
 			'pronamic_moneybird_general',
 			\__( 'General', 'pronamic-moneybird' ),
-			function () { },
+			function (): void { },
 			'pronamic_moneybird'
 		);
 
 		\add_settings_field(
 			'pronamic_moneybird_authorization_post_id',
 			\__( 'Default authorization', 'pronamic-moneybird' ),
-			[ $this, 'input_page' ],
+			$this->input_page( ... ),
 			'pronamic_moneybird',
 			'pronamic_moneybird_general',
 			[
@@ -74,7 +74,7 @@ final class SettingsController {
 		\add_settings_field(
 			'pronamic_moneybird_customer_id_template',
 			\__( 'Customer ID template', 'pronamic-moneybird' ),
-			[ $this, 'input_text' ],
+			$this->input_text( ... ),
 			'pronamic_moneybird',
 			'pronamic_moneybird_general',
 			[

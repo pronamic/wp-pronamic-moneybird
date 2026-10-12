@@ -15,18 +15,15 @@ namespace Pronamic\Moneybird;
  */
 abstract class Endpoint {
 	/**
-	 * Client.
-	 * 
-	 * @var Client
-	 */
-	public $client;
-
-	/**
 	 * Construct endpoint.
 	 * 
 	 * @param Client $client Client.
 	 */
-	public function __construct( $client ) {
-		$this->client = $client;
+	public function __construct(
+		/**
+		 * Client.
+		 */
+		public $client
+	) {
 	}
 }

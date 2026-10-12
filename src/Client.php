@@ -17,19 +17,16 @@ use Pronamic\WordPress\Http\Facades\Http;
  */
 final class Client {
 	/**
-	 * API token.
-	 * 
-	 * @var string
-	 */
-	public $api_token;
-
-	/**
 	 * Construct client.
 	 * 
 	 * @param string $api_token API token.
 	 */
-	public function __construct( $api_token ) {
-		$this->api_token = $api_token;
+	public function __construct(
+		/**
+		 * API token.
+		 */
+		public $api_token
+	) {
 	}
 
 	/**

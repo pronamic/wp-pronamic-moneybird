@@ -17,14 +17,6 @@ use Stringable;
  */
 final class Note implements RemoteSerializable, Stringable {
 	/**
-	 * Note.
-	 *
-	 * @var string
-	 */
-	#[RemoteApiProperty( 'note' )]
-	public $note;
-
-	/**
 	 * Todo.
 	 *
 	 * @var bool|null
@@ -45,8 +37,13 @@ final class Note implements RemoteSerializable, Stringable {
 	 *
 	 * @param string $note Note.
 	 */
-	public function __construct( string $note ) {
-		$this->note = $note;
+	public function __construct(
+		/**
+		 * Note.
+		 */
+		#[RemoteApiProperty( 'note' )]
+		public string $note
+	) {
 	}
 
 	/**

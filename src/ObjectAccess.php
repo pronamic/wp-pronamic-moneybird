@@ -13,21 +13,18 @@ namespace Pronamic\Moneybird;
 /**
  * Object access class
  */
-final class ObjectAccess {
-	/**
-	 * Object.
-	 *
-	 * @var object Object.
-	 */
-	private $value;
-
+final readonly class ObjectAccess {
 	/**
 	 * Construct object access.
 	 *
 	 * @param object $value Object.
 	 */
-	public function __construct( object $value ) {
-		$this->value = $value;
+	public function __construct(
+		/**
+		 * Object.
+		 */
+		private object $value
+	) {
 	}
 
 	/**

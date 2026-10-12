@@ -18,7 +18,7 @@ use JsonSerializable;
 /**
  * Date class
  */
-final class Date extends DateTimeImmutable implements JsonSerializable, RemoteSerializable {
+final class Date extends DateTimeImmutable implements JsonSerializable, RemoteSerializable, \Stringable {
 	/**
 	 * Date from string.
 	 * 
@@ -62,7 +62,7 @@ final class Date extends DateTimeImmutable implements JsonSerializable, RemoteSe
 	 * 
 	 * @return string
 	 */
-	public function __toString() {
+	public function __toString(): string {
 		return $this->format( 'Y-m-d' );
 	}
 }

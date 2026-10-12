@@ -53,9 +53,7 @@ final class ContactsEndpoint extends ResourceEndpoint {
 		$response_data = $response->json();
 
 		$contacts = \array_map(
-			function ( $item ) {
-				return Contact::from_object( $item );
-			},
+			fn( $item ) => Contact::from_object( $item ),
 			$response_data
 		);
 

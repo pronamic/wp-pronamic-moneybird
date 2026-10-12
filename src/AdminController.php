@@ -18,7 +18,7 @@ final class AdminController {
 	 * Setup.
 	 */
 	public function setup() {
-		\add_action( 'admin_menu', [ $this, 'admin_menu' ] );
+		\add_action( 'admin_menu', $this->admin_menu( ... ) );
 	}
 
 	/**
@@ -95,7 +95,7 @@ final class AdminController {
 			\__( 'Moneybird', 'pronamic-moneybird' ),
 			'manage_options',
 			'pronamic-moneybird',
-			function () {
+			function (): void {
 				include __DIR__ . '/../admin/page-dashboard.php';
 			},
 			$menu_icon_url
@@ -117,7 +117,7 @@ final class AdminController {
 			\__( 'Settings', 'pronamic-moneybird' ),
 			'manage_options',
 			'pronamic-moneybird-settings',
-			function () {
+			function (): void {
 				include __DIR__ . '/../admin/page-settings.php';
 			},
 			20

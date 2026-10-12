@@ -20,7 +20,7 @@ final class TemplateController {
 	 * @return void
 	 */
 	public function setup() {
-		\add_filter( 'template_include', [ $this, 'template_include' ] );
+		\add_filter( 'template_include', $this->template_include( ... ) );
 	}
 
 	/**
@@ -36,14 +36,11 @@ final class TemplateController {
 			return $template;
 		}
 
-		switch ( $route ) {
-			case 'new_financial_statement':
-				return $this->template_include_new_financial_statement( $template );
-			case 'new_sales_invoice':
-				return $this->template_include_new_sales_invoice( $template );
-			default:
-				return $template;
-		}
+		return match ( $route ) {
+			'new_financial_statement' => $this->template_include_new_financial_statement( $template ),
+			'new_sales_invoice' => $this->template_include_new_sales_invoice( $template ),
+			default => $template,
+		};
 	}
 
 	/**

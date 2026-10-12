@@ -15,22 +15,19 @@ namespace Pronamic\Moneybird;
  */
 abstract class ResourceEndpoint extends Endpoint {
 	/**
-	 * Administration ID.
-	 * 
-	 * @var string
-	 */
-	public $administration_id;
-
-	/**
 	 * Construct resource endpoint.
-	 * 
+	 *
 	 * @param Client $client            Client.
 	 * @param string $administration_id Administration ID.
 	 */
-	public function __construct( $client, $administration_id ) {
+	public function __construct(
+		$client,
+		/**
+		 * Administration ID.
+		 */
+		public $administration_id
+	) {
 		parent::__construct( $client );
-
-		$this->administration_id = $administration_id;
 	}
 
 	/**
@@ -53,7 +50,7 @@ abstract class ResourceEndpoint extends Endpoint {
 
 	/**
 	 * Post data.
-	 * 
+	 *
 	 * @param string $resource_path Resource path.
 	 * @param mixed  $data          Data.
 	 * @return mixed

@@ -15,36 +15,25 @@ namespace Pronamic\Moneybird;
  */
 final class Attachment {
 	/**
-	 * Filename.
-	 * 
-	 * @var string
-	 */
-	public $filename;
-
-	/**
-	 * Contents.
-	 * 
-	 * @var string
-	 */
-	public $contents;
-
-	/**
-	 * Type.
-	 * 
-	 * @var string
-	 */
-	public $type;
-
-	/**
 	 * Construct attachment.
 	 * 
 	 * @param string $filename Filename.
 	 * @param string $contents Contents.
 	 * @param string $type     Type.
 	 */
-	public function __construct( $filename, $contents, $type ) {
-		$this->filename = $filename;
-		$this->contents = $contents;
-		$this->type     = $type;
+	public function __construct(
+		/**
+		 * Filename.
+		 */
+		public $filename,
+		/**
+		 * Contents.
+		 */
+		public $contents,
+		/**
+		 * Type.
+		 */
+		public $type
+	) {
 	}
 }

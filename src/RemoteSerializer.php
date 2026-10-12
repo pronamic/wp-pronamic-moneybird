@@ -17,19 +17,16 @@ use ReflectionObject;
  */
 final class RemoteSerializer {
 	/**
-	 * Context.
-	 * 
-	 * @var string
-	 */
-	public $context;
-
-	/**
 	 * Construct remote serializer.
 	 * 
 	 * @param string $context Context.
 	 */
-	public function __construct( $context = '' ) {
-		$this->context = $context;
+	public function __construct(
+		/**
+		 * Context.
+		 */
+		public $context = ''
+	) {
 	}
 
 	/**
@@ -77,7 +74,7 @@ final class RemoteSerializer {
 
 		if ( \is_array( $value ) ) {
 			return \array_map(
-				[ $this, 'get_value' ],
+				$this->get_value( ... ),
 				$value
 			);
 		}
