@@ -185,14 +185,7 @@ final class WooCommerceController {
 				$moneybird_contacts = $this->get_similar_contacts( $contacts_endpoint, $contact );
 
 				if ( \count( $moneybird_contacts ) > 0 ) {
-					WP_CLI::log(
-						\sprintf(
-							'Similar Moneybird contacts have been found for: %s',
-							\wp_json_encode( $contact->remote_serialize(), \JSON_PRETTY_PRINT )
-						)
-					);
-
-					$items = [];
+					$similar_contacts = [];
 
 					foreach ( $moneybird_contacts as $moneybird_contact ) {
 						$similarity_report = $contact->get_similarity_report( $moneybird_contact );
@@ -205,34 +198,45 @@ final class WooCommerceController {
 							continue 2;
 						}
 
-						$items[] = [
-							'id'                     => $moneybird_contact->id,
-							'company_name'           => $moneybird_contact->company_name,
-							'address_1'              => $moneybird_contact->address_1,
-							'address_2'              => $moneybird_contact->address_2,
-							'zip_code'               => $moneybird_contact->zip_code,
-							'city'                   => $moneybird_contact->city,
-							'country_code'           => $moneybird_contact->country_code,
-							'send_invoices_to_email' => $moneybird_contact->send_invoices_to_email,
-							'similarity'             => $similarity_report->get_average_similarity(),
-						];
+						$similar_contacts[] = [ $moneybird_contact, $similarity_report ];
 					}
 
-					\WP_CLI\Utils\format_items(
-						'table',
-						$items,
-						[
-							'id',
-							'company_name',
-							'address_1',
-							'address_2',
-							'zip_code',
-							'city',
-							'country_code',
-							'send_invoices_to_email',
-							'similarity',
-						]
-					);
+					WP_CLI::log( 'Similar Moneybird contacts have been found: ' . \count( $similar_contacts ) );
+
+					foreach ( $similar_contacts as [ $moneybird_contact, $similarity_report ] ) {
+						WP_CLI::log( '' );
+
+						WP_CLI::log(
+							\sprintf(
+								'Moneybird contact %s — %s — similarity: %s%%',
+								$moneybird_contact->id,
+								$moneybird_contact->get_remote_link(),
+								\number_format( $similarity_report->get_average_similarity(), 1 )
+							)
+						);
+
+						$items = [];
+
+						foreach ( $similarity_report->property_similarities as $property => $percent ) {
+							$items[] = [
+								'property'   => $property,
+								'local'      => (string) $contact->{$property},
+								'moneybird'  => (string) $moneybird_contact->{$property},
+								'similarity' => \number_format( $percent, 1 ) . '%',
+							];
+						}
+
+						\WP_CLI\Utils\format_items(
+							'table',
+							$items,
+							[
+								'property',
+								'local',
+								'moneybird',
+								'similarity',
+							]
+						);
+					}
 
 					$is_in_list = $this->cli_confirm( 'Is the contact in the list above?' );
 
