@@ -60,7 +60,6 @@ msgstr "Deze administratie-ID wordt standaard gebruikt voor API-aanvragen."
 
 #: admin/meta-box-post.php:21
 #: admin/meta-box-woocommerce-order.php:23
-#: admin/user-profile.php:19
 msgid "Contact ID"
 msgstr "Contact-ID"
 
@@ -132,12 +131,10 @@ msgstr "Moneybird-belastingtarief-ID"
 msgid "Standard rate"
 msgstr "Standaardtarief"
 
-#: admin/user-profile.php:14
 #: src/AdminController.php:94
 #: src/AdminController.php:95
 #: src/PostTypeSupportController.php:70
 #: src/PostTypeSupportController.php:91
-#: src/UsersController.php:49
 #: src/WooCommerceController.php:806
 #: templates/financial-statement-new.php:39
 #: templates/sales-invoice-new.php:41
@@ -380,10 +377,6 @@ msgstr "Standaardautorisatie"
 msgid "— Select authorization —"
 msgstr "— Selecteer autorisatie —"
 
-#: src/SettingsController.php:76
-msgid "Customer ID template"
-msgstr "Sjabloon voor klant-ID"
-
 #: src/SettingsController.php:106
 msgid "— Select a page —"
 msgstr "— Selecteer een pagina —"
@@ -504,7 +497,6 @@ msgstr "Moneybird-verkoopfactuur"
 
 #. translators: %s: Contact ID.
 #: src/PostTypeSupportController.php:137
-#: src/UsersController.php:97
 #: src/WooCommerceController.php:852
 #, php-format
 msgid "Contact ID: %s"

@@ -291,16 +291,6 @@ final class WooCommerceController {
 	 * @throws \Exception Throws an exception if contact creation fails.
 	 */
 	private function create_contact_based_on_woocommerce_order( $contacts_endpoint, WC_Order $order ) {
-		$user = $order->get_user();
-
-		if ( false !== $user ) {
-			$value = \get_user_meta( $user->ID, '_pronamic_moneybird_contact_id', true );
-
-			if ( '' !== $value ) {
-				throw new \Exception( 'Found Moneybird contact ID in user meta: ' . \esc_html( $order->get_id() ) );
-			}
-		}
-
 		$contact = $this->new_contact_based_on_woocommerce_order( $order );
 
 		$contact = $contacts_endpoint->create_contact( $contact );
@@ -308,10 +298,6 @@ final class WooCommerceController {
 		$order->update_meta_data( '_pronamic_moneybird_contact_id', $contact->id );
 
 		$order->save();
-
-		if ( false !== $user ) {
-			\update_user_meta( $user->ID, '_pronamic_moneybird_contact_id', $contact->id );
-		}
 
 		return $contact;
 	}
@@ -377,13 +363,7 @@ final class WooCommerceController {
 		$contact->city         = $order->get_billing_city();
 		$contact->country_code = $order->get_billing_country();
 		$contact->phone        = $order->get_billing_phone();
-		$contact->customer_id  = \strtr(
-			\get_option( 'pronamic_moneybird_customer_id_template', '{customer_id}' ),
-			[
-				'{customer_id}' => $order->get_customer_id(),
-				'{user_id}'     => $order->get_user_id(),
-			]
-		);
+		$contact->customer_id  = null;
 
 		/**
 		 * Tax number.

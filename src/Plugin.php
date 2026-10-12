@@ -49,7 +49,6 @@ final class Plugin {
 			new SalesInvoicesController(),
 			new SettingsController(),
 			new TemplateController(),
-			new UsersController(),
 			new WooCommerceController(),
 		];
 
