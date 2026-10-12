@@ -19,3 +19,5 @@ phpunit.xml.dist
 
 /build/
 /tests/
+
+/node_modules/

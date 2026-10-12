@@ -1,23 +1,21 @@
-# Copyright (C) 2024 Pronamic
-# This file is distributed under the GPL v2 or later.
 msgid ""
 msgstr ""
 "Project-Id-Version: Pronamic Moneybird 1.0.0\n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/pronamic-"
-"moneybird\n"
-"POT-Creation-Date: 2024-04-17T07:58:12+00:00\n"
-"PO-Revision-Date: 2024-04-17 09:58+0200\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/pronamic-moneybird\n"
 "Last-Translator: Remco Tolsma <info@remcotolsma.nl>\n"
 "Language-Team: \n"
-"Language: nl_NL\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2024-04-17T07:58:12+00:00\n"
+"PO-Revision-Date: 2024-04-17 09:58+0200\n"
+"Language: nl_NL\n"
 "X-Generator: Poedit 3.4.2\n"
 "X-Domain: pronamic-moneybird\n"
 
 #. Plugin Name of the plugin
-#: pronamic-moneybird.php src/WooCommerceController.php:567
+#: pronamic-moneybird.php
+#: src/WooCommerceController.php:739
 msgid "Pronamic Moneybird"
 msgstr "Pronamic Moneybird"
 
@@ -28,12 +26,8 @@ msgstr "https://wp.pronamic.directory/plugins/pronamic-moneybird/"
 
 #. Description of the plugin
 #: pronamic-moneybird.php
-msgid ""
-"This WordPress plugin provides the link between your WordPress website and "
-"your Moneybird administration."
-msgstr ""
-"Deze WordPress plugin zorgt voor de koppeling tussen je WordPress-website en "
-"je Moneybird-administratie."
+msgid "This WordPress plugin provides the link between your WordPress website and your Moneybird administration."
+msgstr "Deze WordPress plugin zorgt voor de koppeling tussen je WordPress-website en je Moneybird-administratie."
 
 #. Author of the plugin
 #: pronamic-moneybird.php
@@ -52,6 +46,7 @@ msgstr "API-token"
 
 #. translators: %s: Moneybird URL.
 #: admin/meta-box-authorization-settings.php:35
+#, php-format
 msgid "You can create an API token via %s."
 msgstr "Je kunt een API-token aanmaken via %s."
 
@@ -63,7 +58,9 @@ msgstr "Standaard administratie"
 msgid "This administration ID is used by default for API requests."
 msgstr "Deze administratie-ID wordt standaard gebruikt voor API-aanvragen."
 
-#: admin/meta-box-post.php:21 admin/meta-box-woocommerce-order.php:23
+#: admin/meta-box-post.php:21
+#: admin/meta-box-woocommerce-order.php:23
+#: admin/user-profile.php:19
 msgid "Contact ID"
 msgstr "Contact-ID"
 
@@ -75,11 +72,15 @@ msgstr "Rekening-ID"
 msgid "Ledger account ID"
 msgstr "Grootboekrekening-ID"
 
-#: admin/meta-box-post.php:39 templates/sales-invoice-new.php:115
+#: admin/meta-box-post-sales-invoice.php:64
+#: admin/meta-box-post.php:39
+#: templates/sales-invoice-new.php:115
 msgid "Product ID"
 msgstr "Product-ID"
 
+#: admin/meta-box-post-sales-invoice.php:65
 #: admin/meta-box-post.php:45
+#: templates/sales-invoice-new.php:116
 msgid "Project ID"
 msgstr "Project-ID"
 
@@ -131,17 +132,25 @@ msgstr "Moneybird-belastingtarief-ID"
 msgid "Standard rate"
 msgstr "Standaardtarief"
 
-#: src/AdminController.php:94 src/AdminController.php:95
-#: src/PostTypeSupportController.php:67
-#: templates/financial-statement-new.php:39 templates/sales-invoice-new.php:41
+#: admin/user-profile.php:14
+#: src/AdminController.php:94
+#: src/AdminController.php:95
+#: src/PostTypeSupportController.php:70
+#: src/PostTypeSupportController.php:91
+#: src/UsersController.php:49
+#: src/WooCommerceController.php:806
+#: templates/financial-statement-new.php:39
+#: templates/sales-invoice-new.php:41
 msgid "Moneybird"
 msgstr "Moneybird"
 
-#: src/AdminController.php:106 src/AuthorizationPostTypeController.php:49
+#: src/AdminController.php:106
+#: src/AuthorizationPostTypeController.php:49
 msgid "Moneybird Authorizations"
 msgstr "Moneybird-autorisaties"
 
-#: src/AdminController.php:107 src/AuthorizationPostTypeController.php:76
+#: src/AdminController.php:107
+#: src/AuthorizationPostTypeController.php:76
 msgid "Authorizations"
 msgstr "Autorisaties"
 
@@ -262,7 +271,8 @@ msgid "Moneybird Authorization"
 msgstr "Moneybird autorisatie"
 
 #: src/AuthorizationPostTypeController.php:109
-#: templates/financial-statement-new.php:79 templates/sales-invoice-new.php:81
+#: templates/financial-statement-new.php:79
+#: templates/sales-invoice-new.php:81
 msgid "Authorization"
 msgstr "Autorisatie"
 
@@ -274,11 +284,13 @@ msgstr "Authenticatie"
 msgid "Default"
 msgstr "Standaard"
 
-#: src/FinancialStatementsController.php:61 src/SalesInvoicesController.php:60
+#: src/FinancialStatementsController.php:61
+#: src/SalesInvoicesController.php:60
 msgid "Authorization post ID."
 msgstr "Autorisatiebericht-ID."
 
-#: src/FinancialStatementsController.php:68 src/SalesInvoicesController.php:66
+#: src/FinancialStatementsController.php:68
+#: src/SalesInvoicesController.php:66
 msgid "Moneybird administration ID."
 msgstr "Moneybird-administratie-ID."
 
@@ -290,7 +302,8 @@ msgstr "Moneybird-afschrift."
 msgid "Moneybird financial account ID."
 msgstr "Moneybird-rekening-ID."
 
-#: src/FinancialStatementsController.php:86 src/SalesInvoicesController.php:83
+#: src/FinancialStatementsController.php:86
+#: src/SalesInvoicesController.php:83
 msgid "Reference."
 msgstr "Referentie."
 
@@ -351,7 +364,7 @@ msgstr "Prijs."
 msgid "Product ID."
 msgstr "Product-ID."
 
-#: src/SalesInvoicesController.php:109
+#: src/SalesInvoicesController.php:113
 msgid "Period."
 msgstr "Periode."
 
@@ -375,15 +388,15 @@ msgstr "Sjabloon voor klant-ID"
 msgid "— Select a page —"
 msgstr "— Selecteer een pagina —"
 
-#: src/WooCommerceController.php:70
+#: src/WooCommerceController.php:91
 msgid "WooCommerce"
 msgstr "WooCommerce"
 
-#: src/WooCommerceController.php:78
+#: src/WooCommerceController.php:99
 msgid "Tax rates"
 msgstr "Belastingtarieven"
 
-#: src/WooCommerceController.php:508
+#: src/WooCommerceController.php:661
 msgid "Discount"
 msgstr "Korting"
 
@@ -395,11 +408,13 @@ msgstr "Moneybird-afschrift gemaakt."
 msgid "Add financial statement"
 msgstr "Afschrift toevoegen"
 
-#: templates/financial-statement-new.php:74 templates/sales-invoice-new.php:76
+#: templates/financial-statement-new.php:74
+#: templates/sales-invoice-new.php:76
 msgid "Base"
 msgstr "Basis"
 
-#: templates/financial-statement-new.php:84 templates/sales-invoice-new.php:86
+#: templates/financial-statement-new.php:84
+#: templates/sales-invoice-new.php:86
 msgid "Administration"
 msgstr "Administratie"
 
@@ -407,7 +422,8 @@ msgstr "Administratie"
 msgid "Financial account"
 msgstr "Rekening"
 
-#: templates/financial-statement-new.php:94 templates/sales-invoice-new.php:96
+#: templates/financial-statement-new.php:94
+#: templates/sales-invoice-new.php:96
 msgid "Reference"
 msgstr "Referentie"
 
@@ -460,26 +476,58 @@ msgstr "Regels"
 msgid "Number"
 msgstr "Aantal"
 
+#: admin/meta-box-post-sales-invoice.php:62
 #: templates/sales-invoice-new.php:113
 msgid "Description"
 msgstr "Beschrijving"
 
-#: templates/sales-invoice-new.php:116
+#: templates/sales-invoice-new.php:117
 msgid "Period"
 msgstr "Periode"
 
-#: templates/sales-invoice-new.php:205
+#: templates/sales-invoice-new.php:217
 msgid "Create invoice"
 msgstr "Factuur maken"
 
-#~ msgid "Moneybird contact"
-#~ msgstr "Moneybird-contact"
+#: admin/meta-box-post-sales-invoice.php:61
+msgctxt "quantity"
+msgid "Amount"
+msgstr ""
 
-#~ msgid "Moneybird financial account"
-#~ msgstr "Moneybird-rekening"
+#: admin/meta-box-post-sales-invoice.php:63
+msgid "Price"
+msgstr ""
 
-#~ msgid "Moneybird product"
-#~ msgstr "Moneybird-product"
+#: src/PostSalesInvoiceController.php:41
+msgid "Moneybird sales invoice"
+msgstr ""
 
-#~ msgid "Administration ID"
-#~ msgstr "Administratie-ID"
+#. translators: %s: Contact ID.
+#: src/PostTypeSupportController.php:137
+#: src/UsersController.php:97
+#: src/WooCommerceController.php:852
+#, php-format
+msgid "Contact ID: %s"
+msgstr ""
+
+#. translators: %s: Product ID.
+#: src/PostTypeSupportController.php:158
+#, php-format
+msgid "Product ID: %s"
+msgstr ""
+
+#: src/SalesInvoicesController.php:109
+msgid "Project ID."
+msgstr ""
+
+#. translators: %s: JSON encoded order payment details (payment method and transaction ID).
+#: src/WooCommerceController.php:702
+#, php-format
+msgid "Details: %s"
+msgstr ""
+
+#. translators: %s: Product ID.
+#: src/WooCommerceController.php:875
+#, php-format
+msgid "External sales invoice ID: %s"
+msgstr ""

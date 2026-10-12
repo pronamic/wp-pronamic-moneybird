@@ -1,4 +1,4 @@
-# Copyright (C) 2024 Pronamic
+# Copyright (C) 2026 Pronamic
 # This file is distributed under the GPL v2 or later.
 msgid ""
 msgstr ""
@@ -9,14 +9,14 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2024-04-17T07:58:12+00:00\n"
+"POT-Creation-Date: 2026-10-12T09:47:02+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.10.0\n"
+"X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: pronamic-moneybird\n"
 
 #. Plugin Name of the plugin
 #: pronamic-moneybird.php
-#: src/WooCommerceController.php:567
+#: src/WooCommerceController.php:739
 msgid "Pronamic Moneybird"
 msgstr ""
 
@@ -47,6 +47,7 @@ msgstr ""
 
 #. translators: %s: Moneybird URL.
 #: admin/meta-box-authorization-settings.php:35
+#, php-format
 msgid "You can create an API token via %s."
 msgstr ""
 
@@ -58,8 +59,35 @@ msgstr ""
 msgid "This administration ID is used by default for API requests."
 msgstr ""
 
+#: admin/meta-box-post-sales-invoice.php:61
+msgctxt "quantity"
+msgid "Amount"
+msgstr ""
+
+#: admin/meta-box-post-sales-invoice.php:62
+#: templates/sales-invoice-new.php:113
+msgid "Description"
+msgstr ""
+
+#: admin/meta-box-post-sales-invoice.php:63
+msgid "Price"
+msgstr ""
+
+#: admin/meta-box-post-sales-invoice.php:64
+#: admin/meta-box-post.php:39
+#: templates/sales-invoice-new.php:115
+msgid "Product ID"
+msgstr ""
+
+#: admin/meta-box-post-sales-invoice.php:65
+#: admin/meta-box-post.php:45
+#: templates/sales-invoice-new.php:116
+msgid "Project ID"
+msgstr ""
+
 #: admin/meta-box-post.php:21
 #: admin/meta-box-woocommerce-order.php:23
+#: admin/user-profile.php:19
 msgid "Contact ID"
 msgstr ""
 
@@ -69,15 +97,6 @@ msgstr ""
 
 #: admin/meta-box-post.php:33
 msgid "Ledger account ID"
-msgstr ""
-
-#: admin/meta-box-post.php:39
-#: templates/sales-invoice-new.php:115
-msgid "Product ID"
-msgstr ""
-
-#: admin/meta-box-post.php:45
-msgid "Project ID"
 msgstr ""
 
 #: admin/meta-box-woocommerce-order.php:31
@@ -128,9 +147,13 @@ msgstr ""
 msgid "Standard rate"
 msgstr ""
 
+#: admin/user-profile.php:14
 #: src/AdminController.php:94
 #: src/AdminController.php:95
-#: src/PostTypeSupportController.php:67
+#: src/PostTypeSupportController.php:70
+#: src/PostTypeSupportController.php:91
+#: src/UsersController.php:49
+#: src/WooCommerceController.php:806
 #: templates/financial-statement-new.php:39
 #: templates/sales-invoice-new.php:41
 msgid "Moneybird"
@@ -332,6 +355,24 @@ msgstr ""
 msgid "Code."
 msgstr ""
 
+#: src/PostSalesInvoiceController.php:41
+msgid "Moneybird sales invoice"
+msgstr ""
+
+#. translators: %s: Contact ID.
+#: src/PostTypeSupportController.php:137
+#: src/UsersController.php:97
+#: src/WooCommerceController.php:852
+#, php-format
+msgid "Contact ID: %s"
+msgstr ""
+
+#. translators: %s: Product ID.
+#: src/PostTypeSupportController.php:158
+#, php-format
+msgid "Product ID: %s"
+msgstr ""
+
 #: src/SalesInvoicesController.php:72
 msgid "Moneybird sales invoice."
 msgstr ""
@@ -357,6 +398,10 @@ msgid "Product ID."
 msgstr ""
 
 #: src/SalesInvoicesController.php:109
+msgid "Project ID."
+msgstr ""
+
+#: src/SalesInvoicesController.php:113
 msgid "Period."
 msgstr ""
 
@@ -380,16 +425,28 @@ msgstr ""
 msgid "— Select a page —"
 msgstr ""
 
-#: src/WooCommerceController.php:70
+#: src/WooCommerceController.php:91
 msgid "WooCommerce"
 msgstr ""
 
-#: src/WooCommerceController.php:78
+#: src/WooCommerceController.php:99
 msgid "Tax rates"
 msgstr ""
 
-#: src/WooCommerceController.php:508
+#: src/WooCommerceController.php:661
 msgid "Discount"
+msgstr ""
+
+#. translators: %s: JSON encoded order payment details (payment method and transaction ID).
+#: src/WooCommerceController.php:702
+#, php-format
+msgid "Details: %s"
+msgstr ""
+
+#. translators: %s: Product ID.
+#: src/WooCommerceController.php:875
+#, php-format
+msgid "External sales invoice ID: %s"
 msgstr ""
 
 #: templates/financial-statement-new.php:44
@@ -468,14 +525,10 @@ msgstr ""
 msgid "Number"
 msgstr ""
 
-#: templates/sales-invoice-new.php:113
-msgid "Description"
-msgstr ""
-
-#: templates/sales-invoice-new.php:116
+#: templates/sales-invoice-new.php:117
 msgid "Period"
 msgstr ""
 
-#: templates/sales-invoice-new.php:205
+#: templates/sales-invoice-new.php:217
 msgid "Create invoice"
 msgstr ""

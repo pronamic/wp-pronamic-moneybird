@@ -698,6 +698,7 @@ final class WooCommerceController {
 			 */
 			$note = new Note(
 				\sprintf(
+					/* translators: %s: JSON encoded order payment details (payment method and transaction ID). */
 					\__( 'Details: %s', 'pronamic-moneybird' ),
 					\wp_json_encode(
 						[

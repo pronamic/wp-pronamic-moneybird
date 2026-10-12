@@ -1,8 +1,0 @@
-# Composer
-/vendor/
-
-# Node.js
-/node_modules/
-
-# Packages
-/packages/
