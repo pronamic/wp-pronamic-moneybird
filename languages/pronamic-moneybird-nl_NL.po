@@ -492,15 +492,15 @@ msgstr "Factuur maken"
 #: admin/meta-box-post-sales-invoice.php:61
 msgctxt "quantity"
 msgid "Amount"
-msgstr ""
+msgstr "Aantal"
 
 #: admin/meta-box-post-sales-invoice.php:63
 msgid "Price"
-msgstr ""
+msgstr "Prijs"
 
 #: src/PostSalesInvoiceController.php:41
 msgid "Moneybird sales invoice"
-msgstr ""
+msgstr "Moneybird-verkoopfactuur"
 
 #. translators: %s: Contact ID.
 #: src/PostTypeSupportController.php:137
@@ -508,26 +508,26 @@ msgstr ""
 #: src/WooCommerceController.php:852
 #, php-format
 msgid "Contact ID: %s"
-msgstr ""
+msgstr "Contact-ID: %s"
 
 #. translators: %s: Product ID.
 #: src/PostTypeSupportController.php:158
 #, php-format
 msgid "Product ID: %s"
-msgstr ""
+msgstr "Product-ID: %s"
 
 #: src/SalesInvoicesController.php:109
 msgid "Project ID."
-msgstr ""
+msgstr "Project-ID."
 
 #. translators: %s: JSON encoded order payment details (payment method and transaction ID).
 #: src/WooCommerceController.php:702
 #, php-format
 msgid "Details: %s"
-msgstr ""
+msgstr "Details: %s"
 
 #. translators: %s: Product ID.
 #: src/WooCommerceController.php:875
 #, php-format
 msgid "External sales invoice ID: %s"
-msgstr ""
+msgstr "Externe verkoopfactuur-ID: %s"
