@@ -36,7 +36,7 @@ final class FinancialMutationsController {
 	}
 
 	/**
-	 * Link unprocessed financial mutations to open external sales invoices that mention the transaction ID of the financial mutation in one of their notes.
+	 * Link unprocessed financial mutations to open external sales invoices that mention an identifier (`baltr_`, `chb_`, `inv_`, `tr_`, `re_`, `stl_`) from the message or transaction ID of the financial mutation in one of their notes.
 	 *
 	 * ## OPTIONS
 	 *
@@ -45,12 +45,6 @@ final class FinancialMutationsController {
 	 *
 	 * --financial-account-id=<financial-account-id>
 	 * : Moneybird financial account ID of the financial mutations.
-	 *
-	 * [--prefix=<prefix>]
-	 * : Only process financial mutations with a transaction ID that starts with this prefix.
-	 * ---
-	 * default: tr_
-	 * ---
 	 *
 	 * [--dry-run]
 	 * : Only show the matches, do not link anything.
@@ -73,13 +67,11 @@ final class FinancialMutationsController {
 			[
 				'period'               => '',
 				'financial-account-id' => '',
-				'prefix'               => 'tr_',
 			]
 		);
 
 		$period               = (string) $assoc_args['period'];
 		$financial_account_id = (string) $assoc_args['financial-account-id'];
-		$prefix               = (string) $assoc_args['prefix'];
 
 		if ( '' === $period ) {
 			WP_CLI::error( 'The `--period` argument is required, for example `--period=202601..202604`.' );
@@ -156,16 +148,28 @@ final class FinancialMutationsController {
 		foreach ( $financial_mutations as $financial_mutation ) {
 			$transaction_id = (string) $financial_mutation->account_servicer_transaction_id;
 
-			if ( '' === $transaction_id ) {
-				continue;
-			}
+			WP_CLI::log(
+				\sprintf(
+					'Financial mutation %s: date %s, amount %s, transaction ID %s, contra account %s, message %s',
+					$financial_mutation->id,
+					$financial_mutation->date?->format( 'Y-m-d' ) ?? '—',
+					$financial_mutation->amount ?? '—',
+					'' === $transaction_id ? '—' : $transaction_id,
+					$financial_mutation->contra_account_name ?? '—',
+					\wp_json_encode( (string) $financial_mutation->message, \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE )
+				)
+			);
 
-			if ( ! \str_starts_with( $transaction_id, $prefix ) ) {
+			$identifiers = $this->get_identifiers_from_text( $financial_mutation->message . ' ' . $transaction_id );
+
+			if ( 0 === \count( $identifiers ) ) {
+				WP_CLI::log( '- Skipped, no identifiers found in message or transaction ID.' );
+
 				continue;
 			}
 
 			$item = [
-				'transaction_id'            => $transaction_id,
+				'identifiers'               => \implode( ', ', $identifiers ),
 				'financial_mutation_id'     => $financial_mutation->id,
 				'amount'                    => $financial_mutation->amount,
 				'external_sales_invoice_id' => '',
@@ -173,15 +177,7 @@ final class FinancialMutationsController {
 				'status'                    => '',
 			];
 
-			if ( (float) $financial_mutation->amount <= 0 ) {
-				$item['status'] = 'skipped, amount is not positive';
-
-				$items[] = $item;
-
-				continue;
-			}
-
-			$matches = $this->find_external_sales_invoices_by_note( $external_sales_invoices, $transaction_id );
+			$matches = $this->find_external_sales_invoices_by_note( $external_sales_invoices, $identifiers );
 
 			if ( 0 === \count( $matches ) ) {
 				$item['status'] = 'no match';
@@ -225,7 +221,7 @@ final class FinancialMutationsController {
 
 			$items[] = $item;
 
-			$to_link[] = [ $financial_mutation, $external_sales_invoice ];
+			$to_link[] = [ $financial_mutation, $external_sales_invoice, $identifiers ];
 
 			$linked_external_sales_invoice_ids[] = $external_sales_invoice->id;
 		}
@@ -234,7 +230,7 @@ final class FinancialMutationsController {
 			'table',
 			$items,
 			[
-				'transaction_id',
+				'identifiers',
 				'financial_mutation_id',
 				'amount',
 				'external_sales_invoice_id',
@@ -269,7 +265,7 @@ final class FinancialMutationsController {
 		$number_linked = 0;
 		$number_failed = 0;
 
-		foreach ( $to_link as [ $financial_mutation, $external_sales_invoice ] ) {
+		foreach ( $to_link as [ $financial_mutation, $external_sales_invoice, $identifiers ] ) {
 			try {
 				$financial_mutations_endpoint->link_booking(
 					$financial_mutation,
@@ -284,7 +280,7 @@ final class FinancialMutationsController {
 					\sprintf(
 						'Linked financial mutation %s (%s) to external sales invoice %s.',
 						$financial_mutation->id,
-						$financial_mutation->account_servicer_transaction_id,
+						\implode( ', ', $identifiers ),
 						$external_sales_invoice->id
 					)
 				);
@@ -295,7 +291,7 @@ final class FinancialMutationsController {
 					\sprintf(
 						'Could not link financial mutation %s (%s) to external sales invoice %s: %s',
 						$financial_mutation->id,
-						$financial_mutation->account_servicer_transaction_id,
+						\implode( ', ', $identifiers ),
 						$external_sales_invoice->id,
 						$e->getMessage()
 					),
@@ -359,13 +355,30 @@ final class FinancialMutationsController {
 	}
 
 	/**
-	 * Find the external sales invoices that mention the needle in one of their notes.
+	 * Get the identifiers from a text, for example `tr_c2fbWqSBCVcDhCCoEfrUJ`
+	 * from `payment · 09:28:57 · tr_c2fbWqSBCVcDhCCoEfrUJ · Order 11852`.
+	 *
+	 * Prefixes: `baltr_` balance transfers, `chb_` chargebacks, `inv_` invoices, `tr_` payments, `re_` refunds and `stl_` settlements.
+	 *
+	 * @param string $text Text.
+	 * @return string[]
+	 */
+	private function get_identifiers_from_text( $text ) {
+		if ( ! \preg_match_all( '/\b(?:baltr|chb|inv|tr|re|stl)_[A-Za-z0-9]+\b/', $text, $matches ) ) {
+			return [];
+		}
+
+		return \array_values( \array_unique( $matches[0] ) );
+	}
+
+	/**
+	 * Find the external sales invoices that mention one of the needles in one of their notes.
 	 *
 	 * @param ExternalSalesInvoice[] $external_sales_invoices External sales invoices.
-	 * @param string                 $needle                  Needle.
+	 * @param string[]               $needles                 Needles.
 	 * @return ExternalSalesInvoice[]
 	 */
-	private function find_external_sales_invoices_by_note( array $external_sales_invoices, $needle ) {
+	private function find_external_sales_invoices_by_note( array $external_sales_invoices, array $needles ) {
 		$matches = [];
 
 		foreach ( $external_sales_invoices as $external_sales_invoice ) {
@@ -378,10 +391,12 @@ final class FinancialMutationsController {
 					continue;
 				}
 
-				if ( \str_contains( $text, $needle ) ) {
-					$matches[] = $external_sales_invoice;
+				foreach ( $needles as $needle ) {
+					if ( \str_contains( $text, $needle ) ) {
+						$matches[] = $external_sales_invoice;
 
-					continue 2;
+						continue 3;
+					}
 				}
 			}
 		}
