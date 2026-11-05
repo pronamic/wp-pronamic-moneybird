@@ -30,7 +30,7 @@
 	},
 	"devDependencies": {
 		"@wordpress/env": "^10.34.0",
-		"@wordpress/scripts": "^30.27.0",
+		"@wordpress/scripts": "^37.1.0",
 		"svgo": "^4.0.0"
 	},
 	"scripts": {
